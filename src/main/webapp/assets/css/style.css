@@ -1,0 +1,56 @@
+/*
+
+* Override Pages default styles or create your own styles here
+
+*/
+
+.ui-datatable.borderless thead th,
+.ui-datatable.borderless tbody,
+.ui-datatable.borderless tbody tr,
+.ui-datatable.borderless tbody td {
+    border-style: none;
+}
+
+.hide-column-names table thead tr {
+    display: none;
+}
+
+.ui-datatable-odd {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background: #daeffd;
+    color: #4f4f4f;
+    text-shadow: none;
+}
+.CURRENT-mission{
+    background: #fef6dd;
+}
+.VDE-mission{
+    background: #befeb2;
+}
+.VDG-mission{
+    background: #befeb2;
+}
+.RDE-mission{
+    background: #febbb8;
+}
+.RDG-mission{
+    background: #febbb8;
+}
+
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    background: #daeffd none;
+}
+
+.select-one-menu {
+    width: 100%;
+    height: 25px !important;
+    border: none;
+}
+
+.select-one-menu:focus {
+    background-color: #F0F0F0;
+}

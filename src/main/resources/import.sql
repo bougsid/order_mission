@@ -1,0 +1,3 @@
+INSERT INTO `employeprofile` (`id`, `type`) VALUES ('1', 'DG'),('3', 'EMP'), ('2', 'DE'), ('4', 'SAE');
+INSERT INTO `employe` (`idEmploye`, `classe`, `fonction`, `grade`, `matricule`, `nom`, `password`, `prenom`) VALUES ('1', 'A', 'Prof', 'Prof', '111', 'BOUGSID', '111', 'Ayoub'),('3', 'C', 'Directeur Generale', 'Directeur', '333', 'Direc', '333', 'Direc'), ('2', 'B', 'Directeur etude', 'Directeur', '222', 'Directeur', '222', 'Directeur'), ('4', 'B', 'Sae', 'SAE', '444', 'SAE', '444', 'SAE');
+INSERT INTO `app_user_user_profile` (`USER_ID`, `USER_PROFILE_ID`) VALUES ('1', '3'),('3', '1'), ('2', '2'), ('4', '4');
