@@ -48,6 +48,13 @@
                 table.unselectAllRows();
                 table.selectRow(index, false);
             }
+            function showNotification(message,type){
+                 var options = {
+                    'message': message,
+                    'type' : type
+                };
+                $('body').pgNotification(options).show();
+            }
             window.onload = function () {
 
                 // fix for windows 8
@@ -171,11 +178,13 @@
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
 
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
-
-                                                <li class="no-padding "><p:commandLink
-                                                        actionListener="#{missionView.updateMission()}"
-                                                        class="text-success">Submit</p:commandLink>
-                                                </li>
+                                                <c:if test="#{request.isUserInRole('ROLE_EMP')}">
+                                                    <li class="no-padding "><p:commandLink onsuccess="showNotification('bougsid','error')"
+                                                            actionListener="#{missionView.updateMission()}"
+                                                            class="text-success">Submit</p:commandLink>
+                                                    </li>
+                                                </c:if>
+                                                <c:if test="#{!request.isUserInRole('ROLE_EMP')}">
                                                 <li class="no-padding "><p:commandLink
                                                         actionListener="#{missionView.validateMission()}"
                                                         class="text-success">#{msg['mission.button.validate']}</p:commandLink>
@@ -184,6 +193,7 @@
                                                         actionListener="#{missionView.rejectMission()}"
                                                         class="text-success">#{msg['mission.button.reject']}</p:commandLink>
                                                 </li>
+                                                </c:if>
                                             </ul>
 
                                             <div class="clearfix"/>

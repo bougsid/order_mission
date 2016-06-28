@@ -4,6 +4,7 @@ import com.bougsid.employe.Employe;
 import com.bougsid.employe.EmployeProfile;
 import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
+import com.bougsid.util.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,8 @@ public class MissionService implements IMissionService {
     private MissionStateRepository missionStateRepository;
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private NotificationService notificationService;
     private final static int pageSize = 4;
 
     @Override
@@ -93,9 +96,10 @@ public class MissionService implements IMissionService {
             mission.setCurrentState(MissionStateEnum.CURRENT);
         return this.missionRepository.save(mission);
     }
+
     @Override
     @Transactional
-    public void validateOrRejectMission(Mission mission,boolean validate){
+    public void validateOrRejectMission(Mission mission, boolean validate) {
         MissionStateEnum missionStateEnum = getStateDependsOnConnectedPrincipal(validate);
         mission.setCurrentState(missionStateEnum);
         this.missionRepository.save(mission);
@@ -105,6 +109,13 @@ public class MissionService implements IMissionService {
         state.addMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
+        if (missionStateEnum == MissionStateEnum.VDE) {
+            try {
+                this.notificationService.sendNotificaitoin(mission);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private MissionStateEnum getStateDependsOnConnectedPrincipal(boolean validate) {

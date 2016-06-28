@@ -12,4 +12,6 @@ public interface IEmployeService {
 
     List<Employe> findAll();
 
+    List<Employe> getDirectors();
+
 }

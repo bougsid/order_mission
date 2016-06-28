@@ -78,6 +78,7 @@ public class MissionView implements Serializable {
     public void updateMission() {
         System.out.println("Call update Mission");
         System.out.println(this.selectedMission.getStartDate());
+        this.missionService.save(selectedMission);
     }
 
     public void updateListWithPage() {

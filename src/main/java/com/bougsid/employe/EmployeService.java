@@ -28,4 +28,9 @@ public class EmployeService implements IEmployeService {
     public List<Employe> findAll() {
         return this.employeRepository.findAll();
     }
+
+    @Override
+    public List<Employe> getDirectors() {
+        return this.employeRepository.findByRole(EmployeRole.DG);
+    }
 }

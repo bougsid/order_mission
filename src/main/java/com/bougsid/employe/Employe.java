@@ -1,5 +1,6 @@
 package com.bougsid.employe;
 
+import com.bougsid.bank.Bank;
 import com.bougsid.mission.Mission;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ public class Employe {
     private Long idEmploye;
     private String prenom;
     private String nom;
+    private String email;
     private String matricule;
     private String fonction;
     private String grade;
@@ -36,6 +38,13 @@ public class Employe {
             inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
     private Set<EmployeProfile> employeProfiles = new HashSet<EmployeProfile>();
 
+    @Enumerated(EnumType.STRING)
+    private EmployeRole role;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_bank")
+    private Bank bank;
+    private String rib;
     public Employe() {
 
     }
@@ -123,5 +132,35 @@ public class Employe {
         this.employeProfiles = employeProfiles;
     }
 
+    public EmployeRole getRole() {
+        return role;
+    }
 
+    public void setRole(EmployeRole role) {
+        this.role = role;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public String getRib() {
+        return rib;
+    }
+
+    public void setRib(String rib) {
+        this.rib = rib;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
