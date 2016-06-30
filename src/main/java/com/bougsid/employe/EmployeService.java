@@ -33,4 +33,10 @@ public class EmployeService implements IEmployeService {
     public List<Employe> getDirectors() {
         return this.employeRepository.findByRole(EmployeRole.DG);
     }
+
+    @Override
+    public void initPassword(Employe employe) {
+        employe.setPassword(employe.getMatricule());
+        this.employeRepository.save(employe);
+    }
 }

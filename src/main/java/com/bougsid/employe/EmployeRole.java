@@ -4,7 +4,7 @@ package com.bougsid.employe;
  * Created by ayoub on 6/26/2016.
  */
 public enum EmployeRole {
-    DG("DG"),DE("DE"),EMP("EMP"),SAE("SAE"),LEC("LEC");
+    ADMIN("ADMIN"),DG("DG"),DE("DE"),EMP("EMP"),SAE("SAE"),LEC("LEC");
 
     private String label;
 

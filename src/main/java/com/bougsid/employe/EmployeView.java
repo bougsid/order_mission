@@ -1,8 +1,11 @@
 package com.bougsid.employe;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.bougsid.OrderMissionApplication;
+import com.bougsid.bank.Bank;
+import com.bougsid.bank.IBankService;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.List;
@@ -10,14 +13,23 @@ import java.util.List;
 /**
  * Created by ayoub on 6/23/2016.
  */
-@Component
+@ManagedBean(name = "employeView")
+@ViewScoped
 public class EmployeView implements Serializable {
     private Employe employe = new Employe();
-    @Autowired
     private IEmployeService employeService;
+    private IBankService bankService;
 
     private Employe selectedEmploye;
     private List<Employe> employes;
+    private List<Bank> banks;
+
+    public EmployeView() {
+        employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
+        bankService = OrderMissionApplication.getContext().getBean(IBankService.class);
+        this.employes = this.employeService.findAll();
+        this.banks = this.bankService.getAllBanks();
+    }
 
     public Employe getSelectedEmploye() {
         return selectedEmploye;
@@ -28,8 +40,7 @@ public class EmployeView implements Serializable {
     }
 
     public List<Employe> getEmployes() {
-        if (this.employes == null)
-            this.employes = this.employeService.findAll();
+
         return this.employes;
     }
 
@@ -46,8 +57,8 @@ public class EmployeView implements Serializable {
     }
 
     public void saveEmploye(){
+        System.out.println("Save Employe");
         this.employeService.save(selectedEmploye);
-        this.employes = this.employeService.findAll();
     }
 
     public void newEmploye(){
@@ -61,6 +72,13 @@ public class EmployeView implements Serializable {
             items[i++] = new SelectItem(g, g.getLabel());
         }
         return items;
+    }
+
+    public List<Bank> getBanks(){
+        return this.banks;
+    }
+    public void initPassword(){
+        this.employeService.initPassword(selectedEmploye);
     }
 }
 

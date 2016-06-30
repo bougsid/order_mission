@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -37,7 +38,12 @@ public class Mission {
     @Enumerated(EnumType.STRING)
     private MissionType type;
     private String comment;
+    private String uuid;
 
+    public Mission() {
+        this.transport = new Transport();
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     public Employe getEmploye() {
         return employe;
@@ -45,10 +51,6 @@ public class Mission {
 
     public void setEmploye(Employe employe) {
         this.employe = employe;
-    }
-
-    public Mission() {
-        this.transport = new Transport();
     }
 
     public String getObjet() {
@@ -132,6 +134,14 @@ public class Mission {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Override

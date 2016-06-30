@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,8 +115,26 @@ public class MissionService implements IMissionService {
                 this.notificationService.sendNotificaitoin(mission);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (MessagingException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean validateMissionByUuid(String uuid) {
+        Mission mission = this.missionRepository.findByUuid(uuid);
+        if (mission == null) return false;
+        MissionState state = context.getBean(MissionState.class);
+        state.setState(MissionStateEnum.VDG);
+        state.setStateDate(LocalDate.now());
+        state.addMission(mission);
+        this.missionStateRepository.save(state);
+        mission.setCurrentState(MissionStateEnum.VDG);
+//        mission.addState(state);
+        this.missionRepository.save(mission);
+        return true;
     }
 
     private MissionStateEnum getStateDependsOnConnectedPrincipal(boolean validate) {
@@ -145,6 +164,25 @@ public class MissionService implements IMissionService {
     public Employe getPrincipal() {
         EmployeUserDetails principal = (EmployeUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return principal.getEmploye();
+    }
+
+    @Override
+    public void resendMission(Mission mission) {
+        mission.setCurrentState(MissionStateEnum.CURRENT);
+        this.missionRepository.save(mission);
+    }
+
+    @Override
+    public boolean isRejected(Mission mission) {
+        MissionStateEnum currentState = mission.getCurrentState();
+        switch (currentState) {
+            case RDE:
+            case RDG:
+            case RLEC:
+            case RSAE:
+                return true;
+        }
+        return false;
     }
 
     private List<MissionType> getTypesOfRole(EmployeRole role) {

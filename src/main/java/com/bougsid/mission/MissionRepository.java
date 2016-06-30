@@ -15,6 +15,8 @@ public interface MissionRepository extends JpaRepository<Mission,Long> {
     Page<Mission> findByCurrentStateAndTypeIn(MissionStateEnum currentState, Collection<MissionType> types, Pageable page);
     Page<Mission> findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum currentState, Collection<MissionType> types,Collection<MissionStateEnum> states, Pageable page);
 
+
     Page<Mission> findByEmploye(Employe employe,Pageable page);
+    Mission findByUuid(String uuid);
 
 }

@@ -14,4 +14,5 @@ public interface IEmployeService {
 
     List<Employe> getDirectors();
 
+    void initPassword(Employe selectedEmploye);
 }

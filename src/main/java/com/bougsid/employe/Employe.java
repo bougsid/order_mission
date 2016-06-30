@@ -50,13 +50,10 @@ public class Employe {
     }
 
     public Long getIdEmploye() {
-        System.out.println("---"+this);
-        System.out.println("aaaaa"+idEmploye+"nom"+nom);
         return idEmploye;
     }
 
     public void setIdEmploye(Long idEmploye) {
-        System.out.println("call setter"+idEmploye);
         this.idEmploye = idEmploye;
     }
 

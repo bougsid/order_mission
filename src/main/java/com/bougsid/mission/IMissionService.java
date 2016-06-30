@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by ayoub on 6/23/2016.
  */
+
 public interface IMissionService {
     Page<Mission> findAll(int page);
     Page<Mission> getMissionsForDG(int page);
@@ -22,7 +23,13 @@ public interface IMissionService {
     @Transactional
     void validateOrRejectMission(Mission mission, boolean validate);
 
+    boolean validateMissionByUuid(String uuid);
+
     Employe getPrincipal();
+
+    void resendMission(Mission mission);
+
+    boolean isRejected(Mission mission);
 
 
 //    void rejectMission(Mission mission);

@@ -61,4 +61,23 @@ public class Bank {
     public void setEmployes(Set<Employe> employes) {
         this.employes = employes;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Bank) && (id != null)
+                ? id.equals(((Bank) other).id)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
+    }
 }

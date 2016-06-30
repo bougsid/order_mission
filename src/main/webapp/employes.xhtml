@@ -164,24 +164,23 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="employeList" id="eventsDT" var="emp" value="#{employeView.employes}"
+                                        <p:dataTable widgetVar="employeList" id="eventsDT" var="emp"
+                                                     styleClass="borderless hide-column-names"
+                                                     value="#{employeView.employes}"
                                                      selectionMode="single"
                                                      selection="#{employeView.selectedEmploye}"
                                                      rowKey="#{emp.idEmploye}">
-                                            <f:facet name="header">
-                                                Select Events
-                                            </f:facet>
                                             <p:ajax event="rowSelect" update="@(#employeDetail)"/>
-                                            <p:column headerText="Id">
+                                            <p:column>
                                                 <h:outputText value="#{emp.idEmploye}"/>
                                             </p:column>
-                                            <p:column headerText="Year">
+                                            <p:column>
                                                 <h:outputText value="#{emp.nom}"/>
                                             </p:column>
-                                            <p:column headerText="Brand">
+                                            <p:column>
                                                 <h:outputText value="#{emp.prenom}"/>
                                             </p:column>
-                                            <p:column headerText="Color">
+                                            <p:column>
                                                 <h:outputText value="#{emp.fonction}"/>
                                             </p:column>
                                         </p:dataTable>
@@ -194,7 +193,7 @@
                             <!-- END SPLIT LIST VIEW -->
                             <!-- START SPLIT DETAILS -->
                             <h:form id="employeDetail">
-                                <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                 <div data-email="opened" class="split-details">
                                     <div class="email-content-wrapper">
@@ -205,11 +204,11 @@
 
 
                                                 <li class="no-padding ">
-                                                    <p:commandLink
-                                                        onstart="unselectAll(PF('employeList'));"
-                                                        update="@(#employeDetail)"
-                                                        actionListener="#{employeView.newEmploye()}"
-                                                        class="text-success">#{msg['employe.button.new']}</p:commandLink>
+                                                    <p:commandLink process="@this"
+                                                            onstart="unselectAll(PF('employeList'));"
+                                                            update="@(#employeDetail)"
+                                                            actionListener="#{employeView.newEmploye()}"
+                                                            class="text-success">#{msg['employe.button.new']}</p:commandLink>
                                                 </li>
 
                                             </ul>
@@ -233,7 +232,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group-default required">
                                                                 <label>#{msg['employe.nom']}</label>
-                                                                <h:inputText id="nom"
+                                                                <h:inputText id="nom" required="true"
                                                                              styleClass="form-control input-lg"
                                                                              value="#{employeView.selectedEmploye.nom}">
                                                                 </h:inputText>
@@ -242,7 +241,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group-default required">
                                                                 <label>#{msg['employe.prenom']}</label>
-                                                                <h:inputText id="prenom"
+                                                                <h:inputText id="prenom" required="true"
                                                                              styleClass="form-control input-lg"
                                                                              value="#{employeView.selectedEmploye.prenom}">
                                                                 </h:inputText>
@@ -253,7 +252,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group-default required">
                                                                 <label>#{msg['employe.matricule']}</label>
-                                                                <h:inputText id="matricule"
+                                                                <h:inputText id="matricule" required="true"
                                                                              styleClass="form-control input-lg"
                                                                              value="#{employeView.selectedEmploye.matricule}">
                                                                 </h:inputText>
@@ -262,7 +261,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group-default required">
                                                                 <label>#{msg['employe.fonction']}</label>
-                                                                <h:inputText id="fonction"
+                                                                <h:inputText id="fonction" required="true"
                                                                              styleClass="form-control input-lg"
                                                                              value="#{employeView.selectedEmploye.fonction}">
                                                                 </h:inputText>
@@ -273,7 +272,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group-default required">
                                                                 <label>#{msg['employe.grade']}</label>
-                                                                <h:inputText id="grade"
+                                                                <h:inputText id="grade" required="true"
                                                                              styleClass="form-control input-lg"
                                                                              value="#{employeView.selectedEmploye.grade}">
                                                                 </h:inputText>
@@ -283,7 +282,7 @@
                                                             <div class="form-group-default required">
                                                                 <label>#{msg['employe.classe']}</label>
                                                                 <h:selectOneMenu label="#{msg['employe.classe']}"
-                                                                                 id="transporttype"
+                                                                                 id="classe" required="true"
                                                                                  styleClass="select-one-menu"
                                                                                  value="#{employeView.selectedEmploye.classe}">
                                                                     <f:selectItems value="#{employeView.classes}"/>
@@ -292,13 +291,60 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row clearfix">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group-default required">
+                                                                <label>#{msg['employe.bank']}</label>
+                                                                <h:selectOneMenu label="#{msg['employe.bank']}"
+                                                                                 id="bank" required="true"
+                                                                                 styleClass="select-one-menu"
+                                                                                 value="#{employeView.selectedEmploye.bank}">
+                                                                    <f:selectItem noSelectionOption="true"
+                                                                                  itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                  itemValue=""/>
+                                                                    <f:selectItems value="#{employeView.banks}"
+                                                                                   var="bank"
+                                                                                   itemValue="#{bank}"
+                                                                                   itemLabel="#{bank.name}"
+                                                                    />
+                                                                    <f:converter for="bank"
+                                                                                 converterId="bankConverter"/>
+                                                                </h:selectOneMenu>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group-default required">
+                                                                <label>#{msg['employe.rib']}</label>
+                                                                <h:inputText id="rib" required="true"
+                                                                             label="#{msg['employe.rib']}"
+                                                                             styleClass="form-control input-lg"
+                                                                             value="#{employeView.selectedEmploye.rib}">
+                                                                </h:inputText>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                    <p:commandButton update="@(form)" validateClient="true"
-                                                                     value="#{msg['employe.button.save']}"
-                                                                     actionListener="#{employeView.saveEmploye()}"
-                                                                     class="btn btn-complete btn-cons m-l-10"/>
+                                                <div class="row p-b-20">
+
+                                                    <div style="text-align: center" class="col-sm-11 m-t-30">
+                                                        <p:commandButton
+                                                                onsuccess="showNotification('#{msg['employe.notification.success.initpassword']}','success')"
+                                                                process="@this"
+                                                                value="#{msg['employe.button.initpassword']}"
+                                                                actionListener="#{employeView.initPassword()}"
+                                                                class="btn btn-white btn-cons"/>
+                                                        <p:commandButton validateClient="true"
+                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['employe.notification.success.save']}','success')"
+                                                                         value="#{msg['employe.button.save']}"
+                                                                         update="@(#employeDetail)"
+                                                                         actionListener="#{employeView.saveEmploye()}"
+                                                                         class="btn btn-complete btn-cons m-l-10"/>
+
+                                                    </div>
+
                                                 </div>
+                                                <p:messages/>
                                             </div>
                                         </div>
                                     </div>
@@ -2040,5 +2086,6 @@
         <!-- BEGIN PAGE LEVEL JS -->
 
         <script src="assets/js/scripts.js" type="text/javascript"></script>
+        <script src="assets/js/custom.js" type="text/javascript"></script>
         <!-- END PAGE LEVEL JS -->
     </h:body></f:view>

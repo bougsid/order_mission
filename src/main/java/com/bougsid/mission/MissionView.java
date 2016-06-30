@@ -76,23 +76,23 @@ public class MissionView implements Serializable {
     }
 
     public void updateMission() {
-        System.out.println("Call update Mission");
-        System.out.println(this.selectedMission.getStartDate());
-        this.missionService.save(selectedMission);
+        if (selectedMission != null) {
+            this.missionService.save(selectedMission);
+        }
     }
 
     public void updateListWithPage() {
         System.out.println("Page =" + page);
-        this.missions = this.missionService.findAll(page-1).getContent();
+        this.missions = this.missionService.findAll(page - 1).getContent();
         System.out.println(this.missions.size());
     }
 
     public void validateMission() {
-        this.missionService.validateOrRejectMission(this.selectedMission,true);
+        this.missionService.validateOrRejectMission(this.selectedMission, true);
     }
 
     public void rejectMission() {
-        this.missionService.validateOrRejectMission(this.selectedMission,false);
+        this.missionService.validateOrRejectMission(this.selectedMission, false);
     }
 
     public SelectItem[] getTransportTypes() {
@@ -113,10 +113,17 @@ public class MissionView implements Serializable {
         return items;
     }
 
+    public void resendMission(){
+        this.missionService.resendMission(selectedMission);
+    }
+    public boolean isRejected(){
+        if(selectedMission==null) return false;
+        return this.missionService.isRejected(selectedMission);
+    }
     public SelectItem[] getPages() {
         SelectItem[] pages = new SelectItem[maxPages];
         for (int i = 1; i <= maxPages; i++) {
-            pages[i-1] = new SelectItem(String.valueOf(i), String.valueOf(i));
+            pages[i - 1] = new SelectItem(String.valueOf(i), String.valueOf(i));
         }
         return pages;
     }
