@@ -1,6 +1,8 @@
 package com.bougsid.employe;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,12 @@ public class EmployeService implements IEmployeService {
 
     @Autowired
     private EmployeRepository employeRepository;
+    private final static int pageSize = 4;
+
+    @Override
+    public Page<Employe> findAll(int page) {
+        return this.employeRepository.findAll(new PageRequest(page, pageSize));
+    }
 
     @Override
     public Employe findEmployeByUsername(String username) {
@@ -24,10 +32,6 @@ public class EmployeService implements IEmployeService {
         return this.employeRepository.save(employe);
     }
 
-    @Override
-    public List<Employe> findAll() {
-        return this.employeRepository.findAll();
-    }
 
     @Override
     public List<Employe> getDirectors() {

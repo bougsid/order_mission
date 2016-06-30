@@ -180,17 +180,23 @@
                                                     </li>
                                                 </c:if>
                                                 <c:if test="#{!request.isUserInRole('ROLE_EMP')}">
-                                                    <li class="no-padding "><p:commandLink
+                                                    <li class="no-padding "><p:commandLink process="@this"
                                                             onsuccess="showNotification('#{msg['mission.notification.success.validate']}','success')"
                                                             onerror="showNotification('#{msg['mission.notification.error.validate']}','error')"
                                                             actionListener="#{missionView.validateMission()}"
                                                             class="text-success">#{msg['mission.button.validate']}</p:commandLink>
                                                     </li>
-                                                    <li class="no-padding "><p:commandLink
+                                                    <li class="no-padding "><p:commandLink process="@this"
                                                             onsuccess="showNotification('#{msg['mission.notification.success.reject']}','success')"
                                                             onerror="showNotification('#{msg['mission.notification.error.reject']}','error')"
                                                             actionListener="#{missionView.rejectMission()}"
                                                             class="text-success">#{msg['mission.button.reject']}</p:commandLink>
+                                                    </li>
+                                                    <li class="no-padding "><p:commandLink process="@this"
+                                                            onsuccess="showNotification('#{msg['mission.notification.success.print']}','success')"
+                                                            onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
+                                                            actionListener="#{missionView.printMission()}"
+                                                            class="text-success">#{msg['mission.button.print']}</p:commandLink>
                                                     </li>
                                                 </c:if>
                                             </ul>
@@ -201,7 +207,10 @@
                                         <div class="email-content">
 
                                             <div class="email-content-header">
-                                                <h5>#{msg['mission.state']} #{missionView.selectedMission.currentState.label}</h5>
+                                                <h5>#{msg['mission.state']}
+                                                    #{missionView.selectedMission.lastState.state.label} -
+                                                    #{missionView.selectedMission.lastState.stateDate}
+                                                </h5>
                                                 <h4>#{missionView.selectedMission.employe.prenom}
                                                     #{missionView.selectedMission.employe.nom}
                                                 </h4>

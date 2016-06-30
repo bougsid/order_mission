@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -142,6 +140,11 @@ public class Mission {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    @Transient
+    public MissionState getLastState(){
+        return Collections.max(this.states,Comparator.comparing(MissionState::getStateDate));
     }
 
     @Override

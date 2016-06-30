@@ -31,6 +31,8 @@ public interface IMissionService {
 
     boolean isRejected(Mission mission);
 
+    void printMission(Mission mission);
+
 
 //    void rejectMission(Mission mission);
 }

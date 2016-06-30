@@ -127,6 +127,10 @@ public class MissionView implements Serializable {
         }
         return pages;
     }
+
+    public void printMission(){
+        this.missionService.printMission(selectedMission);
+    }
 //    public List<String> getPages(){
 //        List<String> pages = new ArrayList<>();
 //        boolean tooLong = maxPages>8;

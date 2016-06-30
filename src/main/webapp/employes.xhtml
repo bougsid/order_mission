@@ -162,9 +162,9 @@
                                 <a class="list-refresh" href="#"><i class="fa fa-refresh"/></a>
                                 <div data-email="list">
                                     <!-- START EMAIL LIST SORTED BY DATE -->
-                                    <h:form>
+                                    <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="employeList" id="eventsDT" var="emp"
+                                        <p:dataTable widgetVar="employeList" var="emp"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{employeView.employes}"
                                                      selectionMode="single"
@@ -186,7 +186,16 @@
                                         </p:dataTable>
 
                                     </h:form>
-
+                                    <h:form>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <h:selectOneMenu id="page"
+                                                         styleClass="select-one-menu"
+                                                         value="#{employeView.page}">
+                                            <f:selectItems value="#{employeView.pages}"/>
+                                            <p:ajax update="tableForm" event="valueChange"
+                                                    listener="#{employeView.updateListWithPage()}"/>
+                                        </h:selectOneMenu>
+                                    </h:form>
                                     <!-- END EMAIL LIST SORTED BY DATE -->
                                 </div>
                             </div>

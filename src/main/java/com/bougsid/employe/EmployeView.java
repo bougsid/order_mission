@@ -3,6 +3,7 @@ package com.bougsid.employe;
 import com.bougsid.OrderMissionApplication;
 import com.bougsid.bank.Bank;
 import com.bougsid.bank.IBankService;
+import org.springframework.data.domain.Page;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,12 +24,24 @@ public class EmployeView implements Serializable {
     private Employe selectedEmploye;
     private List<Employe> employes;
     private List<Bank> banks;
+    private int page;
+    private int maxPages;
 
     public EmployeView() {
-        employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
-        bankService = OrderMissionApplication.getContext().getBean(IBankService.class);
-        this.employes = this.employeService.findAll();
+        //Get Banks List
+        this.bankService = OrderMissionApplication.getContext().getBean(IBankService.class);
         this.banks = this.bankService.getAllBanks();
+        //Get Employes List
+        this.page = 0;
+        this.employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
+        Page<Employe> employePage = this.employeService.findAll(this.page);
+        this.employes = employePage.getContent();
+        this.maxPages = employePage.getTotalPages();
+    }
+
+    public void updateListWithPage() {
+        System.out.println("Page =" + page);
+        this.employes = this.employeService.findAll(page - 1).getContent();
     }
 
     public Employe getSelectedEmploye() {
@@ -79,6 +92,20 @@ public class EmployeView implements Serializable {
     }
     public void initPassword(){
         this.employeService.initPassword(selectedEmploye);
+    }
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+    public SelectItem[] getPages() {
+        SelectItem[] pages = new SelectItem[maxPages];
+        for (int i = 1; i <= maxPages; i++) {
+            pages[i - 1] = new SelectItem(String.valueOf(i), String.valueOf(i));
+        }
+        return pages;
     }
 }
 

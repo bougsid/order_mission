@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public class MissionState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMissionState;
-    private LocalDate stateDate;
+    private LocalDateTime stateDate;
     @Enumerated(EnumType.STRING)
     private MissionStateEnum state;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -38,11 +38,11 @@ public class MissionState {
         this.idMissionState = idMissionState;
     }
 
-    public LocalDate getStateDate() {
+    public LocalDateTime getStateDate() {
         return stateDate;
     }
 
-    public void setStateDate(LocalDate stateDate) {
+    public void setStateDate(LocalDateTime stateDate) {
         this.stateDate = stateDate;
     }
 

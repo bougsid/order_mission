@@ -4,6 +4,7 @@ import com.bougsid.employe.Employe;
 import com.bougsid.employe.EmployeProfile;
 import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
+import com.bougsid.printers.PrintMission;
 import com.bougsid.util.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,8 @@ public class MissionService implements IMissionService {
     private ApplicationContext context;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private PrintMission printMission;
     private final static int pageSize = 4;
 
     @Override
@@ -93,9 +96,18 @@ public class MissionService implements IMissionService {
 
     @Override
     public Mission save(Mission mission) {
-        if (mission.getCurrentState() == null)
+        if (mission.getCurrentState() == null) {
             mission.setCurrentState(MissionStateEnum.CURRENT);
-        return this.missionRepository.save(mission);
+            mission = this.missionRepository.save(mission);
+            MissionState state = context.getBean(MissionState.class);
+            state.setState(MissionStateEnum.CURRENT);
+            state.setStateDate(LocalDateTime.now());
+            state.addMission(mission);
+            state = this.missionStateRepository.save(state);
+        } else {
+            mission = this.missionRepository.save(mission);
+        }
+        return mission;
     }
 
     @Override
@@ -106,7 +118,7 @@ public class MissionService implements IMissionService {
         this.missionRepository.save(mission);
         MissionState state = context.getBean(MissionState.class);
         state.setState(missionStateEnum);
-        state.setStateDate(LocalDate.now());
+        state.setStateDate(LocalDateTime.now());
         state.addMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
@@ -128,7 +140,7 @@ public class MissionService implements IMissionService {
         if (mission == null) return false;
         MissionState state = context.getBean(MissionState.class);
         state.setState(MissionStateEnum.VDG);
-        state.setStateDate(LocalDate.now());
+        state.setStateDate(LocalDateTime.now());
         state.addMission(mission);
         this.missionStateRepository.save(state);
         mission.setCurrentState(MissionStateEnum.VDG);
@@ -169,7 +181,12 @@ public class MissionService implements IMissionService {
     @Override
     public void resendMission(Mission mission) {
         mission.setCurrentState(MissionStateEnum.CURRENT);
-        this.missionRepository.save(mission);
+        mission = this.missionRepository.save(mission);
+        MissionState state = context.getBean(MissionState.class);
+        state.setState(MissionStateEnum.CURRENT);
+        state.setStateDate(LocalDateTime.now());
+        state.addMission(mission);
+        state = this.missionStateRepository.save(state);
     }
 
     @Override
@@ -183,6 +200,11 @@ public class MissionService implements IMissionService {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void printMission(Mission mission) {
+        printMission.printMission(mission);
     }
 
     private List<MissionType> getTypesOfRole(EmployeRole role) {

@@ -20,6 +20,8 @@ public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEmploye;
+    @Enumerated(EnumType.STRING)
+    private Civilite civilite;
     private String prenom;
     private String nom;
     private String email;
@@ -34,8 +36,8 @@ public class Employe {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "APP_USER_USER_PROFILE",
-            joinColumns = { @JoinColumn(name = "USER_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
+            joinColumns = {@JoinColumn(name = "USER_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "USER_PROFILE_ID")})
     private Set<EmployeProfile> employeProfiles = new HashSet<EmployeProfile>();
 
     @Enumerated(EnumType.STRING)
@@ -45,6 +47,7 @@ public class Employe {
     @JoinColumn(name = "id_bank")
     private Bank bank;
     private String rib;
+
     public Employe() {
 
     }
@@ -159,5 +162,14 @@ public class Employe {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Civilite getCivilite() {
+        return civilite;
+    }
+
+    @Transient
+    public String getFullName() {
+        return this.nom + " " + this.prenom;
     }
 }
