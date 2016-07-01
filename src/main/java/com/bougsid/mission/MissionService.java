@@ -59,7 +59,15 @@ public class MissionService implements IMissionService {
 
     @Override
     public Page<Mission> getMissionsForDG(int page) {
-        return this.missionRepository.findByCurrentState(MissionStateEnum.VDE, new PageRequest(page, pageSize));
+//        return this.missionRepository.findByCurrentState(MissionStateEnum.VDE, new PageRequest(page, pageSize));
+        List<MissionStateEnum> states = new ArrayList<>();
+        states.add(MissionStateEnum.VSAE);
+        states.add(MissionStateEnum.VLEC);
+        states.add(MissionStateEnum.VDE);
+        Page<Mission> missionPage = this.missionRepository
+                .getMissionsForRole(EmployeRole.DG, MissionStateEnum.CURRENT,
+                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
+        return missionPage;
     }
 
     @Override
@@ -69,10 +77,14 @@ public class MissionService implements IMissionService {
         List<MissionStateEnum> states = new ArrayList<>();
         states.add(MissionStateEnum.VSAE);
         states.add(MissionStateEnum.VLEC);
-        Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
-                this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
+//        Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
+//                this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
+        Page<Mission> missionPage = this.missionRepository
+                .getMissionsForRole(EmployeRole.DE, MissionStateEnum.CURRENT,
+                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
         return missionPage;
     }
+
 
     @Override
     public Page<Mission> getMissionsForSAE(int page) {
@@ -209,5 +221,9 @@ public class MissionService implements IMissionService {
 
     private List<MissionType> getTypesOfRole(EmployeRole role) {
         return new ArrayList<MissionType>(Arrays.asList(MissionType.values())).stream().filter(v -> v.getRole().equals(role)).collect(Collectors.toList());
+    }
+
+    private List<MissionType> getTypesOfSAEAndLEC() {
+        return new ArrayList<MissionType>(Arrays.stream(MissionType.values()).filter(v -> v.getRole() == EmployeRole.SAE || v.getRole() == EmployeRole.LEC).collect(Collectors.toList()));
     }
 }

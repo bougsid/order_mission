@@ -8,6 +8,7 @@ import java.util.List;
  * Created by ayoub on 6/26/2016.
  */
 public interface IEmployeService {
+    List<Employe> findAll();
     Page<Employe> findAll(int page);
 
     Employe findEmployeByUsername(String username);

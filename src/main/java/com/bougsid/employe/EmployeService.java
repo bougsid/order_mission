@@ -18,6 +18,11 @@ public class EmployeService implements IEmployeService {
     private final static int pageSize = 4;
 
     @Override
+    public List<Employe> findAll() {
+        return this.employeRepository.findAll();
+    }
+
+    @Override
     public Page<Employe> findAll(int page) {
         return this.employeRepository.findAll(new PageRequest(page, pageSize));
     }

@@ -29,8 +29,10 @@ public class MissionView implements Serializable {
         this.missionService = OrderMissionApplication.getContext().getBean(IMissionService.class);
         this.page = 0;
         Page<Mission> missionPage = this.missionService.findAll(this.page);
-        this.missions = missionPage.getContent();
-        this.maxPages = missionPage.getTotalPages();
+        if (missionPage != null) {
+            this.missions = missionPage.getContent();
+            this.maxPages = missionPage.getTotalPages();
+        }
     }
 
     public Mission getSelectedMission() {
@@ -113,13 +115,15 @@ public class MissionView implements Serializable {
         return items;
     }
 
-    public void resendMission(){
+    public void resendMission() {
         this.missionService.resendMission(selectedMission);
     }
-    public boolean isRejected(){
-        if(selectedMission==null) return false;
+
+    public boolean isRejected() {
+        if (selectedMission == null) return false;
         return this.missionService.isRejected(selectedMission);
     }
+
     public SelectItem[] getPages() {
         SelectItem[] pages = new SelectItem[maxPages];
         for (int i = 1; i <= maxPages; i++) {
@@ -128,7 +132,7 @@ public class MissionView implements Serializable {
         return pages;
     }
 
-    public void printMission(){
+    public void printMission() {
         this.missionService.printMission(selectedMission);
     }
 //    public List<String> getPages(){

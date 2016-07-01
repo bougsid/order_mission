@@ -106,25 +106,18 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="employeList" var="emp"
+                                        <p:dataTable widgetVar="serviceList" var="emp"
                                                      styleClass="borderless hide-column-names"
-                                                     value="#{employeView.employes}"
+                                                     value="#{serviceView.services}"
                                                      selectionMode="single"
-                                                     selection="#{employeView.selectedEmploye}"
-                                                     rowKey="#{emp.idEmploye}">
-                                            <p:ajax event="rowSelect" update="@(#employeDetail)"/>
-                                            <p:column>
-                                                <h:outputText value="#{emp.idEmploye}"/>
-                                            </p:column>
+                                                     selection="#{serviceView.selectedService}"
+                                                     rowKey="#{srv.idService}">
+                                            <p:ajax event="rowSelect" update="@(#serviceDetail)"/>
+
                                             <p:column>
                                                 <h:outputText value="#{emp.nom}"/>
                                             </p:column>
-                                            <p:column>
-                                                <h:outputText value="#{emp.prenom}"/>
-                                            </p:column>
-                                            <p:column>
-                                                <h:outputText value="#{emp.fonction}"/>
-                                            </p:column>
+
                                         </p:dataTable>
 
                                     </h:form>
@@ -132,10 +125,10 @@
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
                                                          styleClass="select-one-menu"
-                                                         value="#{employeView.page}">
-                                            <f:selectItems value="#{employeView.pages}"/>
+                                                         value="#{serviceView.page}">
+                                            <f:selectItems value="#{serviceView.pages}"/>
                                             <p:ajax update="tableForm" event="valueChange"
-                                                    listener="#{employeView.updateListWithPage()}"/>
+                                                    listener="#{serviceView.updateListWithPage()}"/>
                                         </h:selectOneMenu>
                                     </h:form>
                                     <!-- END EMAIL LIST SORTED BY DATE -->
@@ -143,7 +136,7 @@
                             </div>
                             <!-- END SPLIT LIST VIEW -->
                             <!-- START SPLIT DETAILS -->
-                            <h:form id="employeDetail">
+                            <h:form id="serviceDetail">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                 <div data-email="opened" class="split-details">
@@ -156,10 +149,10 @@
 
                                                 <li class="no-padding ">
                                                     <p:commandLink process="@this"
-                                                            onstart="unselectAll(PF('employeList'));"
-                                                            update="@(#employeDetail)"
-                                                            actionListener="#{employeView.newEmploye()}"
-                                                            class="text-success">#{msg['employe.button.new']}</p:commandLink>
+                                                            onstart="unselectAll(PF('serviceList'));"
+                                                            update="@(#serviceDetail)"
+                                                            actionListener="#{serviceView.newService()}"
+                                                            class="text-success">#{msg['service.button.new']}</p:commandLink>
                                                 </li>
 
                                             </ul>
@@ -169,161 +162,47 @@
 
                                         <div class="email-content">
 
-                                            <!--<div class="email-content-header">-->
-                                            <!--<h2>#{employeView.selectedEmploye.prenom}-->
-                                            <!--#{employeView.selectedEmploye.nom}-->
-                                            <!--</h2>-->
-                                            <!--</div>-->
 
                                             <div class="clearfix"/>
 
-                                            <div class="email-content-body m-t-20 form-group-attached">
+                                            <div class="email-content-body m-t-20">
                                                 <div class="form-group-attached">
-                                                    <div class="row clearfix">
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.civilite']}</label>
-                                                                <h:selectOneMenu label="#{msg['employe.civilite']}"
-                                                                                 id="civilite"
-                                                                                 styleClass="select-one-menu"
-                                                                                 value="#{employeView.selectedEmploye.civilite}">
-                                                                    <f:selectItems
-                                                                            value="#{employeView.civilities}"/>
-                                                                    <f:converter binding="#{genericEnumConverter}"/>
-                                                                </h:selectOneMenu>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.nom']}</label>
-                                                                <h:inputText id="nom" required="true"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{employeView.selectedEmploye.nom}">
-                                                                </h:inputText>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.prenom']}</label>
-                                                                <h:inputText id="prenom" required="true"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{employeView.selectedEmploye.prenom}">
-                                                                </h:inputText>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.matricule']}</label>
-                                                                <h:inputText id="matricule" required="true"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{employeView.selectedEmploye.matricule}">
-                                                                </h:inputText>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.fonction']}</label>
-                                                                <h:inputText id="fonction" required="true"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{employeView.selectedEmploye.fonction}">
-                                                                </h:inputText>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.classe']}</label>
-                                                                <h:selectOneMenu label="#{msg['employe.classe']}"
-                                                                                 id="classe" required="true"
-                                                                                 styleClass="select-one-menu"
-                                                                                 value="#{employeView.selectedEmploye.classe}">
-                                                                    <f:selectItems value="#{employeView.classes}"/>
-                                                                    <f:converter binding="#{genericEnumConverter}"/>
-                                                                </h:selectOneMenu>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row clearfix">
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.grade']}</label>
-                                                                <h:inputText id="grade" required="true"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{employeView.selectedEmploye.grade}">
-                                                                </h:inputText>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.service']}</label>
-                                                                <h:selectOneMenu label="#{msg['employe.service']}"
-                                                                                 id="service" required="true"
-                                                                                 styleClass="select-one-menu"
-                                                                                 value="#{employeView.selectedEmploye.service}">
-                                                                    <f:selectItem noSelectionOption="true"
-                                                                                  itemLabel="#{msg['employe.message.selectbank']}"
-                                                                                  itemValue=""/>
-                                                                    <f:selectItems value="#{employeView.services}"
-                                                                                   var="service"
-                                                                                   itemValue="#{service}"
-                                                                                   itemLabel="#{service.nom}"
-                                                                    />
-                                                                    <f:converter for="service"
-                                                                                 converterId="serviceConverter"/>
-                                                                </h:selectOneMenu>
-                                                            </div>
-                                                        </div>
 
+                                                    <div class="form-group form-group-default required">
+                                                        <label>#{msg['service.nom']}</label>
+                                                        <p:inputText label="#{msg['service.nom']}"
+                                                                     styleClass="form-control input-lg" id="objet"
+                                                                     value="#{serviceView.selectedService.nom}"
+                                                                     required="true"/>
+                                                    </div>
+                                                    <div class="form-group form-group-default required">
+                                                        <label>#{msg['service.chef']}</label>
+                                                        <h:selectOneMenu label="#{msg['service.chef']}"
+                                                                         id="chef" required="true"
+                                                                         styleClass="select-one-menu"
+                                                                         value="#{serviceView.selectedService.chef}">
+                                                            <f:selectItem noSelectionOption="true"
+                                                                          itemLabel="#{msg['employe.message.selectbank']}"
+                                                                          itemValue=""/>
+                                                            <f:selectItems value="#{serviceView.employes}"
+                                                                           var="emp"
+                                                                           itemValue="#{emp}"
+                                                                           itemLabel="#{emp.nom}"
+                                                            />
+                                                            <f:converter for="chef"
+                                                                         converterId="employeConverter"/>
+                                                        </h:selectOneMenu>
                                                     </div>
 
-                                                    <div class="row clearfix">
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.bank']}</label>
-                                                                <h:selectOneMenu label="#{msg['employe.bank']}"
-                                                                                 id="bank" required="true"
-                                                                                 styleClass="select-one-menu"
-                                                                                 value="#{employeView.selectedEmploye.bank}">
-                                                                    <f:selectItem noSelectionOption="true"
-                                                                                  itemLabel="#{msg['employe.message.selectbank']}"
-                                                                                  itemValue=""/>
-                                                                    <f:selectItems value="#{employeView.banks}"
-                                                                                   var="bank"
-                                                                                   itemValue="#{bank}"
-                                                                                   itemLabel="#{bank.name}"
-                                                                    />
-                                                                    <f:converter for="bank"
-                                                                                 converterId="bankConverter"/>
-                                                                </h:selectOneMenu>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['employe.rib']}</label>
-                                                                <h:inputText id="rib" required="true"
-                                                                             label="#{msg['employe.rib']}"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{employeView.selectedEmploye.rib}">
-                                                                </h:inputText>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <div class="row p-b-20">
 
                                                     <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                        <p:commandButton
-                                                                onsuccess="showNotification('#{msg['employe.notification.success.initpassword']}','success')"
-                                                                process="@this"
-                                                                value="#{msg['employe.button.initpassword']}"
-                                                                actionListener="#{employeView.initPassword()}"
-                                                                class="btn btn-white btn-cons"/>
                                                         <p:commandButton validateClient="true"
-                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['employe.notification.success.save']}','success')"
-                                                                         value="#{msg['employe.button.save']}"
-                                                                         update="@(#employeDetail)"
-                                                                         actionListener="#{employeView.saveEmploye()}"
+                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['service.notification.success.save']}','success')"
+                                                                         value="#{msg['service.button.save']}"
+                                                                         update="@(#serviceDetail)"
+                                                                         actionListener="#{serviceView.saveService()}"
                                                                          class="btn btn-complete btn-cons m-l-10"/>
 
                                                     </div>

@@ -2,6 +2,7 @@ package com.bougsid.employe;
 
 import com.bougsid.bank.Bank;
 import com.bougsid.mission.Mission;
+import com.bougsid.service.Service;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +32,13 @@ public class Employe {
     @Enumerated(EnumType.STRING)
     private EmployeClasse classe;
     private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_service", nullable = true)
+    private Service service;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employe")
     private List<Mission> missions;
+    @Enumerated(EnumType.STRING)
+    private EmployeRole hierarchie;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "APP_USER_USER_PROFILE",
@@ -168,8 +174,35 @@ public class Employe {
         return civilite;
     }
 
+
+    public void setCivilite(Civilite civilite) {
+        this.civilite = civilite;
+    }
+
+    public EmployeRole getHierarchie() {
+        return hierarchie;
+    }
+
+    public void setHierarchie(EmployeRole hierarchie) {
+        this.hierarchie = hierarchie;
+    }
+
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
     @Transient
     public String getFullName() {
         return this.nom + " " + this.prenom;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(idEmploye);
     }
 }
