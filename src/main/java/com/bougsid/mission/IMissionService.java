@@ -1,6 +1,7 @@
 package com.bougsid.mission;
 
 import com.bougsid.employe.Employe;
+import com.bougsid.service.Dept;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface IMissionService {
     Page<Mission> findAll(int page);
+
+    Page<Mission> getMissionsForDeptChef(Dept dept, int page);
+
     Page<Mission> getMissionsForDG(int page);
     Page<Mission> getMissionsForDE(int page);
     Page<Mission> getMissionsForSAE(int page);

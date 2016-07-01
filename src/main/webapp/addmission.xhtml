@@ -417,8 +417,8 @@
                                         <div class="email-content">
 
                                             <div class="email-content-header">
-                                                <h2>#{missionView.mission.employe.prenom}
-                                                    #{missionView.mission.employe.nom}
+                                                <h2>#{addMissionView.mission.employe.prenom}
+                                                    #{addMissionView.mission.employe.nom}
                                                 </h2>
                                             </div>
 
@@ -431,20 +431,23 @@
                                                         <label>#{msg['mission.objet']}</label>
                                                         <p:inputText label="#{msg['mission.objet']}"
                                                                      styleClass="form-control input-lg" id="objet"
-                                                                     value="#{missionView.mission.objet}"
+                                                                     value="#{addMissionView.mission.objet}"
                                                                      required="true"/>
                                                         <p:message for="objet"/>
                                                     </div>
+
                                                     <div class="row clearfix">
                                                         <div class="col-sm-6">
                                                             <div class="form-group form-group-default required">
-                                                                <label>#{msg['mission.destination']}</label>
-                                                                <p:inputText label="#{msg['mission.destination']}"
-                                                                             styleClass="form-control input-lg"
-                                                                             id="destination"
-                                                                             value="#{missionView.mission.destination}"
-                                                                             required="true"/>
-                                                                <p:message for="destination"/>
+                                                                <label>#{msg['mission.entreprise']}</label>
+                                                                <h:selectOneMenu label="#{msg['mission.entreprise']}"
+                                                                                 id="entreprise"
+                                                                                 styleClass="select-one-menu"
+                                                                                 value="#{addMissionView.mission.entreprise}">
+                                                                    <f:selectItems
+                                                                            value="#{addMissionView.entreprises}" var="entr" itemValue="#{entr}" itemLabel="#{entr.nom}"/>
+                                                                    <f:converter for="entreprise" converterId="entrepriseConverter"/>
+                                                                </h:selectOneMenu>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6">
@@ -453,14 +456,29 @@
                                                                 <h:selectOneMenu label="#{msg['mission.transporttype']}"
                                                                                  id="type"
                                                                                  styleClass="select-one-menu"
-                                                                                 value="#{missionView.mission.type}">
+                                                                                 value="#{addMissionView.mission.type}">
                                                                     <f:selectItems
-                                                                            value="#{missionView.missionTypes}"/>
+                                                                            value="#{addMissionView.missionTypes}"/>
                                                                     <f:converter binding="#{genericEnumConverter}"/>
                                                                 </h:selectOneMenu>
-                                                                <p:message for="destination"/>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="form-group form-group-default required">
+                                                        <label>#{msg['mission.destination']}</label>
+
+                                                        <p:pickList id="ville" value="#{addMissionView.villes}"
+                                                                    showTargetControls="true" showCheckbox="true"
+                                                                    responsive="true"
+                                                                    showSourceFilter="true" showTargetFilter="true"
+                                                                    filterMatchMode="contains"
+                                                                    var="v" itemLabel="#{v.nom}"
+                                                                    converter="villeConverter"
+                                                                    itemValue="#{v}">
+
+                                                            <f:facet name="sourceCaption">Available</f:facet>
+                                                            <f:facet name="targetCaption">Starting</f:facet>
+                                                        </p:pickList>
                                                     </div>
                                                     <div class="row clearfix">
                                                         <div class="col-sm-6">
@@ -469,7 +487,7 @@
                                                                 <h:inputText id="startdate"
                                                                              label="#{msg['mission.startDate']}"
                                                                              styleClass="form-control input-lg"
-                                                                             value="#{missionView.mission.startDate}">
+                                                                             value="#{addMissionView.mission.startDate}">
                                                                     <f:convertDateTime
                                                                             pattern="#{msg['date.pattern']}"/>
                                                                     <f:converter binding="#{localDateTimeConverter}"/>
@@ -483,7 +501,7 @@
                                                                 <h:inputText id="enddate"
                                                                              label="#{msg['mission.endDate']}"
                                                                              styleClass="form-control input-lg"
-                                                                             value="#{missionView.mission.endDate}">
+                                                                             value="#{addMissionView.mission.endDate}">
                                                                     <f:convertDateTime
                                                                             pattern="#{msg['date.pattern']}"/>
                                                                     <f:converter binding="#{localDateTimeConverter}"/>
@@ -505,9 +523,9 @@
                                                                 <h:selectOneMenu label="#{msg['mission.transporttype']}"
                                                                                  id="transporttype"
                                                                                  styleClass="select-one-menu"
-                                                                                 value="#{missionView.mission.transport.type}">
+                                                                                 value="#{addMissionView.mission.transport.type}">
                                                                     <f:selectItems
-                                                                            value="#{missionView.transportTypes}"/>
+                                                                            value="#{addMissionView.transportTypes}"/>
                                                                     <f:converter binding="#{genericEnumConverter}"/>
                                                                 </h:selectOneMenu>
                                                                 <p:message for="transporttype"/>
@@ -519,7 +537,7 @@
                                                                 <h:inputText label="#{msg['mission.transportmarque']}"
                                                                              id="transportmarque" required="true"
                                                                              styleClass="form-control input-lg"
-                                                                             value="#{missionView.mission.transport.marque}">
+                                                                             value="#{addMissionView.mission.transport.marque}">
                                                                 </h:inputText>
                                                                 <p:message for="transportmarque"/>
 
@@ -532,7 +550,7 @@
                                                                         label="#{msg['mission.transportmatriqule']}"
                                                                         id="transportmatriqule" required="true"
                                                                         styleClass="form-control input-lg"
-                                                                        value="#{missionView.mission.transport.matricule}">
+                                                                        value="#{addMissionView.mission.transport.matricule}">
                                                                 </h:inputText>
                                                                 <p:message for="transportmatriqule"/>
                                                             </div>
@@ -551,7 +569,7 @@
                                                          oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['mission.notification.success.add']}','success')"
                                                          update="@(form)" validateClient="true"
                                                          value="#{msg['mission.button.add']}"
-                                                         actionListener="#{missionView.addMission()}"
+                                                         actionListener="#{addMissionView.addMission()}"
                                                          class="btn btn-complete btn-cons m-l-10"/>
                                     </div>
 
@@ -1945,8 +1963,12 @@
     <!-- END OVERLAY -->
     <!-- BEGIN VENDOR JS -->
     <script src="assets/plugins/pace/pace.min.js" type="text/javascript"></script>
-    <script src="assets/plugins/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>
-    <script src="assets/plugins/modernizr.custom.js" type="text/javascript"></script>
+
+
+    <!--<script src="assets/plugins/jquery/jquery-1.11.1.min.js" type="text/javascript"></script>-->
+
+
+    <!--<script src="assets/plugins/modernizr.custom.js" type="text/javascript"></script>-->
     <script src="assets/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
     <script src="assets/plugins/boostrapv3/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="assets/plugins/jquery/jquery-easy.js" type="text/javascript"></script>

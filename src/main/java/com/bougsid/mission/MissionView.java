@@ -2,6 +2,8 @@ package com.bougsid.mission;
 
 import com.bougsid.OrderMissionApplication;
 import com.bougsid.transport.TransportType;
+import com.bougsid.ville.IVilleService;
+import com.bougsid.ville.Ville;
 import org.springframework.data.domain.Page;
 
 import javax.faces.bean.ManagedBean;
@@ -21,12 +23,16 @@ public class MissionView implements Serializable {
     private int maxPages;
     //    @ManagedProperty(value = "#{missionService}")
     private IMissionService missionService;
+    private IVilleService villeService;
 
     private Mission selectedMission;
     private List<Mission> missions;
+    private List<Ville> villes;
 
     public MissionView() {
         this.missionService = OrderMissionApplication.getContext().getBean(IMissionService.class);
+        this.villeService = OrderMissionApplication.getContext().getBean(IVilleService.class);
+        this.villes = this.villeService.getAllVilles();
         this.page = 0;
         Page<Mission> missionPage = this.missionService.findAll(this.page);
         if (missionPage != null) {
@@ -68,14 +74,7 @@ public class MissionView implements Serializable {
         this.mission = mission;
     }
 
-    public void addMission() {
-        System.out.println("Add Mission");
-        System.out.println(mission);
-//        mission.setIdMission(null);//Always Add New Mission
-        this.missionService.save(this.mission);
-        this.mission = new Mission();
 
-    }
 
     public void updateMission() {
         if (selectedMission != null) {
@@ -134,6 +133,10 @@ public class MissionView implements Serializable {
 
     public void printMission() {
         this.missionService.printMission(selectedMission);
+    }
+
+    public List<Ville> getVilles() {
+        return villes;
     }
 //    public List<String> getPages(){
 //        List<String> pages = new ArrayList<>();

@@ -36,6 +36,7 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.0.M8" level="project" />
     <orderEntry type="library" name="Maven: com.sun.faces:jsf-api:2.2.8-02" level="project" />
     <orderEntry type="library" name="Maven: org.primefaces:primefaces:6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.primefaces.themes:all-themes:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcmail-jdk14:1.38" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk14:1.38" level="project" />

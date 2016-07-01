@@ -1,7 +1,9 @@
 package com.bougsid.mission;
 
 import com.bougsid.employe.Employe;
+import com.bougsid.entreprise.Entreprise;
 import com.bougsid.transport.Transport;
+import com.bougsid.ville.Ville;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
@@ -15,7 +17,7 @@ import java.util.*;
 @Entity
 public class Mission {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMission;
     private String objet;
     private LocalDateTime startDate;
@@ -28,8 +30,8 @@ public class Mission {
     private Employe employe;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "MISSION_MISSION_STATE",
-            joinColumns = { @JoinColumn(name = "MISSION_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "MISSION_STATE_ID") })
+            joinColumns = {@JoinColumn(name = "MISSION_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "MISSION_STATE_ID")})
     private Set<MissionState> states = new HashSet<MissionState>();
     @Enumerated(EnumType.STRING)
     private MissionStateEnum currentState;
@@ -37,6 +39,16 @@ public class Mission {
     private MissionType type;
     private String comment;
     private String uuid;
+//    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "MISSION_VILLE",
+            joinColumns = {@JoinColumn(name = "MISSION_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "VILLE_ID")})
+    private List<Ville> villes = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "id_entreprise", nullable = false)
+    private Entreprise entreprise;
 
     public Mission() {
         this.transport = new Transport();
@@ -106,7 +118,8 @@ public class Mission {
     public void setStates(Set<MissionState> states) {
         this.states = states;
     }
-    public void addState(MissionState state){
+
+    public void addState(MissionState state) {
         this.states.add(state);
     }
 
@@ -143,8 +156,29 @@ public class Mission {
     }
 
     @Transient
-    public MissionState getLastState(){
-        return Collections.max(this.states,Comparator.comparing(MissionState::getStateDate));
+    public MissionState getLastState() {
+        return Collections.max(this.states, Comparator.comparing(MissionState::getStateDate));
+    }
+
+    public List<Ville> getVilles() {
+        return villes;
+    }
+
+    public void setVilles(List<Ville> villes) {
+        this.villes = villes;
+    }
+
+    @Transient
+    public void addVille(Ville ville) {
+        this.villes.add(ville);
+    }
+
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
     }
 
     @Override

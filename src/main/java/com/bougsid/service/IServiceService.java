@@ -8,9 +8,9 @@ import java.util.List;
  * Created by ayoub on 6/30/2016.
  */
 public interface IServiceService {
-    Page<Service> findAll(int page);
+    Page<Dept> findAll(int page);
 
-    List<Service> getAllServices();
+    List<Dept> getAllServices();
 
-    Service save(Service service);
+    Dept save(Dept dept);
 }

@@ -2,7 +2,7 @@ package com.bougsid.employe;
 
 import com.bougsid.bank.Bank;
 import com.bougsid.mission.Mission;
-import com.bougsid.service.Service;
+import com.bougsid.service.Dept;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -33,12 +33,12 @@ public class Employe {
     private EmployeClasse classe;
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_service", nullable = true)
-    private Service service;
+    @JoinColumn(name = "id_dept", nullable = true)
+    private Dept dept;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employe")
     private List<Mission> missions;
-    @Enumerated(EnumType.STRING)
-    private EmployeRole hierarchie;
+//    @Enumerated(EnumType.STRING)
+//    private EmployeRole hierarchie;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "APP_USER_USER_PROFILE",
@@ -179,21 +179,21 @@ public class Employe {
         this.civilite = civilite;
     }
 
-    public EmployeRole getHierarchie() {
-        return hierarchie;
+//    public EmployeRole getHierarchie() {
+//        return hierarchie;
+//    }
+//
+//    public void setHierarchie(EmployeRole hierarchie) {
+//        this.hierarchie = hierarchie;
+//    }
+//
+
+    public Dept getDept() {
+        return dept;
     }
 
-    public void setHierarchie(EmployeRole hierarchie) {
-        this.hierarchie = hierarchie;
-    }
-
-
-    public Service getService() {
-        return service;
-    }
-
-    public void setService(Service service) {
-        this.service = service;
+    public void setDept(Dept dept) {
+        this.dept = dept;
     }
 
     @Transient

@@ -5,6 +5,7 @@ import com.bougsid.employe.EmployeProfile;
 import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
 import com.bougsid.printers.PrintMission;
+import com.bougsid.service.Dept;
 import com.bougsid.util.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -40,13 +41,17 @@ public class MissionService implements IMissionService {
 
     @Override
     public Page<Mission> findAll(int page) {
+        Dept dept = isConnectedDeptChef();
+        if (isConnectedDeptChef() != null) {
+            return getMissionsForDeptChef(dept, page);
+        }
         EmployeRole employeRole = getRole();
         MissionStateEnum currentState = null;
         switch (employeRole) {
             case DG:
                 return this.getMissionsForDG(page);
-            case DE:
-                return this.getMissionsForDE(page);
+//            case DE:
+//                return this.getMissionsForDE(page);
             case SAE:
                 return this.getMissionsForSAE(page);
             case LEC:
@@ -58,16 +63,32 @@ public class MissionService implements IMissionService {
     }
 
     @Override
+    public Page<Mission> getMissionsForDeptChef(Dept dept, int page) {
+        //select mission where mission is current and type is DE type OR
+        //select mission which already validated by SAE or LEC
+        List<MissionStateEnum> states = new ArrayList<>();
+        states.add(MissionStateEnum.VSAE);
+        states.add(MissionStateEnum.VLEC);
+        //Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
+        //this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
+        Page<Mission> missionPage = this.missionRepository
+                .getMissionsForDeptChef(dept, MissionStateEnum.CURRENT,
+                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
+        return missionPage;
+    }
+
+    @Override
     public Page<Mission> getMissionsForDG(int page) {
 //        return this.missionRepository.findByCurrentState(MissionStateEnum.VDE, new PageRequest(page, pageSize));
         List<MissionStateEnum> states = new ArrayList<>();
         states.add(MissionStateEnum.VSAE);
         states.add(MissionStateEnum.VLEC);
         states.add(MissionStateEnum.VDE);
-        Page<Mission> missionPage = this.missionRepository
-                .getMissionsForRole(EmployeRole.DG, MissionStateEnum.CURRENT,
-                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
-        return missionPage;
+//        Page<Mission> missionPage = this.missionRepository
+//                .getMissionsForRole(EmployeRole.DG, MissionStateEnum.CURRENT,
+//                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
+//
+        return null;
     }
 
     @Override
@@ -77,12 +98,13 @@ public class MissionService implements IMissionService {
         List<MissionStateEnum> states = new ArrayList<>();
         states.add(MissionStateEnum.VSAE);
         states.add(MissionStateEnum.VLEC);
-//        Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
-//                this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
-        Page<Mission> missionPage = this.missionRepository
-                .getMissionsForRole(EmployeRole.DE, MissionStateEnum.CURRENT,
-                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
-        return missionPage;
+        //Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
+        //this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
+//        Page<Mission> missionPage = this.missionRepository
+//                .getMissionsForRole(EmployeRole.DE, MissionStateEnum.CURRENT,
+//                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
+//
+        return null;
     }
 
 
@@ -180,6 +202,14 @@ public class MissionService implements IMissionService {
         Employe employe = getPrincipal();
         for (EmployeProfile employeProfile : employe.getEmployeProfiles()) {
             return employeProfile.getType();
+        }
+        return null;
+    }
+
+    private Dept isConnectedDeptChef() {
+        Employe employe = getPrincipal();
+        if (employe.getDept().getChef().equals(employe)) {
+            return employe.getDept();
         }
         return null;
     }

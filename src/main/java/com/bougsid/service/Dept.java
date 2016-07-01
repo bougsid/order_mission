@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Scope("prototype")
-public class Service {
+public class Dept {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,10 +19,10 @@ public class Service {
 
     @OneToOne
     private Employe chef;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "service")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dept")
     private List<Employe> membres;
 
-    public Service() {
+    public Dept() {
     }
 
     public Long getId() {

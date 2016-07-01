@@ -17,194 +17,295 @@
       <table id="8" parent="1" name="mission_mission_state"/>
       <table id="9" parent="1" name="missionstate"/>
       <table id="10" parent="1" name="bank"/>
-      <column id="11" parent="2" name="USER_ID">
+      <table id="11" parent="1" name="service"/>
+      <table id="12" parent="1" name="dept"/>
+      <table id="13" parent="1" name="mission_ville"/>
+      <table id="14" parent="1" name="ville"/>
+      <column id="15" parent="2" name="USER_ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="12" parent="2" name="USER_PROFILE_ID">
+      <column id="16" parent="2" name="USER_PROFILE_ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <index id="13" parent="2" name="FKbvdb3fx4pgmbmjyw567aemwd9">
+      <index id="17" parent="2" name="FKbvdb3fx4pgmbmjyw567aemwd9">
         <columns>USER_PROFILE_ID</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="14" parent="2" name="PRIMARY">
+      <key id="18" parent="2" name="PRIMARY">
         <columns>USER_ID
 USER_PROFILE_ID</columns>
         <primary>1</primary>
       </key>
-      <column id="15" parent="3" name="idEmploye">
+      <column id="19" parent="3" name="idEmploye">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="16" parent="3" name="classe">
+      <column id="20" parent="3" name="civilite">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="17" parent="3" name="email">
+      <column id="21" parent="3" name="classe">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="18" parent="3" name="fonction">
+      <column id="22" parent="3" name="email">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="19" parent="3" name="grade">
+      <column id="23" parent="3" name="fonction">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="20" parent="3" name="matricule">
+      <column id="24" parent="3" name="grade">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="21" parent="3" name="nom">
+      <column id="25" parent="3" name="matricule">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="22" parent="3" name="password">
+      <column id="26" parent="3" name="nom">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="23" parent="3" name="prenom">
+      <column id="27" parent="3" name="password">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="24" parent="3" name="rib">
+      <column id="28" parent="3" name="prenom">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="25" parent="3" name="role">
+      <column id="29" parent="3" name="rib">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="26" parent="3" name="id_bank">
+      <column id="30" parent="3" name="role">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="31" parent="3" name="id_bank">
         <data-type>bigint(20)</data-type>
       </column>
-      <index id="27" parent="3" name="FKrxg8pjxh296qaa2fm8ntdm03j">
+      <column id="32" parent="3" name="id_dept">
+        <data-type>bigint(20)</data-type>
+      </column>
+      <index id="33" parent="3" name="FKp6iquau8b0117tve2s2i81tag">
+        <columns>id_dept</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="34" parent="3" name="FKrxg8pjxh296qaa2fm8ntdm03j">
         <columns>id_bank</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="28" parent="3" name="PRIMARY">
+      <key id="35" parent="3" name="PRIMARY">
         <columns>idEmploye</columns>
         <primary>1</primary>
       </key>
-      <column id="29" parent="4" name="id">
+      <column id="36" parent="4" name="id">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="30" parent="4" name="type">
+      <column id="37" parent="4" name="type">
         <data-type>varchar(255)</data-type>
       </column>
-      <key id="31" parent="4" name="PRIMARY">
+      <key id="38" parent="4" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <column id="32" parent="5" name="next_val">
+      <column id="39" parent="5" name="next_val">
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="33" parent="6" name="idMission">
+      <column id="40" parent="6" name="idMission">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="34" parent="6" name="comment">
+      <column id="41" parent="6" name="comment">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="35" parent="6" name="currentState">
+      <column id="42" parent="6" name="currentState">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="36" parent="6" name="destination">
+      <column id="43" parent="6" name="destination">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="37" parent="6" name="endDate">
+      <column id="44" parent="6" name="endDate">
         <data-type>datetime</data-type>
       </column>
-      <column id="38" parent="6" name="objet">
+      <column id="45" parent="6" name="objet">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="39" parent="6" name="startDate">
+      <column id="46" parent="6" name="startDate">
         <data-type>datetime</data-type>
       </column>
-      <column id="40" parent="6" name="type">
+      <column id="47" parent="6" name="type">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="41" parent="6" name="uuid">
+      <column id="48" parent="6" name="uuid">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="42" parent="6" name="id_employe">
+      <column id="49" parent="6" name="id_employe">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="43" parent="6" name="transport_id">
+      <column id="50" parent="6" name="transport_id">
         <data-type>bigint(20)</data-type>
       </column>
-      <index id="44" parent="6" name="FK55bpk7lyrditlim8qav9mgejd">
+      <index id="51" parent="6" name="FK55bpk7lyrditlim8qav9mgejd">
         <columns>transport_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <index id="45" parent="6" name="FKk5u2enc1ri1vxvq2ydr6xbww9">
+      <index id="52" parent="6" name="FKk5u2enc1ri1vxvq2ydr6xbww9">
         <columns>id_employe</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="46" parent="6" name="PRIMARY">
+      <key id="53" parent="6" name="PRIMARY">
         <columns>idMission</columns>
         <primary>1</primary>
       </key>
-      <column id="47" parent="7" name="id">
+      <column id="54" parent="7" name="id">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="48" parent="7" name="marque">
+      <column id="55" parent="7" name="marque">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="49" parent="7" name="matricule">
+      <column id="56" parent="7" name="matricule">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="50" parent="7" name="type">
+      <column id="57" parent="7" name="type">
         <data-type>varchar(255)</data-type>
       </column>
-      <key id="51" parent="7" name="PRIMARY">
+      <key id="58" parent="7" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <column id="52" parent="8" name="MISSION_STATE_ID">
+      <column id="59" parent="8" name="MISSION_STATE_ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <column id="53" parent="8" name="MISSION_ID">
+      <column id="60" parent="8" name="MISSION_ID">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
       </column>
-      <index id="54" parent="8" name="FKkf28j7k9ntmjeemcyf8vywkax">
+      <index id="61" parent="8" name="FKkf28j7k9ntmjeemcyf8vywkax">
         <columns>MISSION_STATE_ID</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="55" parent="8" name="PRIMARY">
+      <key id="62" parent="8" name="PRIMARY">
         <columns>MISSION_ID
 MISSION_STATE_ID</columns>
         <primary>1</primary>
       </key>
-      <column id="56" parent="9" name="idMissionState">
+      <column id="63" parent="9" name="idMissionState">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="57" parent="9" name="state">
+      <column id="64" parent="9" name="state">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="58" parent="9" name="stateDate">
-        <data-type>date</data-type>
+      <column id="65" parent="9" name="stateDate">
+        <data-type>datetime</data-type>
       </column>
-      <key id="59" parent="9" name="PRIMARY">
+      <key id="66" parent="9" name="PRIMARY">
         <columns>idMissionState</columns>
         <primary>1</primary>
       </key>
-      <column id="60" parent="10" name="id">
+      <column id="67" parent="10" name="id">
         <mandatory>1</mandatory>
         <data-type>bigint(20)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="61" parent="10" name="email">
+      <column id="68" parent="10" name="email">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="62" parent="10" name="name">
+      <column id="69" parent="10" name="name">
         <data-type>varchar(255)</data-type>
       </column>
-      <column id="63" parent="10" name="phone">
+      <column id="70" parent="10" name="phone">
         <data-type>varchar(255)</data-type>
       </column>
-      <key id="64" parent="10" name="PRIMARY">
+      <key id="71" parent="10" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="72" parent="11" name="id">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="73" parent="11" name="nom">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="74" parent="11" name="chef_idEmploye">
+        <data-type>bigint(20)</data-type>
+      </column>
+      <index id="75" parent="11" name="FKhn5tq9k03rslox94f8vhprqhy">
+        <columns>chef_idEmploye</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <key id="76" parent="11" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="77" parent="12" name="id">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="78" parent="12" name="nom">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="79" parent="12" name="chef_idEmploye">
+        <data-type>bigint(20)</data-type>
+      </column>
+      <index id="80" parent="12" name="FK6n70svxtsa5hgqq3mymdald3t">
+        <columns>chef_idEmploye</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <key id="81" parent="12" name="PRIMARY">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+      <column id="82" parent="13" name="Mission_idMission">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="83" parent="13" name="villes_id">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="84" parent="13" name="MISSION_ID">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="85" parent="13" name="VILLE_ID">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <index id="86" parent="13" name="FK3icbpasl47o1m4cxo0ju4tnom">
+        <columns>MISSION_ID</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="87" parent="13" name="FKjk7d2klw7uy027ru6ffqhydym">
+        <columns>VILLE_ID</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="88" parent="13" name="FKruw5pr07px3w4fxu6ur7vufpt">
+        <columns>Mission_idMission</columns>
+        <desc-columns></desc-columns>
+      </index>
+      <index id="89" parent="13" name="UK_1ba0bxq02x96wgukp8g9lhjlj">
+        <columns>villes_id</columns>
+        <desc-columns></desc-columns>
+        <unique>1</unique>
+      </index>
+      <key id="90" parent="13" name="UK_1ba0bxq02x96wgukp8g9lhjlj">
+        <columns>villes_id</columns>
+        <underlying-index>UK_1ba0bxq02x96wgukp8g9lhjlj</underlying-index>
+      </key>
+      <column id="91" parent="14" name="id">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+        <sequence-identity>1</sequence-identity>
+      </column>
+      <column id="92" parent="14" name="nom">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="93" parent="14" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>

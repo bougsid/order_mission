@@ -256,20 +256,20 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="form-group-default required">
-                                                                <label>#{msg['employe.service']}</label>
-                                                                <h:selectOneMenu label="#{msg['employe.service']}"
-                                                                                 id="service" required="true"
+                                                                <label>#{msg['employe.dept']}</label>
+                                                                <h:selectOneMenu label="#{msg['employe.dept']}"
+                                                                                 id="dept" required="true"
                                                                                  styleClass="select-one-menu"
-                                                                                 value="#{employeView.selectedEmploye.service}">
+                                                                                 value="#{employeView.selectedEmploye.dept}">
                                                                     <f:selectItem noSelectionOption="true"
                                                                                   itemLabel="#{msg['employe.message.selectbank']}"
                                                                                   itemValue=""/>
-                                                                    <f:selectItems value="#{employeView.services}"
-                                                                                   var="service"
-                                                                                   itemValue="#{service}"
-                                                                                   itemLabel="#{service.nom}"
+                                                                    <f:selectItems value="#{employeView.depts}"
+                                                                                   var="dept"
+                                                                                   itemValue="#{dept}"
+                                                                                   itemLabel="#{dept.nom}"
                                                                     />
-                                                                    <f:converter for="service"
+                                                                    <f:converter for="dept"
                                                                                  converterId="serviceConverter"/>
                                                                 </h:selectOneMenu>
                                                             </div>

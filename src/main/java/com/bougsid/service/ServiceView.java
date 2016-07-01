@@ -17,12 +17,12 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 public class ServiceView implements Serializable {
-    private Service service = new Service();
+    private Dept dept = new Dept();
     private IEmployeService employeService;
     private IServiceService serviceService;
-    private Service selectedService;
+    private Dept selectedDept;
     private List<Employe> employes;
-    private List<Service> services;
+    private List<Dept> depts;
     private int page;
     private int maxPages;
 
@@ -31,21 +31,21 @@ public class ServiceView implements Serializable {
         this.employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
         //Get Services List
         this.page = 0;
-        Page<Service> servicePage = this.serviceService.findAll(this.page);
-        this.services = servicePage.getContent();
+        Page<Dept> servicePage = this.serviceService.findAll(this.page);
+        this.depts = servicePage.getContent();
         this.maxPages = servicePage.getTotalPages();
         this.employes = this.employeService.findAll();
 
     }
     public void newService(){
-        this.selectedService = new Service();
+        this.selectedDept = new Dept();
     }
     public void updateListWithPage() {
         System.out.println("Page =" + page);
-        this.services = this.serviceService.findAll(page - 1).getContent();
+        this.depts = this.serviceService.findAll(page - 1).getContent();
     }
     public void saveService(){
-        this.serviceService.save(selectedService);
+        this.serviceService.save(selectedDept);
     }
 
     public SelectItem[] getPages() {
@@ -55,20 +55,20 @@ public class ServiceView implements Serializable {
         }
         return pages;
     }
-    public Service getService() {
-        return service;
+    public Dept getDept() {
+        return dept;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setDept(Dept dept) {
+        this.dept = dept;
     }
 
-    public Service getSelectedService() {
-        return selectedService;
+    public Dept getSelectedDept() {
+        return selectedDept;
     }
 
-    public void setSelectedService(Service selectedService) {
-        this.selectedService = selectedService;
+    public void setSelectedDept(Dept selectedDept) {
+        this.selectedDept = selectedDept;
     }
 
     public List<Employe> getEmployes() {
@@ -79,12 +79,12 @@ public class ServiceView implements Serializable {
         this.employes = employes;
     }
 
-    public List<Service> getServices() {
-        return services;
+    public List<Dept> getDepts() {
+        return depts;
     }
 
-    public void setServices(List<Service> services) {
-        this.services = services;
+    public void setDepts(List<Dept> depts) {
+        this.depts = depts;
     }
 
     public int getPage() {

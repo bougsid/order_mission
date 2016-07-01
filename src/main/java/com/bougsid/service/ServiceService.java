@@ -16,17 +16,17 @@ public class ServiceService implements IServiceService {
     private final static int pageSize = 4;
 
     @Override
-    public Page<Service> findAll(int page) {
+    public Page<Dept> findAll(int page) {
         return this.serviceRepository.findAll(new PageRequest(page, pageSize));
     }
 
     @Override
-    public List<Service> getAllServices() {
+    public List<Dept> getAllServices() {
         return this.serviceRepository.findAll();
     }
 
     @Override
-    public Service save(Service service) {
-        return this.serviceRepository.save(service);
+    public Dept save(Dept dept) {
+        return this.serviceRepository.save(dept);
     }
 }

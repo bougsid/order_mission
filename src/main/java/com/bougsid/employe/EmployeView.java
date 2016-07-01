@@ -4,7 +4,7 @@ import com.bougsid.OrderMissionApplication;
 import com.bougsid.bank.Bank;
 import com.bougsid.bank.IBankService;
 import com.bougsid.service.IServiceService;
-import com.bougsid.service.Service;
+import com.bougsid.service.Dept;
 import org.springframework.data.domain.Page;
 
 import javax.faces.bean.ManagedBean;
@@ -26,7 +26,7 @@ public class EmployeView implements Serializable {
     private Employe selectedEmploye;
     private List<Employe> employes;
     private List<Bank> banks;
-    private List<Service> services;
+    private List<Dept> depts;
     private int page;
     private int maxPages;
 
@@ -36,7 +36,7 @@ public class EmployeView implements Serializable {
         this.employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
         this.serviceService = OrderMissionApplication.getContext().getBean(IServiceService.class);
         this.banks = this.bankService.getAllBanks();
-        this.services = this.serviceService.getAllServices();
+        this.depts = this.serviceService.getAllServices();
         //Get Employes List
         this.page = 0;
         Page<Employe> employePage = this.employeService.findAll(this.page);
@@ -104,8 +104,8 @@ public class EmployeView implements Serializable {
     public List<Bank> getBanks() {
         return this.banks;
     }
-    public List<Service> getServices() {
-        return this.services;
+    public List<Dept> getDepts() {
+        return this.depts;
     }
 
     public void initPassword() {
