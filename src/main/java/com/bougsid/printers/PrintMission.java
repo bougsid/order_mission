@@ -7,12 +7,14 @@ package com.bougsid.printers;
 
 import com.bougsid.MSG;
 import com.bougsid.mission.Mission;
+import com.bougsid.ville.Ville;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
@@ -31,8 +33,12 @@ public class PrintMission {
     public void printMission(Mission mission) {
         Document document = new Document(PageSize.A4);
         try {
-
-            PdfWriter.getInstance(document, new FileOutputStream("./order.pdf"));
+            File downloadDir = new File(msg.getMessage("application.mission.downloaddir"));
+            if (!downloadDir.exists()) {
+                downloadDir.mkdir();
+            }
+            System.out.println("Dir ="+downloadDir.getPath());
+            PdfWriter.getInstance(document, new FileOutputStream(downloadDir.getPath() + "/" + mission.getUuid() + ".pdf"));
             document.open();
             //header
             Paragraph paragraph = new Paragraph(msg.getMessage("mission.pdf.school") + "       " + mission.getIdMission() + "           ", DEFAULT_FONT);
@@ -83,7 +89,7 @@ public class PrintMission {
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(": " + mission.getEmploye().getGrade(), DEFAULT_FONT));
+            cell = new PdfPCell(new Paragraph(": " + mission.getEmploye().getGrade().getLabel(), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
@@ -103,7 +109,7 @@ public class PrintMission {
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(" - " + mission.getObjet(), DEFAULT_FONT));
+            cell = new PdfPCell(new Paragraph(" - " + mission.getEntreprise().getNom(), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
@@ -113,7 +119,12 @@ public class PrintMission {
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(": " + mission.getDestination(), DEFAULT_FONT));
+            Paragraph p = new Paragraph();
+            p.setFont(DEFAULT_FONT);
+            for (Ville ville : mission.getVilles()) {
+                p.add(ville.getNom() + "\n");
+            }
+            cell = new PdfPCell(p);
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);

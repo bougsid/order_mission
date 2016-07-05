@@ -2,16 +2,22 @@ package com.bougsid.mission;
 
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.entreprise.IEntrepriseService;
-import com.bougsid.OrderMissionApplication;
+import com.bougsid.missionType.IMissionTypeService;
+import com.bougsid.missionType.MissionType;
 import com.bougsid.transport.TransportType;
 import com.bougsid.ville.IVilleService;
 import com.bougsid.ville.Ville;
 import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,24 +27,36 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 public class AddMissionView {
+    @Autowired
     private IMissionService missionService;
+    @Autowired
     private IVilleService villeService;
+    @Autowired
     private IEntrepriseService entrepriseService;
+    @Autowired
+    private IMissionTypeService missionTypeService;
     private List<Ville> sourceVilles;
     private List<Ville> targetVilles;
     private DualListModel<Ville> villes;
     private List<Entreprise> entreprises;
+    private List<MissionType> missionTypes;
     private Mission mission = new Mission();
 
     @PostConstruct
     public void init() {
-        this.missionService = OrderMissionApplication.getContext().getBean(IMissionService.class);
-        this.villeService = OrderMissionApplication.getContext().getBean(IVilleService.class);
-        this.entrepriseService = OrderMissionApplication.getContext().getBean(IEntrepriseService.class);
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ServletContext servletContext = (ServletContext) externalContext.getContext();
+        WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).
+                getAutowireCapableBeanFactory().
+                autowireBean(this);
+//        this.missionService = OrderMissionApplication.getContext().getBean(IMissionService.class);
+//        this.villeService = OrderMissionApplication.getContext().getBean(IVilleService.class);
+//        this.entrepriseService = OrderMissionApplication.getContext().getBean(IEntrepriseService.class);
         this.entreprises = this.entrepriseService.getAllEntreprices();
         this.sourceVilles = this.villeService.getAllVilles();
         this.targetVilles = new ArrayList<>();
         this.villes = new DualListModel<>(sourceVilles,targetVilles);
+        this.missionTypes = this.missionTypeService.getAllTypes();
     }
     public void addMission() {
         System.out.println("Add Mission");
@@ -64,13 +82,8 @@ public class AddMissionView {
         return items;
     }
 
-    public SelectItem[] getMissionTypes() {
-        SelectItem[] items = new SelectItem[MissionType.values().length];
-        int i = 0;
-        for (MissionType g : MissionType.values()) {
-            items[i++] = new SelectItem(g, g.getLabel());
-        }
-        return items;
+    public List<MissionType> getMissionTypes() {
+        return missionTypes;
     }
     public DualListModel<Ville> getVilles() {
         return villes;

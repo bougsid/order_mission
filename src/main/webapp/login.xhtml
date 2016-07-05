@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta charset="utf-8" />
-    <title>Pages - Admin Dashboard UI Kit - Lock Screen</title>
+    <title>#{msg['configuration.title']} - Lock Screen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
     <link rel="apple-touch-icon" href="pages/ico/60.png"/>
     <link rel="apple-touch-icon" sizes="76x76" href="pages/ico/76.png"/>
@@ -45,9 +45,8 @@
         <!-- START Background Caption-->
         <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
           <h2 class="semi-bold text-white">
-					Pages make it easy to enjoy what matters the most in the life</h2>
+          #{msg['configuration.title']}</h2>
           <p class="small">
-            images Displayed are solely for representation purposes only, All work copyright of respective owner, otherwise © 2013-2014 REVOX.
           </p>
         </div>
         <!-- END Background Caption-->
@@ -57,13 +56,13 @@
       <div class="login-container bg-white">
         <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
           <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22"/>
-          <p class="p-t-35">Sign into your pages account</p>
+          <p class="p-t-35">#{msg['login.signin']}</p>
           <!-- START Login Form -->
           <form id="form-login" class="p-t-15" role="form" action="/login" method="post">
             <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
             <!-- START Form Control-->
             <div class="form-group form-group-default">
-              <label>Login</label>
+              <label>#{msg['login.user']}</label>
               <div class="controls">
                 <input type="text" name="username" placeholder="User Name" class="form-control" required="required"/>
               </div>
@@ -71,7 +70,7 @@
             <!-- END Form Control-->
             <!-- START Form Control-->
             <div class="form-group form-group-default">
-              <label>Password</label>
+              <label>#{msg['login.password']}</label>
               <div class="controls">
                 <input type="password" class="form-control" name="password" placeholder="Credentials" required="required"/>
               </div>
@@ -79,30 +78,28 @@
             <!-- START Form Control-->
             <div class="row">
               <div class="col-md-6 no-padding">
-                <div class="checkbox ">
-                  <input type="checkbox" value="1" id="checkbox1"/>
-                  <label for="checkbox1">Keep Me Signed in</label>
-                </div>
+                <!--<div class="checkbox ">-->
+                  <!--<input type="checkbox" value="1" id="checkbox1"/>-->
+                  <!--<label for="checkbox1">Keep Me Signed in</label>-->
+                <!--</div>-->
               </div>
               <div class="col-md-6 text-right">
-                <a href="#" class="text-info small">Help? Contact Support</a>
+                <a href="#" class="text-info small">Aide</a>
               </div>
             </div>
             <!-- END Form Control-->
-            <button class="btn btn-primary btn-cons m-t-10" type="submit">Sign in</button>
+            <button class="btn btn-primary btn-cons m-t-10" type="submit">#{msg['login.signin']}</button>
           </form>
           <!--END Login Form-->
           <div class="pull-bottom sm-pull-bottom">
             <div class="m-b-30 p-r-80 sm-m-t-20 sm-p-r-15 sm-p-b-20 clearfix">
               <div class="col-sm-3 col-md-2 no-padding">
-                <img alt="" class="m-t-5" data-src="assets/img/demo/pages_icon.png" data-src-retina="assets/img/demo/pages_icon_2x.png" height="60" src="assets/img/demo/pages_icon.png" width="60"/>
+                <!--<img alt="" class="m-t-5" data-src="assets/img/demo/pages_icon.png" data-src-retina="assets/img/demo/pages_icon_2x.png" height="60" src="assets/img/demo/pages_icon.png" width="60"/>-->
               </div>
               <div class="col-sm-9 no-padding m-t-10">
                 <p>
                   <small>
-									Create a pages account. If you have a facebook account, log into it for this
-									process. Sign in with <a href="#" class="text-info">Facebook</a> or <a href="#"
-									                                                                       class="text-info">Google</a>
+
 								</small>
                 </p>
               </div>

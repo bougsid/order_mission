@@ -15,12 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -41,87 +36,34 @@ public class MissionService implements IMissionService {
 
     @Override
     public Page<Mission> findAll(int page) {
-        Dept dept = isConnectedDeptChef();
-        if (isConnectedDeptChef() != null) {
-            return getMissionsForDeptChef(dept, page);
-        }
-        EmployeRole employeRole = getRole();
-        MissionStateEnum currentState = null;
-        switch (employeRole) {
+        Employe cp = getPrincipal();
+        if(cp.getGrade() != null)
+        switch (cp.getGrade().getType()) {
             case DG:
                 return this.getMissionsForDG(page);
-//            case DE:
-//                return this.getMissionsForDE(page);
-            case SAE:
-                return this.getMissionsForSAE(page);
-            case LEC:
-                return this.getMissionsForLEC(page);
-            case EMP:
+            case CHEF:
+                return this.getMissionsForCHEF(page);
+            case AUTRE:
                 return this.getMissionsForEMP(page);
         }
         return null;
     }
 
     @Override
-    public Page<Mission> getMissionsForDeptChef(Dept dept, int page) {
-        //select mission where mission is current and type is DE type OR
-        //select mission which already validated by SAE or LEC
-        List<MissionStateEnum> states = new ArrayList<>();
-        states.add(MissionStateEnum.VSAE);
-        states.add(MissionStateEnum.VLEC);
-        //Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
-        //this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
-        Page<Mission> missionPage = this.missionRepository
-                .getMissionsForDeptChef(dept, MissionStateEnum.CURRENT,
-                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
-        return missionPage;
-    }
-
-    @Override
     public Page<Mission> getMissionsForDG(int page) {
-//        return this.missionRepository.findByCurrentState(MissionStateEnum.VDE, new PageRequest(page, pageSize));
-        List<MissionStateEnum> states = new ArrayList<>();
-        states.add(MissionStateEnum.VSAE);
-        states.add(MissionStateEnum.VLEC);
-        states.add(MissionStateEnum.VDE);
-//        Page<Mission> missionPage = this.missionRepository
-//                .getMissionsForRole(EmployeRole.DG, MissionStateEnum.CURRENT,
-//                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
-//
-        return null;
+        return this.missionRepository.getMissionsForDG(MissionStateEnum.VDG, new PageRequest(page, pageSize));
     }
 
     @Override
-    public Page<Mission> getMissionsForDE(int page) {
-        //select mission where mission is current and type is DE type OR
-        //select mission which already validated by SAE or LEC
-        List<MissionStateEnum> states = new ArrayList<>();
-        states.add(MissionStateEnum.VSAE);
-        states.add(MissionStateEnum.VLEC);
-        //Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeInOrCurrentStateIn(MissionStateEnum.CURRENT,
-        //this.getTypesOfRole(EmployeRole.DE), states, new PageRequest(page, pageSize));
-//        Page<Mission> missionPage = this.missionRepository
-//                .getMissionsForRole(EmployeRole.DE, MissionStateEnum.CURRENT,
-//                        getTypesOfSAEAndLEC(), states, new PageRequest(page, pageSize));
-//
-        return null;
+    public Page<Mission> getMissionsForCHEF(int page) {
+        Employe ce = getPrincipal();
+        return this.missionRepository.getMissionsForCHEF(MissionStateEnum.VCHEF, ce.getDept(), MissionStateEnum.VDTYPE, ce.getDept(), new PageRequest(page, pageSize));
     }
-
-
     @Override
-    public Page<Mission> getMissionsForSAE(int page) {
-        Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeIn(MissionStateEnum.CURRENT,
-                this.getTypesOfRole(EmployeRole.SAE), new PageRequest(page, pageSize));
-        return missionPage;
+    public Page<Mission> getMissionsForDAF(int page) {
+        Employe ce = getPrincipal();
+        return this.missionRepository.findByNextState(MissionStateEnum.DAF, new PageRequest(page, pageSize));
     }
-
-    @Override
-    public Page<Mission> getMissionsForLEC(int page) {
-        Page<Mission> missionPage = this.missionRepository.findByCurrentStateAndTypeIn(MissionStateEnum.CURRENT,
-                this.getTypesOfRole(EmployeRole.LEC), new PageRequest(page, pageSize));
-        return missionPage;
-    }
-
     @Override
     public Page<Mission> getMissionsForEMP(int page) {
         Page<Mission> missionPage = this.missionRepository.findByEmploye(getPrincipal(), new PageRequest(page, pageSize));
@@ -132,6 +74,7 @@ public class MissionService implements IMissionService {
     public Mission save(Mission mission) {
         if (mission.getCurrentState() == null) {
             mission.setCurrentState(MissionStateEnum.CURRENT);
+            mission.setNextState(getNextState(mission));
             mission = this.missionRepository.save(mission);
             MissionState state = context.getBean(MissionState.class);
             state.setState(MissionStateEnum.CURRENT);
@@ -144,27 +87,97 @@ public class MissionService implements IMissionService {
         return mission;
     }
 
+    private MissionStateEnum getNextState(Mission mission) {
+        Dept typeDept = mission.getType().getDept();
+        MissionStateEnum nextState = MissionStateEnum.CURRENT;
+//        if (mission.getType().getDept() == null) {
+        switch (mission.getCurrentState()) {
+            case CURRENT: {
+                if (typeDept != null) {
+                    System.out.println(typeDept.getId());
+                    if (typeDept.getId() == mission.getEmploye().getDept().getId())
+                        nextState = MissionStateEnum.VCHEF;
+                    else
+                        nextState = MissionStateEnum.VDTYPE;
+
+                } else {
+                    if (mission.getEmploye().getDept() != null) {
+                        nextState = MissionStateEnum.VCHEF;
+                    } else {
+                        nextState = MissionStateEnum.VDG;
+                    }
+                }
+            }
+            break;
+            case VDTYPE: {
+                if (mission.getEmploye().getDept() != null) {
+                    nextState = MissionStateEnum.VCHEF;
+                } else {
+                    nextState = MissionStateEnum.VDG;
+                }
+            }
+            break;
+            case VCHEF: {
+                nextState = MissionStateEnum.VDG;
+            }
+            break;
+            case VDG: {
+                nextState = MissionStateEnum.DAF;
+            }
+            break;
+            case DAF:
+                nextState = MissionStateEnum.VALIDATED;
+                break;
+        }
+        return nextState;
+    }
+
+
     @Override
     @Transactional
-    public void validateOrRejectMission(Mission mission, boolean validate) {
-        MissionStateEnum missionStateEnum = getStateDependsOnConnectedPrincipal(validate);
-        mission.setCurrentState(missionStateEnum);
+    public void validateMission(Mission mission) {
+        mission.setCurrentState(mission.getNextState());
+        mission.setNextState(this.getNextState(mission));
         this.missionRepository.save(mission);
         MissionState state = context.getBean(MissionState.class);
-        state.setState(missionStateEnum);
+        state.setState(mission.getCurrentState());
         state.setStateDate(LocalDateTime.now());
         state.addMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
-        if (missionStateEnum == MissionStateEnum.VDE) {
-            try {
-                this.notificationService.sendNotificaitoin(mission);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (missionStateEnum == MissionStateEnum.VDE) {
+//            try {
+//                this.notificationService.sendNotificaitoin(mission);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (MessagingException e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
+
+    @Override
+    @Transactional
+    public void rejectMission(Mission mission) {
+        MissionStateEnum rejectState = getRStateDependsOnConnectedPrincipal(mission);
+        mission.setCurrentState(rejectState);
+        mission.setNextState(MissionStateEnum.CURRENT);
+        this.missionRepository.save(mission);
+        MissionState state = context.getBean(MissionState.class);
+        state.setState(mission.getCurrentState());
+        state.setStateDate(LocalDateTime.now());
+        state.addMission(mission);
+        mission.addState(state);
+        state = this.missionStateRepository.save(state);
+//        if (missionStateEnum == MissionStateEnum.VDE) {
+//            try {
+//                this.notificationService.sendNotificaitoin(mission);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (MessagingException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override
@@ -172,33 +185,44 @@ public class MissionService implements IMissionService {
     public boolean validateMissionByUuid(String uuid) {
         Mission mission = this.missionRepository.findByUuid(uuid);
         if (mission == null) return false;
-        MissionState state = context.getBean(MissionState.class);
-        state.setState(MissionStateEnum.VDG);
-        state.setStateDate(LocalDateTime.now());
-        state.addMission(mission);
-        this.missionStateRepository.save(state);
-        mission.setCurrentState(MissionStateEnum.VDG);
-//        mission.addState(state);
-        this.missionRepository.save(mission);
+//        MissionState state = context.getBean(MissionState.class);
+//        state.setState(mission.getCurrentState());
+//        state.setStateDate(LocalDateTime.now());
+//        state.addMission(mission);
+//        this.missionStateRepository.registerEmploye(state);
+//        mission.setCurrentState(mission.getNextState());
+//        mission.setNextState(mission.getCurrentState());
+//        this.missionRepository.registerEmploye(mission);
+        this.validateMission(mission);
         return true;
     }
 
-    private MissionStateEnum getStateDependsOnConnectedPrincipal(boolean validate) {
-        EmployeRole employeRole = getRole();
-        switch (employeRole) {
-            case DE:
-                return (validate) ? MissionStateEnum.VDE : MissionStateEnum.RDE;
+    @Override
+    @Transactional
+    public boolean rejectMissionByUuid(String uuid) {
+        Mission mission = this.missionRepository.findByUuid(uuid);
+        if (mission == null) return false;
+        this.rejectMission(mission);
+        return true;
+    }
+
+    private MissionStateEnum getRStateDependsOnConnectedPrincipal(Mission mission) {
+        Employe employe = getPrincipal();
+        switch (employe.getGrade().getType()) {
             case DG:
-                return (validate) ? MissionStateEnum.VDG : MissionStateEnum.RDG;
-            case SAE:
-                return (validate) ? MissionStateEnum.VSAE : MissionStateEnum.RSAE;
-            case LEC:
-                return (validate) ? MissionStateEnum.VLEC : MissionStateEnum.RLEC;
+                return MissionStateEnum.RDG;
+            case CHEF: {
+                if (mission.getNextState() == MissionStateEnum.VCHEF) {
+                    return MissionStateEnum.RCHEF;
+                } else {
+                    return MissionStateEnum.RDTYPE;
+                }
+            }
         }
         return null;
     }
 
-    private EmployeRole getRole() {
+    private EmployeRole getRoleOfPrincipal() {
         Employe employe = getPrincipal();
         for (EmployeProfile employeProfile : employe.getEmployeProfiles()) {
             return employeProfile.getType();
@@ -206,13 +230,13 @@ public class MissionService implements IMissionService {
         return null;
     }
 
-    private Dept isConnectedDeptChef() {
-        Employe employe = getPrincipal();
-        if (employe.getDept().getChef().equals(employe)) {
-            return employe.getDept();
-        }
-        return null;
-    }
+//    private Dept isConnectedDeptChef() {
+//        Employe employe = getPrincipal();
+//        if (employe.getDept().getChef().equals(employe)) {
+//            return employe.getDept();
+//        }
+//        return null;
+//    }
 
     @Override
     public Employe getPrincipal() {
@@ -223,9 +247,10 @@ public class MissionService implements IMissionService {
     @Override
     public void resendMission(Mission mission) {
         mission.setCurrentState(MissionStateEnum.CURRENT);
+        mission.setNextState(this.getNextState(mission));
         mission = this.missionRepository.save(mission);
         MissionState state = context.getBean(MissionState.class);
-        state.setState(MissionStateEnum.CURRENT);
+        state.setState(mission.getCurrentState());
         state.setStateDate(LocalDateTime.now());
         state.addMission(mission);
         state = this.missionStateRepository.save(state);
@@ -235,25 +260,17 @@ public class MissionService implements IMissionService {
     public boolean isRejected(Mission mission) {
         MissionStateEnum currentState = mission.getCurrentState();
         switch (currentState) {
-            case RDE:
+            case RCHEF:
             case RDG:
-            case RLEC:
-            case RSAE:
+            case RDTYPE:
                 return true;
         }
         return false;
     }
 
     @Override
-    public void printMission(Mission mission) {
+    public void printMission(Mission mission)  {
         printMission.printMission(mission);
     }
 
-    private List<MissionType> getTypesOfRole(EmployeRole role) {
-        return new ArrayList<MissionType>(Arrays.asList(MissionType.values())).stream().filter(v -> v.getRole().equals(role)).collect(Collectors.toList());
-    }
-
-    private List<MissionType> getTypesOfSAEAndLEC() {
-        return new ArrayList<MissionType>(Arrays.stream(MissionType.values()).filter(v -> v.getRole() == EmployeRole.SAE || v.getRole() == EmployeRole.LEC).collect(Collectors.toList()));
-    }
 }

@@ -11,9 +11,13 @@ public class EmployeProfile {
     @GeneratedValue
     private Long id;
     @Enumerated(EnumType.STRING)
-    private EmployeRole type= EmployeRole.EMP;
+    private EmployeRole type= EmployeRole.USER;
 
     public EmployeProfile() {
+    }
+
+    public EmployeProfile(EmployeRole type) {
+        this.type = type;
     }
 
     public Long getId() {

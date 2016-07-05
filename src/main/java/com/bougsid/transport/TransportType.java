@@ -4,7 +4,10 @@ package com.bougsid.transport;
  * Created by ayoub on 6/25/2016.
  */
 public enum TransportType {
-    PERSONNEL("Personnel"),Service("Dept");
+    PERSONNEL("Personnel"),
+    TRAIN("Train"),
+    Accompagnement("Accompagnement"),
+    Service("Service");
 
     private String label;
 

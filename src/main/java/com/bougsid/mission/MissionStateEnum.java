@@ -5,14 +5,15 @@ package com.bougsid.mission;
  */
 public enum MissionStateEnum {
     CURRENT("En cours"),
-    VDE("Valider par le directeur d'etude"),
+    VCHEF("Valider par le chef de service"),
     VDG("Valider pa le directeur Générale"),
-    VSAE("Valider par service d'entreprise"),
-    VLEC("Valider par LEC"),
-    RDE("Refuser par le directeur d'etude"),
+    VDTYPE("Valider par service d'entreprise"),
+    RCHEF("Refuser par le chef de service"),
     RDG("Refuser par le directeur generale"),
-    RSAE("Refuser par service d'entreprise"),
-    RLEC("Refuser par LEC");
+    RDTYPE("Refuser par service d'entreprise"),
+    DAF("DAF"),
+    VALIDATED("VALIDATED");
+
     private String label;
 
     MissionStateEnum(String label) {

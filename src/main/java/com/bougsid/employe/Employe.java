@@ -1,6 +1,7 @@
 package com.bougsid.employe;
 
 import com.bougsid.bank.Bank;
+import com.bougsid.grade.Grade;
 import com.bougsid.mission.Mission;
 import com.bougsid.service.Dept;
 import org.springframework.context.annotation.Scope;
@@ -28,11 +29,13 @@ public class Employe {
     private String email;
     private String matricule;
     private String fonction;
-    private String grade;
+    @OneToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_grade")
+    private Grade grade;
     @Enumerated(EnumType.STRING)
     private EmployeClasse classe;
     private String password;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_dept", nullable = true)
     private Dept dept;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "employe")
@@ -40,14 +43,12 @@ public class Employe {
 //    @Enumerated(EnumType.STRING)
 //    private EmployeRole hierarchie;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     @JoinTable(name = "APP_USER_USER_PROFILE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "USER_PROFILE_ID")})
     private Set<EmployeProfile> employeProfiles = new HashSet<EmployeProfile>();
 
-    @Enumerated(EnumType.STRING)
-    private EmployeRole role;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_bank")
@@ -98,11 +99,11 @@ public class Employe {
         this.matricule = matricule;
     }
 
-    public String getGrade() {
+    public Grade getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(Grade grade) {
         this.grade = grade;
     }
 
@@ -136,14 +137,6 @@ public class Employe {
 
     public void setEmployeProfiles(Set<EmployeProfile> employeProfiles) {
         this.employeProfiles = employeProfiles;
-    }
-
-    public EmployeRole getRole() {
-        return role;
-    }
-
-    public void setRole(EmployeRole role) {
-        this.role = role;
     }
 
     public Bank getBank() {
@@ -197,6 +190,11 @@ public class Employe {
     }
 
     @Transient
+    public void addEmployeProfile(EmployeProfile employeProfile) {
+        this.employeProfiles.add(employeProfile);
+    }
+
+    @Transient
     public String getFullName() {
         return this.nom + " " + this.prenom;
     }
@@ -204,5 +202,19 @@ public class Employe {
     @Override
     public String toString() {
         return String.valueOf(idEmploye);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Employe) && (idEmploye != null)
+                ? idEmploye.equals(((Employe) other).idEmploye)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (idEmploye != null)
+                ? (this.getClass().hashCode() + idEmploye.hashCode())
+                : super.hashCode();
     }
 }

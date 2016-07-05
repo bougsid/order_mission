@@ -13,11 +13,12 @@ import java.util.List;
 @Scope("prototype")
 public class Dept {
     @Id
+    @Access(AccessType.PROPERTY)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Employe chef;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "dept")
     private List<Employe> membres;
@@ -60,5 +61,19 @@ public class Dept {
     @Override
     public String toString() {
         return String.valueOf(id);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Dept) && (id != null)
+                ? id.equals(((Dept) other).id)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 }

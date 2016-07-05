@@ -13,9 +13,15 @@ public interface IEmployeService {
 
     Employe findEmployeByUsername(String username);
 
-    Employe save(Employe employe);
+    Employe registerEmploye(Employe employe) throws MatriculeAlreadyExistException;
+
+    void deleteEmploye(Employe employe) throws EmployeIsChefException;
+
+    Employe updateEmploye(Employe employe) throws MatriculeAlreadyExistException;
 
     List<Employe> getDirectors();
 
     void initPassword(Employe selectedEmploye);
+
+    Employe save(Employe employe);
 }

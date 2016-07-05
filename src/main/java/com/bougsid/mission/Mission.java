@@ -2,6 +2,7 @@ package com.bougsid.mission;
 
 import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
+import com.bougsid.missionType.MissionType;
 import com.bougsid.transport.Transport;
 import com.bougsid.ville.Ville;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +23,7 @@ public class Mission {
     private String objet;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String destination;
+//    private String destination;
     @OneToOne(cascade = CascadeType.PERSIST)
     private Transport transport;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -36,6 +37,9 @@ public class Mission {
     @Enumerated(EnumType.STRING)
     private MissionStateEnum currentState;
     @Enumerated(EnumType.STRING)
+    private MissionStateEnum nextState;
+    @OneToOne
+    @JoinColumn(name = "id_type")
     private MissionType type;
     private String comment;
     private String uuid;
@@ -87,13 +91,13 @@ public class Mission {
         this.endDate = endDate;
     }
 
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
+//    public String getDestination() {
+//        return destination;
+//    }
+//
+//    public void setDestination(String destination) {
+//        this.destination = destination;
+//    }
 
     public Transport getTransport() {
         return transport;
@@ -129,6 +133,14 @@ public class Mission {
 
     public void setCurrentState(MissionStateEnum currentState) {
         this.currentState = currentState;
+    }
+
+    public MissionStateEnum getNextState() {
+        return nextState;
+    }
+
+    public void setNextState(MissionStateEnum nextState) {
+        this.nextState = nextState;
     }
 
     public MissionType getType() {
@@ -188,7 +200,6 @@ public class Mission {
                 ", objet='" + objet + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", destination='" + destination + '\'' +
                 ", transport=" + transport +
                 ", employe=" + employe +
                 '}';

@@ -1,5 +1,9 @@
 package com.bougsid.service;
 
+import com.bougsid.employe.IEmployeService;
+import com.bougsid.grade.Grade;
+import com.bougsid.grade.GradeType;
+import com.bougsid.grade.IGradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +17,10 @@ import java.util.List;
 public class ServiceService implements IServiceService {
     @Autowired
     private ServiceRepository serviceRepository;
+    @Autowired
+    private IEmployeService employeService;
+    @Autowired
+    private IGradeService gradeService;
     private final static int pageSize = 4;
 
     @Override
@@ -27,6 +35,16 @@ public class ServiceService implements IServiceService {
 
     @Override
     public Dept save(Dept dept) {
-        return this.serviceRepository.save(dept);
+        if(dept.getChef() != null){
+            dept.getChef().setGrade(getChefGrade());
+            dept.getChef().setDept(dept);
+        }
+        dept = this.serviceRepository.save(dept);
+        this.employeService.save(dept.getChef());
+        return dept;
+    }
+    @Override
+    public Grade getChefGrade(){
+        return this.gradeService.findByType(GradeType.CHEF);
     }
 }
