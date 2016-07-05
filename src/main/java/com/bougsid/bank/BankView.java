@@ -1,9 +1,14 @@
 package com.bougsid.bank;
 
-import com.bougsid.OrderMissionApplication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,13 +19,20 @@ import java.util.List;
 @ViewScoped
 public class BankView implements Serializable {
     private Bank bank = new Bank();
+    @Autowired
     private IBankService bankService;
 
     private Bank selectedBank;
     private List<Bank> banks;
 
-    public BankView() {
-        this.bankService = OrderMissionApplication.getContext().getBean(IBankService.class);
+    @PostConstruct
+    public void init() {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ServletContext servletContext = (ServletContext) externalContext.getContext();
+        WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).
+                getAutowireCapableBeanFactory().
+                autowireBean(this);
+//        this.bankService = OrderMissionApplication.getContext().getBean(IBankService.class);
         this.banks = this.bankService.getAllBanks();
     }
 

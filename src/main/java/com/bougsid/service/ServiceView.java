@@ -1,13 +1,18 @@
 package com.bougsid.service;
 
-import com.bougsid.OrderMissionApplication;
 import com.bougsid.employe.Employe;
 import com.bougsid.employe.IEmployeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,7 +23,9 @@ import java.util.List;
 @ViewScoped
 public class ServiceView implements Serializable {
     private Dept dept = new Dept();
+    @Autowired
     private IEmployeService employeService;
+    @Autowired
     private IServiceService serviceService;
     private Dept selectedDept;
     private List<Employe> employes;
@@ -26,9 +33,15 @@ public class ServiceView implements Serializable {
     private int page;
     private int maxPages;
 
-    public ServiceView() {
-        this.serviceService = OrderMissionApplication.getContext().getBean(IServiceService.class);
-        this.employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
+    @PostConstruct
+    public void init() {
+//        this.serviceService = OrderMissionApplication.getContext().getBean(IServiceService.class);
+//        this.employeService = OrderMissionApplication.getContext().getBean(IEmployeService.class);
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ServletContext servletContext = (ServletContext) externalContext.getContext();
+        WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).
+                getAutowireCapableBeanFactory().
+                autowireBean(this);
         //Get Services List
         this.page = 0;
         Page<Dept> servicePage = this.serviceService.findAll(this.page);
@@ -37,14 +50,17 @@ public class ServiceView implements Serializable {
         this.employes = this.employeService.findAll();
 
     }
-    public void newService(){
+
+    public void newService() {
         this.selectedDept = new Dept();
     }
+
     public void updateListWithPage() {
         System.out.println("Page =" + page);
         this.depts = this.serviceService.findAll(page - 1).getContent();
     }
-    public void saveService(){
+
+    public void saveService() {
         this.serviceService.save(selectedDept);
     }
 
@@ -55,6 +71,7 @@ public class ServiceView implements Serializable {
         }
         return pages;
     }
+
     public Dept getDept() {
         return dept;
     }

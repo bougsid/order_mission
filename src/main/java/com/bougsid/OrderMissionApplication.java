@@ -2,7 +2,6 @@ package com.bougsid;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -14,9 +13,9 @@ import java.util.Locale;
 @SpringBootApplication
 @EnableAsync
 public class OrderMissionApplication {
-private static ApplicationContext context;
+//private static ApplicationContext context;
 	public static void main(String[] args) {
-		context = SpringApplication.run(OrderMissionApplication.class, args);
+		 SpringApplication.run(OrderMissionApplication.class, args);
 	}
 
 	@Bean
@@ -34,9 +33,9 @@ private static ApplicationContext context;
 		return source;
 	}
 
-	public static ApplicationContext getContext() {
-		return context;
-	}
+//	public static ApplicationContext getContext() {
+//		return context;
+//	}
 	//
 //	@Bean
 //	public ServletRegistrationBean servletRegistrationBean() {

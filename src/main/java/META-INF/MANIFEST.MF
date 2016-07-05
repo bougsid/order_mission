@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Class-Path: logback-core-1.1.7.jar spring-boot-starter-validation-1.3.
+ 5.RELEASE.jar spring-boot-starter-aop-1.3.5.RELEASE.jar jandex-2.0.0.
+ Final.jar jboss-logging-3.3.0.Final.jar spring-aop-4.2.6.RELEASE.jar 
+ tomcat-embed-logging-juli-9.0.0.M6.jar spring-context-support-4.2.6.R
+ ELEASE.jar tomcat-embed-core-9.0.0.M8.jar bctsp-jdk14-1.38.jar spring
+ -boot-1.3.5.RELEASE.jar hibernate-jpa-2.1-api-1.0.0.Final.jar hiberna
+ te-java8-5.1.0.Final.jar mysql-connector-java-5.1.38.jar spring-jdbc-
+ 4.2.6.RELEASE.jar jcl-over-slf4j-1.7.21.jar hibernate-entitymanager-5
+ .1.0.Final.jar aspectjweaver-1.8.9.jar javassist-3.18.1-GA.jar common
+ s-io-1.3.2.jar xml-apis-1.0.b2.jar jackson-databind-2.6.6.jar jackson
+ -core-2.6.6.jar jsf-impl-2.2.8-02.jar tomcat-embed-jasper-9.0.0.M8.ja
+ r validation-api-1.1.0.Final.jar jackson-annotations-2.6.6.jar primef
+ aces-6.0.jar spring-boot-starter-jdbc-1.3.5.RELEASE.jar spring-contex
+ t-4.2.6.RELEASE.jar spring-boot-starter-1.3.5.RELEASE.jar spring-boot
+ -starter-web-1.3.5.RELEASE.jar spring-boot-devtools-1.3.5.RELEASE.jar
+  javax.mail-1.5.5.jar spring-expression-4.2.6.RELEASE.jar hibernate-c
+ ore-5.1.0.Final.jar spring-boot-starter-tomcat-1.3.5.RELEASE.jar spri
+ ng-orm-4.2.6.RELEASE.jar log4j-over-slf4j-1.7.21.jar spring-security-
+ web-4.0.4.RELEASE.jar spring-aspects-4.2.6.RELEASE.jar spring-securit
+ y-config-4.0.4.RELEASE.jar jstl-1.2.jar spring-data-commons-1.11.4.RE
+ LEASE.jar slf4j-api-1.7.21.jar bcprov-jdk14-1.38.jar spring-boot-auto
+ configure-1.3.5.RELEASE.jar geronimo-jta_1.1_spec-1.1.1.jar jul-to-sl
+ f4j-1.7.21.jar antlr-2.7.7.jar spring-web-4.2.6.RELEASE.jar activatio
+ n-1.1.jar spring-boot-starter-mail-1.3.5.RELEASE.jar tomcat-embed-el-
+ 8.0.33.jar bcmail-jdk14-1.38.jar spring-beans-4.2.6.RELEASE.jar hiber
+ nate-validator-5.2.4.Final.jar jsf-api-2.2.8-02.jar spring-boot-start
+ er-data-jpa-1.3.5.RELEASE.jar spring-core-4.2.6.RELEASE.jar spring-we
+ bmvc-4.2.6.RELEASE.jar ecj-4.5.1.jar logback-classic-1.1.7.jar snakey
+ aml-1.16.jar tomcat-embed-websocket-8.0.33.jar spring-boot-starter-lo
+ gging-1.3.5.RELEASE.jar dom4j-1.6.1.jar javax.transaction-api-1.2.jar
+  spring-tx-4.2.6.RELEASE.jar classmate-1.3.0.jar tomcat-juli-8.0.33.j
+ ar spring-data-jpa-1.9.4.RELEASE.jar spring-boot-starter-security-1.3
+ .5.RELEASE.jar hibernate-commons-annotations-5.0.1.Final.jar aopallia
+ nce-1.0.jar spring-security-core-4.0.4.RELEASE.jar tomcat-jdbc-8.0.33
+ .jar itextpdf-5.0.6.jar
+Main-Class: com.bougsid.OrderMissionApplication
+
