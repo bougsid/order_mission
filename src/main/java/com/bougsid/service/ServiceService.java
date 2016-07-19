@@ -21,11 +21,16 @@ public class ServiceService implements IServiceService {
     private IEmployeService employeService;
     @Autowired
     private IGradeService gradeService;
-    private final static int pageSize = 4;
+    private final static int pageSize = 10;
 
     @Override
     public Page<Dept> findAll(int page) {
         return this.serviceRepository.findAll(new PageRequest(page, pageSize));
+    }
+
+    @Override
+    public List<Dept> findAll() {
+        return this.serviceRepository.findAll();
     }
 
     @Override
@@ -39,7 +44,7 @@ public class ServiceService implements IServiceService {
             dept.getChef().setGrade(getChefGrade());
             dept.getChef().setDept(dept);
         }
-        dept = this.serviceRepository.save(dept);
+        this.serviceRepository.save(dept);
         this.employeService.save(dept.getChef());
         return dept;
     }

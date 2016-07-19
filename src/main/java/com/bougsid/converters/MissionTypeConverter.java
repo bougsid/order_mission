@@ -1,7 +1,7 @@
 package com.bougsid.converters;
 
 import com.bougsid.mission.AddMissionView;
-import com.bougsid.missionType.MissionType;
+import com.bougsid.missiontype.MissionType;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;

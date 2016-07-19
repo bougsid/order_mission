@@ -1,4 +1,4 @@
-package com.bougsid.missionType;
+package com.bougsid.missiontype;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

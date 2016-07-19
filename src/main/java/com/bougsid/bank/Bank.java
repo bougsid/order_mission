@@ -17,7 +17,7 @@ public class Bank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String email;
+//    private String email;
     private String phone;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bank")
     private Set<Employe> employes = new HashSet<>();
@@ -38,13 +38,13 @@ public class Bank {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
 
     public String getPhone() {
         return phone;

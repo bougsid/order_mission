@@ -32,7 +32,7 @@ public class MissionService implements IMissionService {
     private NotificationService notificationService;
     @Autowired
     private PrintMission printMission;
-    private final static int pageSize = 4;
+    private final static int pageSize = 10;
 
     @Override
     public Page<Mission> findAll(int page) {
@@ -43,6 +43,11 @@ public class MissionService implements IMissionService {
                 return this.getMissionsForDG(page);
             case CHEF:
                 return this.getMissionsForCHEF(page);
+            case ASSISTANT:{
+                if(cp.getDept().getNom().equals("DAF"))
+                    return this.getMissionsForDAF(page);
+                return this.getMissionsForEMP(page);
+            }
             case AUTRE:
                 return this.getMissionsForEMP(page);
         }

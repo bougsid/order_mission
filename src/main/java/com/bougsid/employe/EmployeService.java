@@ -31,7 +31,7 @@ public class EmployeService implements IEmployeService {
     private ApplicationContext context;
     @Autowired
     private MSG msg;
-    private final static int pageSize = 4;
+    private final static int pageSize = 10;
 
     @Override
     public List<Employe> findAll() {

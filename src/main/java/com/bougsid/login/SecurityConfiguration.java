@@ -21,6 +21,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(employeUserDetailsService);
     }
 
+    @Autowired
+    private AuthHandler authHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.csrf().disable();
@@ -30,9 +33,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/employes").hasRole("ADMIN")
                 .antMatchers("/banks").hasRole("ADMIN")
                 .antMatchers("/services").hasRole("ADMIN")
+                .antMatchers("/types").hasRole("ADMIN")
                 .antMatchers("/addmission").hasRole("USER")
                 .antMatchers("/missions").authenticated()
-                .and().formLogin().loginPage("/login").defaultSuccessUrl("/missions")
+                .and().formLogin().loginPage("/login").successHandler(authHandler)
                 .usernameParameter("username").passwordParameter("password")
                 .and().exceptionHandling().accessDeniedPage("/404");
     }

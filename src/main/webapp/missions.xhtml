@@ -77,7 +77,8 @@
                     <!-- START APP -->
                     <!-- START SECONDARY SIDEBAR MENU-->
                     <nav class="secondary-sidebar padding-30">
-                        <a href="addmission" class="btn btn-complete btn-block btn-compose m-b-30">#{msg['mission.compose']}</a>
+                        <a href="addmission"
+                           class="btn btn-complete btn-block btn-compose m-b-30">#{msg['mission.compose']}</a>
 
 
                         <ul class="main-menu">
@@ -165,36 +166,38 @@
 
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
                                                 <c:if test="#{missionView.selectedMission != null}">
-                                                <c:if test="#{!missionView.chefOrDG}">
-                                                    <li class="no-padding "><p:commandLink
-                                                            onsuccess="showNotification('#{msg['mission.notification.success.update']}','success')"
-                                                            onerror="showNotification('#{msg['mission.notification.error.update']}','error')"
-                                                            actionListener="#{missionView.updateMission()}"
-                                                            class="text-success">#{msg['mission.button.save']}</p:commandLink>
-                                                    </li>
-                                                </c:if>
-                                                <c:if test="#{missionView.chefOrDG}">
-                                                    <li class="no-padding "><p:commandLink process="@this"
-                                                                                           onsuccess="showNotification('#{msg['mission.notification.success.validate']}','success')"
-                                                                                           onerror="showNotification('#{msg['mission.notification.error.validate']}','error')"
-                                                                                           actionListener="#{missionView.validateMission()}"
-                                                                                           class="text-success">#{msg['mission.button.validate']}</p:commandLink>
-                                                    </li>
-                                                    <li class="no-padding ">
-                                                        <p:commandLink process="@this"
-                                                                       onsuccess="showNotification('#{msg['mission.notification.success.reject']}','success')"
-                                                                       onerror="showNotification('#{msg['mission.notification.error.reject']}','error')"
-                                                                       actionListener="#{missionView.rejectMission()}"
-                                                                       class="text-success">#{msg['mission.button.reject']}</p:commandLink>
-                                                    </li>
-                                                    <li class="no-padding ">
-                                                        <p:commandLink process="@this"
-                                                                       onsuccess="showNotification('#{msg['mission.notification.success.print']}','success')"
-                                                                       onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
-                                                                       actionListener="#{missionView.printMission()}"
-                                                                       class="text-success">#{msg['mission.button.print']}</p:commandLink>
-                                                    </li>
-                                                </c:if>
+                                                    <c:if test="#{missionView.autre}">
+                                                        <li class="no-padding "><p:commandLink
+                                                                onsuccess="showNotification('#{msg['mission.notification.success.update']}','success')"
+                                                                onerror="showNotification('#{msg['mission.notification.error.update']}','error')"
+                                                                actionListener="#{missionView.updateMission()}"
+                                                                class="text-success">#{msg['mission.button.save']}</p:commandLink>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="#{missionView.chefOrDG}">
+                                                        <li class="no-padding "><p:commandLink process="@this"
+                                                                                               onsuccess="showNotification('#{msg['mission.notification.success.validate']}','success')"
+                                                                                               onerror="showNotification('#{msg['mission.notification.error.validate']}','error')"
+                                                                                               actionListener="#{missionView.validateMission()}"
+                                                                                               class="text-success">#{msg['mission.button.validate']}</p:commandLink>
+                                                        </li>
+                                                        <li class="no-padding ">
+                                                            <p:commandLink process="@this"
+                                                                           onsuccess="showNotification('#{msg['mission.notification.success.reject']}','success')"
+                                                                           onerror="showNotification('#{msg['mission.notification.error.reject']}','error')"
+                                                                           actionListener="#{missionView.rejectMission()}"
+                                                                           class="text-success">#{msg['mission.button.reject']}</p:commandLink>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="#{missionView.daf}">
+                                                        <li class="no-padding ">
+                                                            <p:commandLink process="@this"
+                                                                           onsuccess="showNotification('#{msg['mission.notification.success.print']}','success')"
+                                                                           onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
+                                                                           actionListener="#{missionView.printMission()}"
+                                                                           class="text-success">#{msg['mission.button.print']}</p:commandLink>
+                                                        </li>
+                                                    </c:if>
                                                 </c:if>
                                             </ul>
 
@@ -271,8 +274,10 @@
                                                                         converter="villeConverter"
                                                                         itemValue="#{v}">
 
-                                                                <f:facet name="sourceCaption">#{msg['mission.villes.all']}</f:facet>
-                                                                <f:facet name="targetCaption">#{msg['mission.villes.destination']}</f:facet>
+                                                                <f:facet
+                                                                        name="sourceCaption">#{msg['mission.villes.all']}</f:facet>
+                                                                <f:facet
+                                                                        name="targetCaption">#{msg['mission.villes.destination']}</f:facet>
                                                             </p:pickList>
                                                         </div>
                                                         <div class="row clearfix">

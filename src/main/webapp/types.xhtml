@@ -93,22 +93,20 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="serviceList" var="srv"
+                                        <p:dataTable widgetVar="serviceList" var="typ"
                                                      styleClass="borderless hide-column-names"
-                                                     value="#{serviceView.depts}"
+                                                     value="#{missionTypeView.missionTypes}"
                                                      selectionMode="single"
-                                                     selection="#{serviceView.selectedDept}"
-                                                     rowKey="#{srv.id}">
-                                            <p:ajax event="rowSelect" update="@(#serviceDetail)"/>
+                                                     selection="#{missionTypeView.selectedMissionType}"
+                                                     rowKey="#{typ.id}">
+                                            <p:ajax event="rowSelect" update="@(#missionTypeDetail)"/>
 
                                             <p:column>
-                                                <h:outputText value="#{srv.nom}"/>
+                                                <h:outputText value="#{typ.label}"/>
                                             </p:column>
-
                                             <p:column>
-                                                <h:outputText value="#{srv.chef.fullName}"/>
+                                                <h:outputText value="#{typ.dept.nom}"/>
                                             </p:column>
-
                                         </p:dataTable>
 
                                     </h:form>
@@ -116,10 +114,10 @@
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
                                                          styleClass="select-one-menu"
-                                                         value="#{serviceView.page}">
-                                            <f:selectItems value="#{serviceView.pages}"/>
+                                                         value="#{missionTypeView.page}">
+                                            <f:selectItems value="#{missionTypeView.pages}"/>
                                             <p:ajax update="tableForm" event="valueChange"
-                                                    listener="#{serviceView.updateListWithPage()}"/>
+                                                    listener="#{missionTypeView.updateListWithPage()}"/>
                                         </h:selectOneMenu>
                                     </h:form>
                                     <!-- END EMAIL LIST SORTED BY DATE -->
@@ -127,7 +125,7 @@
                             </div>
                             <!-- END SPLIT LIST VIEW -->
                             <!-- START SPLIT DETAILS -->
-                            <h:form id="serviceDetail">
+                            <h:form id="missionTypeDetail">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                 <div data-email="opened" class="split-details">
@@ -141,8 +139,8 @@
                                                 <li class="no-padding ">
                                                     <p:commandLink process="@this"
                                                                    onstart="unselectAll(PF('serviceList'));"
-                                                                   update="@(#serviceDetail)"
-                                                                   actionListener="#{serviceView.newService()}"
+                                                                   update="@(#missionTypeDetail)"
+                                                                   actionListener="#{missionTypeView.newType()}"
                                                                    class="text-success">#{msg['employe.button.new']}</p:commandLink>
                                                 </li>
 
@@ -150,7 +148,7 @@
 
                                             <div class="clearfix"/>
                                         </div>
-                                        <c:if test="#{serviceView.selectedDept != null}">
+                                        <c:if test="#{missionTypeView.selectedMissionType != null}">
                                             <div class="email-content">
 
 
@@ -160,27 +158,28 @@
                                                     <div class="form-group-attached">
 
                                                         <div class="form-group form-group-default required">
-                                                            <label>#{msg['dept.nom']}</label>
-                                                            <p:inputText label="#{msg['dept.nom']}"
+                                                            <label>#{msg['missionType.label']}</label>
+                                                            <p:inputText label="#{msg['missionType.label']}"
                                                                          styleClass="form-control input-lg" id="objet"
-                                                                         value="#{serviceView.selectedDept.nom}"
+                                                                         value="#{missionTypeView.selectedMissionType.label}"
                                                                          required="true"/>
                                                         </div>
                                                         <div class="form-group form-group-default required">
-                                                            <label>#{msg['dept.chef']}</label>
-                                                            <h:selectOneMenu rendered="true" label="#{msg['dept.chef']}"
-                                                                             id="chef" required="true"
+                                                            <label>#{msg['missionType.dept']}</label>
+                                                            <h:selectOneMenu label="#{msg['employe.dept']}"
+                                                                             id="dept"
                                                                              styleClass="select-one-menu"
-                                                                             value="#{serviceView.selectedDept.chef}">
+                                                                             value="#{missionTypeView.selectedMissionType.dept}">
                                                                 <f:selectItem noSelectionOption="true"
                                                                               itemLabel="#{msg['employe.message.selectbank']}"
                                                                               itemValue=""/>
-                                                                <f:selectItems rendered="true" value="#{serviceView.employes}"
-                                                                               var="chef"
-                                                                               itemValue="#{chef}"
-                                                                               itemLabel="#{chef.fullName}"
+                                                                <f:selectItems value="#{employeView.depts}"
+                                                                               var="dept"
+                                                                               itemValue="#{dept}"
+                                                                               itemLabel="#{dept.nom}"
                                                                 />
-                                                                <f:converter converterId="employeConverter"/>
+                                                                <f:converter for="dept"
+                                                                             converterId="serviceConverter"/>
                                                             </h:selectOneMenu>
                                                         </div>
 
@@ -189,10 +188,10 @@
 
                                                         <div style="text-align: center" class="col-sm-11 m-t-30">
                                                             <p:commandButton validateClient="true"
-                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['dept.notification.success.save']}','success')"
-                                                                             value="#{msg['dept.button.save']}"
-                                                                             update="@(#serviceDetail)"
-                                                                             actionListener="#{serviceView.saveService()}"
+                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['missionType.notification.success.save']}','success')"
+                                                                             value="#{msg['mission.button.save']}"
+                                                                             update="@(#missionTypeDetail)"
+                                                                             actionListener="#{missionTypeView.saveType()}"
                                                                              class="btn btn-complete btn-cons m-l-10"/>
 
                                                         </div>

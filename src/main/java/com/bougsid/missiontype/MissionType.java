@@ -1,4 +1,4 @@
-package com.bougsid.missionType;
+package com.bougsid.missiontype;
 
 import com.bougsid.service.Dept;
 import org.springframework.context.annotation.Scope;
@@ -46,8 +46,23 @@ public class MissionType {
         this.dept = dept;
     }
 
-    public String toString(){
+    @Override
+    public String toString() {
         return String.valueOf(id);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof MissionType) && (id != null)
+                ? id.equals(((MissionType) other).id)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 }
 

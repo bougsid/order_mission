@@ -2,8 +2,8 @@ package com.bougsid.mission;
 
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.entreprise.IEntrepriseService;
-import com.bougsid.missionType.IMissionTypeService;
-import com.bougsid.missionType.MissionType;
+import com.bougsid.missiontype.IMissionTypeService;
+import com.bougsid.missiontype.MissionType;
 import com.bougsid.transport.TransportType;
 import com.bougsid.ville.IVilleService;
 import com.bougsid.ville.Ville;

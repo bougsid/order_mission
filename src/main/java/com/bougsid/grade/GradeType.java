@@ -4,7 +4,7 @@ package com.bougsid.grade;
  * Created by ayoub on 7/3/2016.
  */
 public enum GradeType {
-    DG("DG"), DA("DA"),CHEF("CHEF"),AUTRE("AUTRE");
+    DG("DG"), DA("DA"),CHEF("CHEF"),AUTRE("AUTRE"),ASSISTANT("Assistant(e)");
 
     private String label;
 

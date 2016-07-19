@@ -1,10 +1,11 @@
 package com.bougsid.mission;
 
+import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.entreprise.IEntrepriseService;
 import com.bougsid.grade.GradeType;
-import com.bougsid.missionType.IMissionTypeService;
-import com.bougsid.missionType.MissionType;
+import com.bougsid.missiontype.IMissionTypeService;
+import com.bougsid.missiontype.MissionType;
 import com.bougsid.transport.TransportType;
 import com.bougsid.ville.IVilleService;
 import com.bougsid.ville.Ville;
@@ -176,7 +177,15 @@ public class MissionView implements Serializable {
         GradeType type = this.missionService.getPrincipal().getGrade().getType();
         return type == GradeType.CHEF || type == GradeType.DG;
     }
-
+    public boolean isAutre() {
+        GradeType type = this.missionService.getPrincipal().getGrade().getType();
+        return type == GradeType.AUTRE;
+    }
+    public boolean isDaf() {
+        Employe principal = this.missionService.getPrincipal();
+        GradeType type = principal.getGrade().getType();
+        return type == GradeType.ASSISTANT && principal.getDept().getNom().equals("DAF");
+    }
     private String send() {
         return "employes";
     }

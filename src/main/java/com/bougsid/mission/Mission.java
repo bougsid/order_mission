@@ -2,7 +2,7 @@ package com.bougsid.mission;
 
 import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
-import com.bougsid.missionType.MissionType;
+import com.bougsid.missiontype.MissionType;
 import com.bougsid.transport.Transport;
 import com.bougsid.ville.Ville;
 import org.springframework.context.annotation.Scope;

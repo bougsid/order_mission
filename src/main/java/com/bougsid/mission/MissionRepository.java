@@ -1,7 +1,7 @@
 package com.bougsid.mission;
 
 import com.bougsid.employe.Employe;
-import com.bougsid.missionType.MissionType;
+import com.bougsid.missiontype.MissionType;
 import com.bougsid.service.Dept;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

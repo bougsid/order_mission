@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface IServiceService {
     Page<Dept> findAll(int page);
+    List<Dept> findAll();
 
     List<Dept> getAllServices();
 
