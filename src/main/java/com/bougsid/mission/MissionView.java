@@ -167,12 +167,28 @@ public class MissionView implements Serializable {
         try {
             context.getExternalContext().redirect(request.getContextPath()
                     + "/download/" + selectedMission.getUuid()
-                    + "/" + selectedMission.getEmploye().getFullName());
+                    + "/" + selectedMission.getEmploye().getFullName()
+                    + "/pdf"
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    public void printDecompte() {
+        System.out.println("Printing ...");
+        this.missionService.printDecompte(selectedMission);
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            context.getExternalContext().redirect(request.getContextPath()
+                    + "/download/" + selectedMission.getUuid()
+                    + "/" + selectedMission.getEmploye().getFullName()
+                    + "/xlsx"
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public boolean isChefOrDG() {
         GradeType type = this.missionService.getPrincipal().getGrade().getType();
         return type == GradeType.CHEF || type == GradeType.DG;

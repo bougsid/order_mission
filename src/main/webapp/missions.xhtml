@@ -197,6 +197,13 @@
                                                                            actionListener="#{missionView.printMission()}"
                                                                            class="text-success">#{msg['mission.button.print']}</p:commandLink>
                                                         </li>
+                                                        <li class="no-padding ">
+                                                            <p:commandLink process="@this"
+                                                                           onstart="showNotification('#{msg['mission.notification.success.print']}','success')"
+                                                                           onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
+                                                                           actionListener="#{missionView.printDecompte()}"
+                                                                           class="text-success">#{msg['mission.button.decompte']}</p:commandLink>
+                                                        </li>
                                                     </c:if>
                                                 </c:if>
                                             </ul>

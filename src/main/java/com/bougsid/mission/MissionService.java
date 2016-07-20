@@ -4,6 +4,7 @@ import com.bougsid.employe.Employe;
 import com.bougsid.employe.EmployeProfile;
 import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
+import com.bougsid.mission.decompte.Excel;
 import com.bougsid.printers.PrintMission;
 import com.bougsid.service.Dept;
 import com.bougsid.util.NotificationService;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 
 /**
@@ -32,6 +34,8 @@ public class MissionService implements IMissionService {
     private NotificationService notificationService;
     @Autowired
     private PrintMission printMission;
+    @Autowired
+    private Excel excel;
     private final static int pageSize = 10;
 
     @Override
@@ -150,15 +154,13 @@ public class MissionService implements IMissionService {
         state.addMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
-//        if (missionStateEnum == MissionStateEnum.VDE) {
-//            try {
-//                this.notificationService.sendNotificaitoin(mission);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } catch (MessagingException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        try {
+            this.notificationService.sendNotificaitoin(mission);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -275,7 +277,11 @@ public class MissionService implements IMissionService {
 
     @Override
     public void printMission(Mission mission)  {
-        printMission.printMission(mission);
+        this.printMission.printMission(mission);
+    }
+    @Override
+    public void printDecompte(Mission mission)  {
+        this.excel.generateExcel(mission);
     }
 
 }

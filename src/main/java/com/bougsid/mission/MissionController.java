@@ -87,19 +87,24 @@ public class MissionController {
         return "redirect:/login?logout";
     }
 
-    @RequestMapping(value = "/download/{uuid}/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/download/{uuid}/{name}/{type}", method = RequestMethod.GET)
     public void getFile(
             @PathVariable("uuid") String uuid,
             @PathVariable("name") String name,
+            @PathVariable("type") String type,
             HttpServletResponse response) {
         try {
             System.out.println("Downloading ...");
-            response.setContentType("application/pdf");
-            response.setHeader("Content-disposition", "inline; filename="+name);
+            if (type.equals("pdf"))
+                response.setContentType("application/pdf");
+            else
+                response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-disposition", "inline; filename=" + name+"."+type
+            );
 
             // get your file as InputStream
             File downloadDir = new File(msg.getMessage("application.mission.downloaddir"));
-            InputStream is = new FileInputStream(downloadDir.getPath() + "/" + uuid + ".pdf");
+            InputStream is = new FileInputStream(downloadDir.getPath() + "/" + uuid + "."+type);
 
             // copy it to response's OutputStream
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());

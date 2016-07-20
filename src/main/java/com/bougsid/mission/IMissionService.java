@@ -43,6 +43,8 @@ public interface IMissionService {
 
     void printMission(Mission mission);
 
+    void printDecompte(Mission mission);
+
 
 //    void rejectMission(Mission mission);
 }
