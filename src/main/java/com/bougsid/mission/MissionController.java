@@ -73,9 +73,9 @@ public class MissionController {
         return "missions";
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/taux", method = RequestMethod.GET)
     public String testPage() {
-        return "test";
+        return "taux";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

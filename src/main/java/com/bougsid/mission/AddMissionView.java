@@ -59,14 +59,14 @@ public class AddMissionView {
         this.missionTypes = this.missionTypeService.getAllTypes();
     }
     public void addMission() {
-        System.out.println("Add Mission");
-//        System.out.println(mission);
-//        mission.setIdMission(null);//Always Add New Mission
-//        this.villes.getTarget().forEach(System.out::println);
-        System.out.println("Size ="+this.villes.getTarget().size());
-        for (Ville ville : this.villes.getTarget()) {
-            System.out.println("---------------"+ville.getId()+ville.getNom());
-        }
+//        System.out.println("Add Mission");
+////        System.out.println(mission);
+////        mission.setIdMission(null);//Always Add New Mission
+////        this.villes.getTarget().forEach(System.out::println);
+//        System.out.println("Size ="+this.villes.getTarget().size());
+//        for (Ville ville : this.villes.getTarget()) {
+//            System.out.println("---------------"+ville.getId()+ville.getNom());
+//        }
         this.mission.setVilles(this.villes.getTarget());
         this.missionService.save(this.mission);
         this.mission = new Mission();

@@ -29,6 +29,7 @@ public class Employe {
     private String email;
     private String matricule;
     private String fonction;
+    private boolean derictor;
     @OneToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinColumn(name = "id_grade")
     private Grade grade;
@@ -197,6 +198,14 @@ public class Employe {
     @Transient
     public String getFullName() {
         return this.nom + " " + this.prenom;
+    }
+
+    public boolean isDerictor() {
+        return derictor;
+    }
+
+    public void setDerictor(boolean derictor) {
+        this.derictor = derictor;
     }
 
     @Override

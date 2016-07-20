@@ -3,6 +3,8 @@ package com.bougsid.mission.decompte;
 import com.bougsid.MSG;
 import com.bougsid.employe.Employe;
 import com.bougsid.mission.Mission;
+import com.bougsid.taux.ITauxService;
+import com.bougsid.taux.Taux;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
@@ -21,6 +23,8 @@ import java.time.temporal.ChronoUnit;
  */
 @Component
 public class Excel {
+    @Autowired
+    private ITauxService tauxService;
     @Autowired
     private MSG msg;
     private Mission mission;
@@ -73,6 +77,7 @@ public class Excel {
 
     private void setHeaderInformations() {
         Employe employ = mission.getEmploye();
+        Taux taux = this.tauxService.getTaux();
         this.setCellValue(nom, employ.getFullName());
         this.setCellValue(matricule, employ.getMatricule());
         this.setCellValue(idMission, mission.getIdMission());
@@ -83,10 +88,17 @@ public class Excel {
         this.setCellValue(endHour, mission.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm")));
         this.setCellValue(transportType, mission.getTransport().getType().getLabel());
         this.setCellValue(distance, 0);
-        this.setCellValue(tauxDejounerDiner, 10);
-        this.setCellValue(tauxPetitDejouner, 25);
-        this.setCellValue(tauxHebergement, 40);
-        this.setCellValue(tauxKilometrique, 1.8);
+        if(employ.isDerictor()){
+            this.setCellValue(tauxDejounerDiner, taux.getTauxDejounerDinerDirec());
+            this.setCellValue(tauxPetitDejouner, taux.getTauxPetitDejounerDirec());
+            this.setCellValue(tauxHebergement, taux.getTauxHebergementDirec());
+            this.setCellValue(tauxKilometrique, taux.getTauxKilometriqueDirec());
+        }else{
+            this.setCellValue(tauxDejounerDiner, taux.getTauxDejounerDiner());
+            this.setCellValue(tauxPetitDejouner, taux.getTauxPetitDejouner());
+            this.setCellValue(tauxHebergement, taux.getTauxHebergement());
+            this.setCellValue(tauxKilometrique, taux.getTauxKilometrique());
+        }
     }
 
     private double getCellValue(String ref) {
