@@ -17,6 +17,8 @@ public class Ville {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom;
+    private float distance;
+    private float tauxAuto;
 
     public Ville() {
     }
@@ -37,4 +39,19 @@ public class Ville {
         this.nom = nom;
     }
 
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public float getTauxAuto() {
+        return tauxAuto;
+    }
+
+    public void setTauxAuto(float tauxAuto) {
+        this.tauxAuto = tauxAuto;
+    }
 }

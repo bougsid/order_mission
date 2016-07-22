@@ -74,10 +74,17 @@ public class MissionController {
     }
 
     @RequestMapping(value = "/taux", method = RequestMethod.GET)
-    public String testPage() {
+    public String tauxPage() {
         return "taux";
     }
-
+    @RequestMapping(value = "/transport", method = RequestMethod.GET)
+    public String transportPage() {
+        return "transport";
+    }
+    @RequestMapping(value = "/villes", method = RequestMethod.GET)
+    public String villesPage() {
+        return "villes";
+    }
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

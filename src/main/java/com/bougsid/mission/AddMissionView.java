@@ -4,6 +4,7 @@ import com.bougsid.entreprise.Entreprise;
 import com.bougsid.entreprise.IEntrepriseService;
 import com.bougsid.missiontype.IMissionTypeService;
 import com.bougsid.missiontype.MissionType;
+import com.bougsid.transport.IVehiculeService;
 import com.bougsid.transport.TransportType;
 import com.bougsid.ville.IVilleService;
 import com.bougsid.ville.Ville;
@@ -35,8 +36,11 @@ public class AddMissionView {
     private IEntrepriseService entrepriseService;
     @Autowired
     private IMissionTypeService missionTypeService;
+    @Autowired
+    private IVehiculeService vehiculeService;
     private List<Ville> sourceVilles;
     private List<Ville> targetVilles;
+//    private List<Vehicule> vehicules;
     private DualListModel<Ville> villes;
     private List<Entreprise> entreprises;
     private List<MissionType> missionTypes;
@@ -54,6 +58,7 @@ public class AddMissionView {
 //        this.entrepriseService = OrderMissionApplication.getContext().getBean(IEntrepriseService.class);
         this.entreprises = this.entrepriseService.getAllEntreprices();
         this.sourceVilles = this.villeService.getAllVilles();
+//        this.vehicules = this.vehiculeService.getServiceVehicules();
         this.targetVilles = new ArrayList<>();
         this.villes = new DualListModel<>(sourceVilles,targetVilles);
         this.missionTypes = this.missionTypeService.getAllTypes();
@@ -109,4 +114,8 @@ public class AddMissionView {
     public void setEntreprises(List<Entreprise> entreprises) {
         this.entreprises = entreprises;
     }
+
+//    public List<Vehicule> getVehicules() {
+//        return vehicules;
+//    }
 }

@@ -137,8 +137,6 @@
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
 
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
-
-
                                                 <li class="no-padding ">
                                                     <p:commandLink process="@this"
                                                                    onstart="unselectAll(PF('employeList'));"
@@ -151,8 +149,14 @@
                                                         <p:commandLink process="@this"
                                                                        update="@(#employeDetail)"
                                                                        actionListener="#{employeView.deleteEmploye()}"
-                                                                       class="text-success">#{msg['employe.button.delete']}</p:commandLink>
+                                                                       class="text-success">#{msg['employe.button.delete']}
+                                                            <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.deleteQuestion']}" icon="ui-icon-alert" />
+                                                        </p:commandLink>
                                                     </li>
+                                                    <p:confirmDialog global="true">
+                                                        <p:commandButton value="#{msg['confirmation.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
                                                 </c:if>
 
                                             </ul>
@@ -232,7 +236,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="row clearfix">
-                                                            <div class="col-sm-6">
+                                                            <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.grade']}</label>
                                                                     <h:selectOneMenu label="#{msg['employe.grade']}"
@@ -260,7 +264,14 @@
                                                                     </h:panelGroup>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6">
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['employe.director']}</label>
+                                                                    <p:selectBooleanCheckbox itemLabel="Oui" label="Oui" value="#{employeView.selectedEmploye.derictor}" />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.dept']}</label>
                                                                     <h:selectOneMenu label="#{msg['employe.dept']}"

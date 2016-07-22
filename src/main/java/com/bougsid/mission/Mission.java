@@ -3,7 +3,7 @@ package com.bougsid.mission;
 import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.missiontype.MissionType;
-import com.bougsid.transport.Transport;
+import com.bougsid.transport.TransportType;
 import com.bougsid.ville.Ville;
 import org.springframework.context.annotation.Scope;
 
@@ -23,9 +23,12 @@ public class Mission {
     private String objet;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-//    private String destination;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private Transport transport;
+    //    private String destination;
+    @Enumerated(EnumType.STRING)
+    private TransportType transportType;
+    @OneToOne
+    private Employe accompEmploye;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_employe", nullable = false)
     private Employe employe;
@@ -43,7 +46,7 @@ public class Mission {
     private MissionType type;
     private String comment;
     private String uuid;
-//    @OneToMany(fetch = FetchType.LAZY)
+    //    @OneToMany(fetch = FetchType.LAZY)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "MISSION_VILLE",
             joinColumns = {@JoinColumn(name = "MISSION_ID")},
@@ -51,11 +54,11 @@ public class Mission {
     private List<Ville> villes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "id_entreprise", nullable = false)
+    @JoinColumn(name = "id_entreprise", nullable = true)
     private Entreprise entreprise;
 
     public Mission() {
-        this.transport = new Transport();
+//        this.transport = new Transport();
         this.uuid = UUID.randomUUID().toString();
     }
 
@@ -91,7 +94,31 @@ public class Mission {
         this.endDate = endDate;
     }
 
-//    public String getDestination() {
+    public TransportType getTransportType() {
+        return transportType;
+    }
+
+    public void setTransportType(TransportType transportType) {
+        this.transportType = transportType;
+    }
+
+    public Employe getAccompEmploye() {
+        return accompEmploye;
+    }
+
+    public void setAccompEmploye(Employe accompEmploye) {
+        this.accompEmploye = accompEmploye;
+    }
+//
+//    public Vehicule getServiceVehicule() {
+//        return serviceVehicule;
+//    }
+//
+//    public void setServiceVehicule(Vehicule serviceVehicule) {
+//        this.serviceVehicule = serviceVehicule;
+//    }
+
+    //    public String getDestination() {
 //        return destination;
 //    }
 //
@@ -99,13 +126,13 @@ public class Mission {
 //        this.destination = destination;
 //    }
 
-    public Transport getTransport() {
-        return transport;
-    }
-
-    public void setTransport(Transport transport) {
-        this.transport = transport;
-    }
+//    public Transport getTransport() {
+//        return transport;
+//    }
+//
+//    public void setTransport(Transport transport) {
+//        this.transport = transport;
+//    }
 
     public Long getIdMission() {
         return idMission;
@@ -200,7 +227,7 @@ public class Mission {
                 ", objet='" + objet + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", transport=" + transport +
+//                ", transport=" + transport +
                 ", employe=" + employe +
                 '}';
     }

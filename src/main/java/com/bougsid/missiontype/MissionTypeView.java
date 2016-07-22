@@ -64,6 +64,10 @@ public class MissionTypeView implements Serializable {
         this.missionTypeService.save(selectedMissionType);
     }
 
+    public void deleteType() {
+        this.missionTypeService.delete(selectedMissionType);
+    }
+
     public SelectItem[] getPages() {
         SelectItem[] pages = new SelectItem[maxPages];
         for (int i = 1; i <= maxPages; i++) {

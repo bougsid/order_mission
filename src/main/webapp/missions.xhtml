@@ -166,23 +166,23 @@
 
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
                                                 <c:if test="#{missionView.selectedMission != null}">
-                                                    <c:if test="#{missionView.autre}">
-                                                        <li class="no-padding "><p:commandLink
-                                                                onsuccess="showNotification('#{msg['mission.notification.success.update']}','success')"
-                                                                onerror="showNotification('#{msg['mission.notification.error.update']}','error')"
-                                                                actionListener="#{missionView.updateMission()}"
-                                                                class="text-success">#{msg['mission.button.save']}</p:commandLink>
-                                                        </li>
-                                                    </c:if>
+                                                    <!--<c:if test="#{missionView.autre}">-->
+                                                    <!--<li class="no-padding "><p:commandLink process="@this"-->
+                                                    <!--onsuccess="showNotification('#{msg['mission.notification.success.update']}','success')"-->
+                                                    <!--onerror="showNotification('#{msg['mission.notification.error.update']}','error')"-->
+                                                    <!--actionListener="#{missionView.updateMission()}"-->
+                                                    <!--class="text-success">#{msg['mission.button.save']}</p:commandLink>-->
+                                                    <!--</li>-->
+                                                    <!--</c:if>-->
                                                     <c:if test="#{missionView.chefOrDG}">
-                                                        <li class="no-padding "><p:commandLink process="@this"
+                                                        <li class="no-padding "><p:commandLink process="comment @this"
                                                                                                onsuccess="showNotification('#{msg['mission.notification.success.validate']}','success')"
                                                                                                onerror="showNotification('#{msg['mission.notification.error.validate']}','error')"
                                                                                                actionListener="#{missionView.validateMission()}"
                                                                                                class="text-success">#{msg['mission.button.validate']}</p:commandLink>
                                                         </li>
                                                         <li class="no-padding ">
-                                                            <p:commandLink process="@this"
+                                                            <p:commandLink process="comment @this"
                                                                            onsuccess="showNotification('#{msg['mission.notification.success.reject']}','success')"
                                                                            onerror="showNotification('#{msg['mission.notification.error.reject']}','error')"
                                                                            actionListener="#{missionView.rejectMission()}"
@@ -208,7 +208,6 @@
                                                 </c:if>
                                             </ul>
 
-                                            <div class="clearfix"/>
                                         </div>
                                         <c:if test="#{missionView.selectedMission != null}">
                                             <div class="email-content">
@@ -218,12 +217,18 @@
                                                         #{missionView.selectedMission.lastState.state.label} -
                                                         #{missionView.selectedMission.lastState.stateDate}
                                                     </h5>
-                                                    <h4>#{missionView.selectedMission.employe.prenom}
-                                                        #{missionView.selectedMission.employe.nom}
-                                                    </h4>
-                                                </div>
+                                                    <c:if test="#{missionView.chefOrDG}">
+                                                        <p:inputTextarea class="form-control" id="comment"
+                                                                         placeholder="#{msg['mission.comment']}"
+                                                                         value="#{missionView.selectedMission.comment}"
+                                                                         aria-invalid="false"></p:inputTextarea>
+                                                    </c:if>
+                                                    <h5>
+                                                        <h:outputText value="#{missionView.selectedMission.employe.civilite.label}"/>
+                                                        <b><h:outputText value="#{missionView.selectedMission.employe.fullName}"/></b>
 
-                                                <div class="clearfix"/>
+                                                    </h5>
+                                                </div>
 
                                                 <div class="email-content-body m-t-20">
                                                     <div class="form-group-attached">
@@ -272,20 +277,30 @@
                                                         </div>
                                                         <div class="form-group form-group-default required">
                                                             <label>#{msg['mission.destination']}</label>
-                                                            <p:pickList id="ville" value="#{missionView.villes}"
-                                                                        showTargetControls="true" showCheckbox="true"
-                                                                        responsive="true"
-                                                                        showSourceFilter="true" showTargetFilter="true"
-                                                                        filterMatchMode="contains"
-                                                                        var="v" itemLabel="#{v.nom}"
-                                                                        converter="villeConverter"
-                                                                        itemValue="#{v}">
+                                                            <c:if test="#{missionView.autre}">
+                                                                <p:pickList id="ville" value="#{missionView.villes}"
+                                                                            showTargetControls="true"
+                                                                            showCheckbox="true"
+                                                                            responsive="true"
+                                                                            showSourceFilter="true"
+                                                                            showTargetFilter="true"
+                                                                            filterMatchMode="contains"
+                                                                            var="v" itemLabel="#{v.nom}"
+                                                                            converter="villeConverter"
+                                                                            itemValue="#{v}">
 
-                                                                <f:facet
-                                                                        name="sourceCaption">#{msg['mission.villes.all']}</f:facet>
-                                                                <f:facet
-                                                                        name="targetCaption">#{msg['mission.villes.destination']}</f:facet>
-                                                            </p:pickList>
+                                                                    <f:facet
+                                                                            name="sourceCaption">#{msg['mission.villes.all']}</f:facet>
+                                                                    <f:facet
+                                                                            name="targetCaption">#{msg['mission.villes.destination']}</f:facet>
+                                                                </p:pickList>
+                                                            </c:if>
+                                                            <c:if test="#{!missionView.autre}">
+                                                                <ui:repeat value="#{missionView.selectedMission.villes}"
+                                                                           var="ville">
+                                                                    <h:outputText value="#{ville.nom}, "/>
+                                                                </ui:repeat>
+                                                            </c:if>
                                                         </div>
                                                         <div class="row clearfix">
                                                             <div class="col-sm-6">
@@ -323,52 +338,49 @@
                                                     <p class="m-t-10">#{msg['mission.transport']}</p>
                                                     <div class="form-group-attached">
                                                         <div class="row clearfix">
-                                                            <div class="col-sm-4">
+                                                            <div class="col-sm-6">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['mission.transporttype']}</label>
                                                                     <h:selectOneMenu
                                                                             label="#{msg['mission.transporttype']}"
                                                                             id="transporttype"
                                                                             styleClass="select-one-menu"
-                                                                            value="#{missionView.selectedMission.transport.type}">
+                                                                            value="#{missionView.selectedMission.transportType}">
                                                                         <f:selectItems
                                                                                 value="#{missionView.transportTypes}"/>
                                                                         <f:converter binding="#{genericEnumConverter}"/>
+                                                                    <p:ajax render="missionDetail:accomp"/>
                                                                     </h:selectOneMenu>
                                                                     <p:message for="transporttype"/>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group-default required">
-                                                                    <label>#{msg['mission.transportmarque']}</label>
-                                                                    <h:inputText
-                                                                            label="#{msg['mission.transportmarque']}"
-                                                                            id="transportmarque" required="true"
-                                                                            styleClass="form-control input-lg"
-                                                                            value="#{missionView.selectedMission.transport.marque}">
-                                                                    </h:inputText>
-                                                                    <p:message for="transportmarque"/>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group-default required">
-                                                                    <label>#{msg['mission.transportmatriqule']}</label>
-                                                                    <h:inputText
-                                                                            label="#{msg['mission.transportmatriqule']}"
-                                                                            id="transportmatriqule" required="true"
-                                                                            styleClass="form-control input-lg"
-                                                                            value="#{missionView.selectedMission.transport.matricule}">
-                                                                    </h:inputText>
-                                                                    <p:message for="transportmatriqule"/>
-                                                                </div>
-                                                            </div>
+                                                            <h:panelGroup id="accomp">
+                                                                <h:panelGroup
+                                                                        rendered="#{missionView.selectedMission.transportType=='Accompagnement'}">
+                                                                    <div class="col-sm-6">
+                                                                        <div class="form-group form-group-default required">
+                                                                            <label>#{msg['mission.accompEmploye']}</label>
+                                                                            <h:selectOneMenu
+                                                                                    id="chef"
+                                                                                    styleClass="select-one-menu"
+                                                                                    value="#{missionView.selectedMission.accompEmploye}">
+                                                                                <f:selectItem noSelectionOption="true"
+                                                                                              itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                              itemValue=""/>
+                                                                                <f:selectItems rendered="true"
+                                                                                               value="#{serviceView.employes}"
+                                                                                               var="emp"
+                                                                                               itemValue="#{emp}"
+                                                                                               itemLabel="#{emp.fullName}"
+                                                                                />
+                                                                                <f:converter
+                                                                                        converterId="employeConverter"/>
+                                                                            </h:selectOneMenu>
+                                                                        </div>
+                                                                    </div>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>
                                                         </div>
-
-                                                        <p:inputTextarea class="form-control" id="name"
-                                                                         placeholder="#{msg['mission.comment']}"
-                                                                         value="#{missionView.selectedMission.comment}"
-                                                                         aria-invalid="false"></p:inputTextarea>
 
                                                     </div>
                                                     <div class="row p-b-20">

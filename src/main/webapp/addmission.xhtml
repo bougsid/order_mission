@@ -54,7 +54,8 @@
                 <!-- START EMAIL -->
                 <!-- START EMAIL SIDEBAR MENU-->
                 <nav class="secondary-sidebar padding-30">
-                    <a href="addmission" class="btn btn-complete btn-block btn-compose m-b-30">#{msg['mission.compose']}</a>
+                    <a href="addmission"
+                       class="btn btn-complete btn-block btn-compose m-b-30">#{msg['mission.compose']}</a>
 
 
                     <ul class="main-menu">
@@ -71,11 +72,12 @@
 
                 <!-- END EMAL SIDEBAR MENU -->
                 <!-- START COMPOSE EMAIL -->
-                <div class="email-composer container-fluid">
+                <div class="email-composer
+container-fluid">
                     <div class="row">
                         <div class="col-sm-12 no-padding">
                             <!--<div class="wysiwyg5-wrapper ">-->
-                                <!--<h1>#{msg['mission.new']}</h1>-->
+                            <!--<h1>#{msg['mission.new']}</h1>-->
                             <!--</div>-->
                             <h:form id="missionDetail">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -112,9 +114,15 @@
                                                                                  id="entreprise"
                                                                                  styleClass="select-one-menu"
                                                                                  value="#{addMissionView.mission.entreprise}">
+                                                                    <f:selectItem noSelectionOption="true"
+                                                                                  itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                  itemValue=""/>
                                                                     <f:selectItems
-                                                                            value="#{addMissionView.entreprises}" var="entr" itemValue="#{entr}" itemLabel="#{entr.nom}"/>
-                                                                    <f:converter for="entreprise" converterId="entrepriseConverter"/>
+                                                                            value="#{addMissionView.entreprises}"
+                                                                            var="entr" itemValue="#{entr}"
+                                                                            itemLabel="#{entr.nom}"/>
+                                                                    <f:converter for="entreprise"
+                                                                                 converterId="entrepriseConverter"/>
                                                                 </h:selectOneMenu>
                                                             </div>
                                                         </div>
@@ -126,8 +134,11 @@
                                                                                  styleClass="select-one-menu"
                                                                                  value="#{addMissionView.mission.type}">
                                                                     <f:selectItems
-                                                                            value="#{addMissionView.missionTypes}" var="tp" itemValue="#{tp}" itemLabel="#{tp.label}"/>
-                                                                    <f:converter for="type" converterId="missionTypeConverter"/>
+                                                                            value="#{addMissionView.missionTypes}"
+                                                                            var="tp" itemValue="#{tp}"
+                                                                            itemLabel="#{tp.label}"/>
+                                                                    <f:converter for="type"
+                                                                                 converterId="missionTypeConverter"/>
                                                                 </h:selectOneMenu>
                                                             </div>
                                                         </div>
@@ -141,11 +152,13 @@
                                                                     filterMatchMode="contains"
                                                                     var="v" itemLabel="#{v.nom}"
                                                                     converter="villeConverter"
-                                                                    
+
                                                                     itemValue="#{v}">
 
-                                                            <f:facet name="sourceCaption">#{msg['mission.villes.all']}</f:facet>
-                                                            <f:facet name="targetCaption">#{msg['mission.villes.destination']}</f:facet>
+                                                            <f:facet
+                                                                    name="sourceCaption">#{msg['mission.villes.all']}</f:facet>
+                                                            <f:facet
+                                                                    name="targetCaption">#{msg['mission.villes.destination']}</f:facet>
                                                         </p:pickList>
                                                     </div>
                                                     <div class="row clearfix">
@@ -183,44 +196,47 @@
 
                                                 <div class="form-group-attached">
                                                     <div class="row clearfix">
-                                                        <div class="col-sm-4">
+                                                        <div class="col-sm-6">
                                                             <div class="form-group form-group-default required">
                                                                 <label>#{msg['mission.transporttype']}</label>
                                                                 <h:selectOneMenu label="#{msg['mission.transporttype']}"
                                                                                  id="transporttype"
                                                                                  styleClass="select-one-menu"
-                                                                                 value="#{addMissionView.mission.transport.type}">
+                                                                                 value="#{addMissionView.mission.transportType}">
                                                                     <f:selectItems
                                                                             value="#{addMissionView.transportTypes}"/>
                                                                     <f:converter binding="#{genericEnumConverter}"/>
+                                                                    <f:ajax render="missionDetail:accomp"/>
                                                                 </h:selectOneMenu>
                                                                 <p:message for="transporttype"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group form-group-default required">
-                                                                <label>#{msg['mission.transportmarque']}</label>
-                                                                <h:inputText label="#{msg['mission.transportmarque']}"
-                                                                             id="transportmarque" required="true"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{addMissionView.mission.transport.marque}">
-                                                                </h:inputText>
-                                                                <p:message for="transportmarque"/>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-4">
-                                                            <div class="form-group form-group-default required">
-                                                                <label>#{msg['mission.transportmatriqule']}</label>
-                                                                <h:inputText
-                                                                        label="#{msg['mission.transportmatriqule']}"
-                                                                        id="transportmatriqule" required="true"
-                                                                        styleClass="form-control input-lg"
-                                                                        value="#{addMissionView.mission.transport.matricule}">
-                                                                </h:inputText>
-                                                                <p:message for="transportmatriqule"/>
-                                                            </div>
-                                                        </div>
+                                                        <h:panelGroup id="accomp">
+                                                            <h:panelGroup
+                                                                    rendered="#{addMissionView.mission.transportType=='Accompagnement'}">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group form-group-default required">
+                                                                        <label>#{msg['mission.accompEmploye']}</label>
+                                                                        <h:selectOneMenu
+                                                                                id="chef"
+                                                                                styleClass="select-one-menu"
+                                                                                value="#{addMissionView.mission.accompEmploye}">
+                                                                            <f:selectItem noSelectionOption="true"
+                                                                                          itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                          itemValue=""/>
+                                                                            <f:selectItems rendered="true"
+                                                                                           value="#{serviceView.employes}"
+                                                                                           var="emp"
+                                                                                           itemValue="#{emp}"
+                                                                                           itemLabel="#{emp.fullName}"
+                                                                            />
+                                                                            <f:converter
+                                                                                    converterId="employeConverter"/>
+                                                                        </h:selectOneMenu>
+                                                                    </div>
+                                                                </div>
+                                                            </h:panelGroup>
+                                                        </h:panelGroup>
                                                     </div>
                                                 </div>
                                             </div>

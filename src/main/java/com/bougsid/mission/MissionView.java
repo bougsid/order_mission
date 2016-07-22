@@ -115,13 +115,15 @@ public class MissionView implements Serializable {
     }
 
     public void validateMission() {
-        if(selectedMission != null)
-        this.missionService.validateMission(this.selectedMission);
+        if(selectedMission != null){
+            this.missionService.validateMission(this.selectedMission);
+        }
     }
 
     public void rejectMission() {
-        if(selectedMission != null)
-        this.missionService.rejectMission(this.selectedMission);
+        if(selectedMission != null){
+            this.missionService.rejectMission(this.selectedMission);
+        }
     }
 
     public SelectItem[] getTransportTypes() {

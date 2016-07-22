@@ -1,4 +1,4 @@
-package com.bougsid.service;
+package com.bougsid.transport;
 
 import com.bougsid.employe.Employe;
 import com.bougsid.employe.IEmployeService;
@@ -21,17 +21,18 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class ServiceView implements Serializable {
-    private Dept dept = new Dept();
+public class VehiculeView implements Serializable {
+
+    @Autowired
+    private IVehiculeService vehiculeService;
     @Autowired
     private IEmployeService employeService;
-    @Autowired
-    private IServiceService serviceService;
-    private Dept selectedDept;
+    private Vehicule selectedVehicule;
+    private List<Vehicule> vehicules;
     private List<Employe> employes;
-    private List<Dept> depts;
     private int page;
     private int maxPages;
+    private Vehicule vehicule;
 
     @PostConstruct
     public void init() {
@@ -42,31 +43,32 @@ public class ServiceView implements Serializable {
         WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).
                 getAutowireCapableBeanFactory().
                 autowireBean(this);
-        //Get Services List
+        //Get Vehicules List
         this.page = 0;
-        Page<Dept> servicePage = this.serviceService.findAll(this.page);
-        this.depts = servicePage.getContent();
+        Page<Vehicule> servicePage = this.vehiculeService.findAll(this.page);
+        this.employes = employeService.findAll();
+        this.vehicules = servicePage.getContent();
         this.maxPages = servicePage.getTotalPages();
-        this.employes = this.employeService.findAll();
-
+        vehicule = new Vehicule();
     }
 
-    public void newService() {
-        this.selectedDept = new Dept();
+    public void newVehicule() {
+        this.selectedVehicule = new Vehicule();
     }
 
     public void updateListWithPage() {
         System.out.println("Page =" + page);
-        this.depts = this.serviceService.findAll(page - 1).getContent();
+        this.vehicules = this.vehiculeService.findAll(page - 1).getContent();
     }
 
-    public void saveService() {
-        this.serviceService.save(selectedDept);
+    public void saveVehicule() {
+        this.vehiculeService.save(selectedVehicule);
     }
 
-    public void deleteService(){
-        this.serviceService.delete(selectedDept);
+    public void deleteVehicule() {
+        this.vehiculeService.delete(selectedVehicule);
     }
+
     public SelectItem[] getPages() {
         SelectItem[] pages = new SelectItem[maxPages];
         for (int i = 1; i <= maxPages; i++) {
@@ -75,20 +77,20 @@ public class ServiceView implements Serializable {
         return pages;
     }
 
-    public Dept getDept() {
-        return dept;
+    public Vehicule getVehicule() {
+        return vehicule;
     }
 
-    public void setDept(Dept dept) {
-        this.dept = dept;
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
     }
 
-    public Dept getSelectedDept() {
-        return selectedDept;
+    public Vehicule getSelectedVehicule() {
+        return selectedVehicule;
     }
 
-    public void setSelectedDept(Dept selectedDept) {
-        this.selectedDept = selectedDept;
+    public void setSelectedVehicule(Vehicule selectedVehicule) {
+        this.selectedVehicule = selectedVehicule;
     }
 
     public List<Employe> getEmployes() {
@@ -99,12 +101,12 @@ public class ServiceView implements Serializable {
         this.employes = employes;
     }
 
-    public List<Dept> getDepts() {
-        return depts;
+    public List<Vehicule> getVehicules() {
+        return vehicules;
     }
 
-    public void setDepts(List<Dept> depts) {
-        this.depts = depts;
+    public void setVehicules(List<Vehicule> vehicules) {
+        this.vehicules = vehicules;
     }
 
     public int getPage() {

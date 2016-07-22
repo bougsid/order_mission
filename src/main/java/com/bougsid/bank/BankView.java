@@ -61,6 +61,10 @@ public class BankView implements Serializable {
         this.bankService.save(selectedBank);
     }
 
+    public void deleteBank(){
+        this.bankService.delete(selectedBank);
+    }
+
     public void newBank(){
         this.selectedBank = new Bank();
     }

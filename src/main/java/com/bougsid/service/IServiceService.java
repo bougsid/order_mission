@@ -17,4 +17,6 @@ public interface IServiceService {
     Dept save(Dept dept);
 
     Grade getChefGrade();
+
+    void delete(Dept dept);
 }

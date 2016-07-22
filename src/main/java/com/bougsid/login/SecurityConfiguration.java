@@ -35,6 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/services").hasRole("ADMIN")
                 .antMatchers("/types").hasRole("ADMIN")
                 .antMatchers("/taux").hasRole("ADMIN")
+                .antMatchers("/transport").hasRole("ADMIN")
+                .antMatchers("/villes").hasRole("ADMIN")
                 .antMatchers("/addmission").hasRole("USER")
                 .antMatchers("/missions").authenticated()
                 .and().formLogin().loginPage("/login").successHandler(authHandler)

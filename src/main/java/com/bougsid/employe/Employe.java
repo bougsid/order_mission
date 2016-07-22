@@ -4,6 +4,7 @@ import com.bougsid.bank.Bank;
 import com.bougsid.grade.Grade;
 import com.bougsid.mission.Mission;
 import com.bougsid.service.Dept;
+import com.bougsid.transport.Vehicule;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -56,8 +57,18 @@ public class Employe {
     private Bank bank;
     private String rib;
 
+    @OneToOne
+    private Vehicule vehicule;
     public Employe() {
 
+    }
+
+    public Vehicule getVehicule() {
+        return vehicule;
+    }
+
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
     }
 
     public Long getIdEmploye() {

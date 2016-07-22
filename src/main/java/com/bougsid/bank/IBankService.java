@@ -13,4 +13,6 @@ public interface IBankService {
     Bank findOne(Long id);
 
     void save(Bank bank);
+
+    void delete(Bank bank);
 }

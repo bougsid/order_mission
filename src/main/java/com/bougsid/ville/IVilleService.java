@@ -1,5 +1,7 @@
 package com.bougsid.ville;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 /**
@@ -7,4 +9,10 @@ import java.util.List;
  */
 public interface IVilleService {
     List<Ville> getAllVilles();
+
+    Page<Ville> findAll(int page);
+
+    Ville save(Ville ville);
+
+    void delete(Ville ville);
 }

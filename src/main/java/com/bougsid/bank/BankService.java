@@ -31,4 +31,9 @@ public class BankService implements IBankService {
     public void save(Bank bank) {
         this.bankRepository.save(bank);
     }
+
+    @Override
+    public void delete(Bank bank) {
+        this.bankRepository.delete(bank);
+    }
 }

@@ -52,4 +52,9 @@ public class ServiceService implements IServiceService {
     public Grade getChefGrade(){
         return this.gradeService.findByType(GradeType.CHEF);
     }
+
+    @Override
+    public void delete(Dept dept) {
+        this.serviceRepository.delete(dept);
+    }
 }

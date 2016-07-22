@@ -91,31 +91,45 @@
                                 <a class="list-refresh" href="#"><i class="fa fa-refresh"/></a>
                                 <div data-email="list">
                                     <!-- START EMAIL LIST SORTED BY DATE -->
-                                    <h:form>
+                                    <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="bankList" var="bnk"
+                                        <p:dataTable widgetVar="vehiculeList" var="v"
                                                      styleClass="borderless hide-column-names"
-                                                     value="#{bankView.banks}"
+                                                     value="#{vehiculeView.vehicules}"
                                                      selectionMode="single"
-                                                     selection="#{bankView.selectedBank}"
-                                                     rowKey="#{bnk.id}">
-                                            <p:ajax event="rowSelect" update="@(#bankDetail)"/>
+                                                     selection="#{vehiculeView.selectedVehicule}"
+                                                     rowKey="#{v.id}">
+                                            <p:ajax event="rowSelect" update="@(#vehiculeDetail)"/>
+
                                             <p:column>
-                                                <h:outputText value="#{bnk.name}"/>
+                                                <h:outputText value="#{v.marque}"/>
+                                            </p:column>
+
+                                            <p:column>
+                                                <h:outputText value="#{v.matricule}"/>
                                             </p:column>
                                             <p:column>
-                                                <h:outputText value="#{bnk.phone}"/>
+                                                <h:outputText value="#{v.employe.fullName}"/>
                                             </p:column>
                                         </p:dataTable>
 
                                     </h:form>
-
+                                    <h:form>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <h:selectOneMenu id="page"
+                                                         styleClass="select-one-menu"
+                                                         value="#{vehiculeView.page}">
+                                            <f:selectItems value="#{vehiculeView.pages}"/>
+                                            <p:ajax update="tableForm" event="valueChange"
+                                                    listener="#{vehiculeView.updateListWithPage()}"/>
+                                        </h:selectOneMenu>
+                                    </h:form>
                                     <!-- END EMAIL LIST SORTED BY DATE -->
                                 </div>
                             </div>
                             <!-- END SPLIT LIST VIEW -->
                             <!-- START SPLIT DETAILS -->
-                            <h:form id="bankDetail">
+                            <h:form id="vehiculeDetail">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                 <div data-email="opened" class="split-details">
@@ -124,77 +138,104 @@
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
 
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
-                                                <li class="no-padding ">
-                                                    <p:commandLink process="@this"
-                                                                   onstart="unselectAll(PF('bankList'));"
-                                                                   update="@(#bankDetail)"
-                                                                   actionListener="#{bankView.newBank()}"
-                                                                   class="text-success">#{msg['bank.button.new']}</p:commandLink>
-                                                </li>
-                                                <c:if test="#{bankView.selectedBank != null}">
+
 
                                                 <li class="no-padding ">
                                                     <p:commandLink process="@this"
-                                                                   update="@(#employeDetail)"
-                                                                   actionListener="#{bankView.deleteBank()}"
-                                                                   class="text-success">#{msg['employe.button.delete']}
-                                                        <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.deleteQuestion']}" icon="ui-icon-alert" />
-                                                    </p:commandLink>
+                                                                   onstart="unselectAll(PF('vehiculeList'));"
+                                                                   update="@(#vehiculeDetail)"
+                                                                   actionListener="#{vehiculeView.newVehicule()}"
+                                                                   class="text-success">#{msg['employe.button.new']}</p:commandLink>
                                                 </li>
-                                                <p:confirmDialog global="true">
-                                                    <p:commandButton value="#{msg['confirmation.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                                    <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                                </p:confirmDialog>
+                                                <c:if test="#{vehiculeView.selectedVehicule != null}">
+                                                    <li class="no-padding ">
+                                                        <p:commandLink process="@this"
+                                                                       update="@(#employeDetail)"
+                                                                       actionListener="#{vehiculeView.deleteVehicule()}"
+                                                                       class="text-success">#{msg['employe.button.delete']}
+                                                            <p:confirm header="#{msg['confirmation.deleteHeader']}"
+                                                                       message="#{msg['confirmation.deleteQuestion']}"
+                                                                       icon="ui-icon-alert"/>
+                                                        </p:commandLink>
+                                                    </li>
+                                                    <p:confirmDialog global="true">
+                                                        <p:commandButton value="#{msg['confirmation.yes']}"
+                                                                         type="button" styleClass="ui-confirmdialog-yes"
+                                                                         icon="ui-icon-check"/>
+                                                        <p:commandButton value="#{msg['confirmation.no']}" type="button"
+                                                                         styleClass="ui-confirmdialog-no"
+                                                                         icon="ui-icon-close"/>
+                                                    </p:confirmDialog>
                                                 </c:if>
                                             </ul>
 
                                             <div class="clearfix"/>
                                         </div>
-                                        <c:if test="#{bankView.selectedBank != null}">
+                                        <c:if test="#{vehiculeView.selectedVehicule != null}">
+                                            <div class="email-content">
 
-                                        <div class="email-content">
 
-                                            <div class="clearfix"/>
+                                                <div class="clearfix"/>
 
-                                            <div class="email-content-body m-t-20">
-                                                <div class="form-group-attached">
-                                                    <div class="form-group form-group-default required">
-                                                        <label>#{msg['bank.name']}</label>
-                                                        <p:inputText label="#{msg['bank.name']}"
-                                                                     styleClass="form-control input-lg" id="objet"
-                                                                     value="#{bankView.selectedBank.name}"
-                                                                     required="true"/>
-                                                    </div>
-                                                    <div class="row clearfix">
+                                                <div class="email-content-body m-t-20">
+                                                    <div class="form-group-attached">
 
-                                                        <div class="col-sm-12">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['bank.phone']}</label>
-                                                                <h:inputText id="fonction" required="true"
-                                                                             label="#{msg['bank.phone']}"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{bankView.selectedBank.phone}">
-                                                                </h:inputText>
-                                                            </div>
+                                                        <div class="form-group form-group-default required">
+                                                            <label>#{msg['vehicule.marque']}</label>
+                                                            <p:inputText label="#{msg['vehicule.marque']}"
+                                                                         styleClass="form-control input-lg" id="marque"
+                                                                         value="#{vehiculeView.selectedVehicule.marque}"
+                                                                         required="true"/>
                                                         </div>
+                                                        <div class="form-group form-group-default required">
+                                                            <label>#{msg['vehicule.matricule']}</label>
+                                                            <p:inputText label="#{msg['vehicule.matricule']}"
+                                                                         styleClass="form-control input-lg"
+                                                                         id="matricule"
+                                                                         value="#{vehiculeView.selectedVehicule.matricule}"
+                                                                         required="true"/>
+                                                        </div>
+                                                        <div class="form-group form-group-default required">
+                                                            <label>#{msg['vehicule.employe']}</label>
+                                                            <h:selectOneMenu rendered="true"
+                                                                             label="#{msg['vehicule.employe']}"
+                                                                             id="chef" required="true"
+                                                                             styleClass="select-one-menu"
+                                                                             value="#{vehiculeView.selectedVehicule.employe}">
+                                                                <f:selectItem noSelectionOption="true"
+                                                                              itemLabel="#{msg['employe.message.selectbank']}"
+                                                                              itemValue=""/>
+                                                                <f:selectItems rendered="true"
+                                                                               value="#{vehiculeView.employes}"
+                                                                               var="chef"
+                                                                               itemValue="#{chef}"
+                                                                               itemLabel="#{chef.fullName}"
+                                                                />
+                                                                <f:converter converterId="employeConverter"/>
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="form-group form-group-default required">
+                                                            <p:selectBooleanCheckbox itemLabel="#{msg['mission.servicevehicule']}"
+                                                                                     value="#{vehiculeView.selectedVehicule.service}"/>
+                                                        </div>
+
                                                     </div>
-                                                </div>
-                                                <div class="row p-b-20">
+                                                    <div class="row p-b-20">
 
-                                                    <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                        <p:commandButton validateClient="true"
-                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['bank.notification.success.save']}','success')"
-                                                                         value="#{msg['bank.button.save']}"
-                                                                         update="@(#bankDetail)"
-                                                                         actionListener="#{bankView.saveBank()}"
-                                                                         class="btn btn-complete btn-cons m-l-10"/>
+                                                        <div style="text-align: center" class="col-sm-11 m-t-30">
+                                                            <p:commandButton validateClient="true"
+                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['vehicule.notification.success.save']}','success')"
+                                                                             value="#{msg['mission.button.save']}"
+                                                                             update="@(#vehiculeDetail)"
+                                                                             actionListener="#{vehiculeView.saveVehicule()}"
+                                                                             class="btn btn-complete btn-cons m-l-10"/>
+
+                                                        </div>
 
                                                     </div>
-
+                                                    <p:messages/>
                                                 </div>
-                                                <p:messages/>
                                             </div>
-                                        </div>
                                         </c:if>
                                     </div>
                                 </div>

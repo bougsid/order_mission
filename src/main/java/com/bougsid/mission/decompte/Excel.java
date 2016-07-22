@@ -5,6 +5,8 @@ import com.bougsid.employe.Employe;
 import com.bougsid.mission.Mission;
 import com.bougsid.taux.ITauxService;
 import com.bougsid.taux.Taux;
+import com.bougsid.transport.TransportType;
+import com.bougsid.ville.Ville;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
@@ -17,6 +19,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * Created by ayoub on 7/19/2016.
@@ -38,6 +41,7 @@ public class Excel {
     private final String endHour = "J14";
     private final String transportType = "C16";
     private final String distance = "H16";
+    private final String distanceAjouter = "I16";
     private final String tauxDejounerDiner = "C18";
     private final String tauxPetitDejouner = "H18";
     private final String tauxHebergement = "C20";
@@ -47,6 +51,9 @@ public class Excel {
     private final String hebergement = "C31";
     private final String total = "E34";
     private final String totalOnWords = "D38";
+    private final String tickAuto = "F27";
+    private final String nombreTickAuto = "G27";
+    private final String tauxTickAuto = "H27";
 
     private Sheet sheet;
 
@@ -81,23 +88,34 @@ public class Excel {
         this.setCellValue(nom, employ.getFullName());
         this.setCellValue(matricule, employ.getMatricule());
         this.setCellValue(idMission, mission.getIdMission());
-        this.setCellValue(destination, mission.getVilles().toString());
+        this.setCellValue(destination, this.stringfyVille(mission.getVilles()));
         this.setCellValue(startDate, mission.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         this.setCellValue(startHour, mission.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm")));
         this.setCellValue(endDate, mission.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         this.setCellValue(endHour, mission.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm")));
-        this.setCellValue(transportType, mission.getTransport().getType().getLabel());
-        this.setCellValue(distance, 0);
-        if(employ.isDerictor()){
+        this.setCellValue(transportType, mission.getTransportType().getLabel());
+        this.setCellValue(distanceAjouter, 0);//TODO
+        if (mission.getVilles().size() == 1) {
+            this.setCellValue(distance, mission.getVilles().get(0).getDistance() * 2);
+        }
+        if (employ.isDerictor()) {
             this.setCellValue(tauxDejounerDiner, taux.getTauxDejounerDinerDirec());
             this.setCellValue(tauxPetitDejouner, taux.getTauxPetitDejounerDirec());
             this.setCellValue(tauxHebergement, taux.getTauxHebergementDirec());
             this.setCellValue(tauxKilometrique, taux.getTauxKilometriqueDirec());
-        }else{
+        } else {
             this.setCellValue(tauxDejounerDiner, taux.getTauxDejounerDiner());
             this.setCellValue(tauxPetitDejouner, taux.getTauxPetitDejouner());
             this.setCellValue(tauxHebergement, taux.getTauxHebergement());
             this.setCellValue(tauxKilometrique, taux.getTauxKilometrique());
+
+            if (mission.getTransportType() == TransportType.PERSONNEL) {
+                this.setCellValue(tickAuto, msg.getMessage("decompte.tickAuto"));
+                this.setCellValue(nombreTickAuto, 2);// TODO
+                if (mission.getVilles().size() == 1) {
+                    this.setCellValue(tauxTickAuto, mission.getVilles().get(0).getTauxAuto());
+                }
+            }
         }
     }
 
@@ -127,8 +145,12 @@ public class Excel {
 
     private void fillTotalWord() {
         double totalPrice = getCellValue(total);
+        if(Math.ceil(totalPrice) < totalPrice+0.001){
+            totalPrice = Math.ceil(totalPrice);
+        }
+        System.out.println("Total ="+totalPrice);
         long entier = (long) Math.floor(totalPrice);
-        long decimal = (long) Math.floor((totalPrice - entier) * 100.0f);
+        long decimal = (long) Math.floor((totalPrice - entier) * 100.0d);
         String res = NumberToWord.convert(entier);
         if (decimal != 0) {
             res += " " + decimal + " cts";
@@ -191,5 +213,14 @@ public class Excel {
         this.setCellValue(this.dejounerDiner, dejounerDiner);
         this.setCellValue(this.hebergement, days + 1);
 //        System.out.println("Petit Dejouner = " + petitDejouner + "  Dejouner diner = " + dejounerDiner + " Days = " + (days+1));
+    }
+
+    private String stringfyVille(List<Ville> villes){
+        String stringfyVilles = "";
+        for (Ville ville : villes) {
+            stringfyVilles += ville.getNom() +",";
+        }
+        stringfyVilles = stringfyVilles.substring(0,stringfyVilles.length()-1);
+        return stringfyVilles;
     }
 }

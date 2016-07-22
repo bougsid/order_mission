@@ -42,7 +42,7 @@ public class PrintMission {
             document.open();
             //header
             Paragraph paragraph = new Paragraph(msg.getMessage("mission.pdf.school") + "       " + mission.getIdMission() + "           ", DEFAULT_FONT);
-            Phrase phrase = new Phrase(msg.getMessage("mission.pdf.city") + " " + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE));
+            Phrase phrase = new Phrase(msg.getMessage("mission.pdf.city") + " " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             paragraph.add(phrase);
             paragraph.setSpacingAfter(50);
             document.add(paragraph);
@@ -158,7 +158,7 @@ public class PrintMission {
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(": " + mission.getTransport().toString(), DEFAULT_FONT));
+            cell = new PdfPCell(new Paragraph(": " + mission.getTransportType().getLabel(), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
