@@ -220,6 +220,15 @@ public class Mission {
         this.entreprise = entreprise;
     }
 
+    @Transient
+    public String getStringfyVille(){
+        String stringfyVilles = "";
+        for (Ville ville : villes) {
+            stringfyVilles += ville.getNom() +",";
+        }
+        stringfyVilles = stringfyVilles.substring(0,stringfyVilles.length()-1);
+        return stringfyVilles;
+    }
     @Override
     public String toString() {
         return "Mission{" +

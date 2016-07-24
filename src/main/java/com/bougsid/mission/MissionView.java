@@ -1,5 +1,6 @@
 package com.bougsid.mission;
 
+import com.bougsid.decompte.IDecompteService;
 import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.entreprise.IEntrepriseService;
@@ -42,6 +43,8 @@ public class MissionView implements Serializable {
     private IEntrepriseService entrepriseService;
     @Autowired
     private IMissionTypeService missionTypeService;
+    @Autowired
+    private IDecompteService decompteService;
     private int page;
     private int maxPages;
     //    @ManagedProperty(value = "#{missionService}")
@@ -176,21 +179,21 @@ public class MissionView implements Serializable {
             e.printStackTrace();
         }
     }
-    public void printDecompte() {
-        System.out.println("Printing ...");
-        this.missionService.printDecompte(selectedMission);
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        try {
-            context.getExternalContext().redirect(request.getContextPath()
-                    + "/download/" + selectedMission.getUuid()
-                    + "/" + selectedMission.getEmploye().getFullName()
-                    + "/xlsx"
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void printDecompte() {
+//        System.out.println("Printing ...");
+//        this.missionService.printDecompte(selectedMission);
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+//        try {
+//            context.getExternalContext().redirect(request.getContextPath()
+//                    + "/download/" + selectedMission.getUuid()
+//                    + "/" + selectedMission.getEmploye().getFullName()
+//                    + "/xlsx"
+//            );
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
     public boolean isChefOrDG() {
         GradeType type = this.missionService.getPrincipal().getGrade().getType();
         return type == GradeType.CHEF || type == GradeType.DG;
@@ -234,5 +237,11 @@ public class MissionView implements Serializable {
 
     public void setVilles(DualListModel<Ville> villes) {
         this.villes = villes;
+    }
+
+    public void setMissionToDecompteIframe(){
+        System.out.println("set mission iframe");
+        this.decompteService.setDecompteWithMission(this.selectedMission);
+        System.out.println("ok1");
     }
 }

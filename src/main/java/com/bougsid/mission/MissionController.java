@@ -43,7 +43,10 @@ public class MissionController {
     public String errorPage() {
         return "404";
     }
-
+    @RequestMapping(value = "/decompte", method = RequestMethod.GET)
+    public String decomptePage() {
+        return "decompte";
+    }
     @RequestMapping(value = "/addmission", method = RequestMethod.GET)
     public String addMissionPage() {
         return "addmission";

@@ -4,7 +4,7 @@ import com.bougsid.employe.Employe;
 import com.bougsid.employe.EmployeProfile;
 import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
-import com.bougsid.mission.decompte.Excel;
+import com.bougsid.decompte.generatedecompte.Excel;
 import com.bougsid.printers.PrintMission;
 import com.bougsid.service.Dept;
 import com.bougsid.util.NotificationService;
@@ -279,9 +279,6 @@ public class MissionService implements IMissionService {
     public void printMission(Mission mission)  {
         this.printMission.printMission(mission);
     }
-    @Override
-    public void printDecompte(Mission mission)  {
-        this.excel.generateExcel(mission);
-    }
+
 
 }

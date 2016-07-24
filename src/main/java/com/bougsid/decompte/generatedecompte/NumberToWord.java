@@ -1,4 +1,4 @@
-package com.bougsid.mission.decompte;
+package com.bougsid.decompte.generatedecompte;
 
 import java.text.DecimalFormat;
 

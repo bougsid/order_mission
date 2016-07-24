@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/missions").authenticated()
                 .and().formLogin().loginPage("/login").successHandler(authHandler)
                 .usernameParameter("username").passwordParameter("password")
-                .and().exceptionHandling().accessDeniedPage("/404");
+                .and().exceptionHandling().accessDeniedPage("/404")
+                .and().headers().frameOptions().sameOrigin();
     }
 }

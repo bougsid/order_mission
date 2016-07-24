@@ -318,7 +318,7 @@
                                                             <div class="col-sm-6">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.rib']}</label>
-                                                                    <h:inputText id="rib" required="true"
+                                                                    <h:inputText id="rib" required="true" maxlength="14"
                                                                                  label="#{msg['employe.rib']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.rib}">
@@ -328,7 +328,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="row p-b-20">
-
                                                         <div style="text-align: center" class="col-sm-11 m-t-30">
                                                             <p:commandButton
                                                                     onsuccess="showNotification('#{msg['employe.notification.success.initpassword']}','success')"
@@ -344,7 +343,6 @@
                                                                              class="btn btn-complete btn-cons m-l-10"/>
 
                                                         </div>
-
                                                     </div>
                                                     <p:messages/>
                                                 </div>

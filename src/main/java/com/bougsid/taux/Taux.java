@@ -14,15 +14,15 @@ public class Taux {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private float tauxDejounerDiner;
-    private float tauxPetitDejouner;
-    private float tauxHebergement;
-    private float tauxKilometrique;
+    private double tauxDejounerDiner;
+    private double tauxPetitDejouner;
+    private double tauxHebergement;
+    private double tauxKilometrique;
 
-    private float tauxDejounerDinerDirec;
-    private float tauxPetitDejounerDirec;
-    private float tauxHebergementDirec;
-    private float tauxKilometriqueDirec;
+    private double tauxDejounerDinerDirec;
+    private double tauxPetitDejounerDirec;
+    private double tauxHebergementDirec;
+    private double tauxKilometriqueDirec;
 
     public Long getId() {
         return id;
@@ -32,67 +32,67 @@ public class Taux {
         this.id = id;
     }
 
-    public float getTauxDejounerDiner() {
+    public double getTauxDejounerDiner() {
         return tauxDejounerDiner;
     }
 
-    public void setTauxDejounerDiner(float tauxDejounerDiner) {
+    public void setTauxDejounerDiner(double tauxDejounerDiner) {
         this.tauxDejounerDiner = tauxDejounerDiner;
     }
 
-    public float getTauxPetitDejouner() {
+    public double getTauxPetitDejouner() {
         return tauxPetitDejouner;
     }
 
-    public void setTauxPetitDejouner(float tauxPetitDejouner) {
+    public void setTauxPetitDejouner(double tauxPetitDejouner) {
         this.tauxPetitDejouner = tauxPetitDejouner;
     }
 
-    public float getTauxHebergement() {
+    public double getTauxHebergement() {
         return tauxHebergement;
     }
 
-    public void setTauxHebergement(float tauxHebergement) {
+    public void setTauxHebergement(double tauxHebergement) {
         this.tauxHebergement = tauxHebergement;
     }
 
-    public float getTauxKilometrique() {
+    public double getTauxKilometrique() {
         return tauxKilometrique;
     }
 
-    public void setTauxKilometrique(float tauxKilometrique) {
+    public void setTauxKilometrique(double tauxKilometrique) {
         this.tauxKilometrique = tauxKilometrique;
     }
 
-    public float getTauxDejounerDinerDirec() {
+    public double getTauxDejounerDinerDirec() {
         return tauxDejounerDinerDirec;
     }
 
-    public void setTauxDejounerDinerDirec(float tauxDejounerDinerDirec) {
+    public void setTauxDejounerDinerDirec(double tauxDejounerDinerDirec) {
         this.tauxDejounerDinerDirec = tauxDejounerDinerDirec;
     }
 
-    public float getTauxPetitDejounerDirec() {
+    public double getTauxPetitDejounerDirec() {
         return tauxPetitDejounerDirec;
     }
 
-    public void setTauxPetitDejounerDirec(float tauxPetitDejounerDirec) {
+    public void setTauxPetitDejounerDirec(double tauxPetitDejounerDirec) {
         this.tauxPetitDejounerDirec = tauxPetitDejounerDirec;
     }
 
-    public float getTauxHebergementDirec() {
+    public double getTauxHebergementDirec() {
         return tauxHebergementDirec;
     }
 
-    public void setTauxHebergementDirec(float tauxHebergementDirec) {
+    public void setTauxHebergementDirec(double tauxHebergementDirec) {
         this.tauxHebergementDirec = tauxHebergementDirec;
     }
 
-    public float getTauxKilometriqueDirec() {
+    public double getTauxKilometriqueDirec() {
         return tauxKilometriqueDirec;
     }
 
-    public void setTauxKilometriqueDirec(float tauxKilometriqueDirec) {
+    public void setTauxKilometriqueDirec(double tauxKilometriqueDirec) {
         this.tauxKilometriqueDirec = tauxKilometriqueDirec;
     }
 }
