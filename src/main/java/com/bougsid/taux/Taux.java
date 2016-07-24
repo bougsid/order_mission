@@ -24,6 +24,8 @@ public class Taux {
     private double tauxHebergementDirec;
     private double tauxKilometriqueDirec;
 
+    private double tauxTaxi;
+
     public Long getId() {
         return id;
     }
@@ -94,5 +96,13 @@ public class Taux {
 
     public void setTauxKilometriqueDirec(double tauxKilometriqueDirec) {
         this.tauxKilometriqueDirec = tauxKilometriqueDirec;
+    }
+
+    public double getTauxTaxi() {
+        return tauxTaxi;
+    }
+
+    public void setTauxTaxi(double tauxTaxi) {
+        this.tauxTaxi = tauxTaxi;
     }
 }

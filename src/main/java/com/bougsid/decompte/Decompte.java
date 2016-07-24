@@ -1,6 +1,7 @@
 package com.bougsid.decompte;
 
 import com.bougsid.mission.Mission;
+import com.bougsid.transport.TransportType;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
@@ -22,6 +23,8 @@ public class Decompte {
     private double tauxPetitDejouner;
     private double tauxHebergement;
     private double tauxKilometrique;
+    private double tauxTaxi;
+    private long days;
     private long dejounerDiner;
     private long petitDejouner;
     private long hebergement;
@@ -138,6 +141,22 @@ public class Decompte {
         this.kilometrique = kilometrique;
     }
 
+    public double getTauxTaxi() {
+        return tauxTaxi;
+    }
+
+    public void setTauxTaxi(double tauxTaxi) {
+        this.tauxTaxi = tauxTaxi;
+    }
+
+    public long getDays() {
+        return days;
+    }
+
+    public void setDays(long days) {
+        this.days = days;
+    }
+
     public String getDepart() {
         return depart;
     }
@@ -176,5 +195,30 @@ public class Decompte {
 
     public void setMission(Mission mission) {
         this.mission = mission;
+    }
+
+    @Transient
+    public void calculeTotal() {
+        double pd = petitDejouner * tauxPetitDejouner;
+        double dd = dejounerDiner * tauxDejounerDiner;
+        double h = hebergement * tauxHebergement;
+        double k = tauxKilometrique * distance;
+        double a = 0d; //Auto
+        double t = 0d; //Taxi
+        if (mission.getTransportType() == TransportType.PERSONNEL) {
+            a = tauxAuto * nombreTickAuto;
+        } else if (mission.getTransportType() == TransportType.TRAIN
+                || mission.getTransportType() == TransportType.CTM
+                || mission.getTransportType() == TransportType.AVION) {
+            t = tauxTaxi * days;
+        }
+        System.out.println(pd);
+        System.out.println(dd);
+        System.out.println(h);
+        System.out.println(k);
+        System.out.println(a);
+        System.out.println(t);
+        this.total = pd + dd + h + k + a + t;
+        System.out.println(total);
     }
 }

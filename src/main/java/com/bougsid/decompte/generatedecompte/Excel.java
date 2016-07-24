@@ -6,6 +6,7 @@ import com.bougsid.employe.Employe;
 import com.bougsid.mission.Mission;
 import com.bougsid.taux.ITauxService;
 import com.bougsid.taux.Taux;
+import com.bougsid.transport.TransportType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
@@ -54,6 +55,7 @@ public class Excel {
     private final String tauxAuto = "H27";
     private final String imputation = "D40";
     private final String exercice = "D42";
+    private final String totalTransportType = "J25";
 
     private Sheet sheet;
 
@@ -71,7 +73,13 @@ public class Excel {
             sheet = wb.getSheetAt(0);
             //Write Content
             this.setHeaderInformations();
-            this.fillAuto();
+            if (this.mission.getTransportType() == TransportType.PERSONNEL) {
+                this.fillAuto();
+            } else if (mission.getTransportType() == TransportType.TRAIN
+                    || mission.getTransportType() == TransportType.CTM
+                    || mission.getTransportType() == TransportType.AVION) {
+                this.fillTaxi();
+            }
             this.fillSejour();
             XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
             this.fillTotalWord();
@@ -115,15 +123,24 @@ public class Excel {
         this.setCellValue(this.dejounerDiner, this.decompte.getDejounerDiner());
         this.setCellValue(this.hebergement, this.decompte.getHebergement());
     }
+
     private void fillAuto() {
         this.setCellValue(tickAuto, msg.getMessage("decompte.tickAuto"));
         this.setCellValue(nombreTickAuto, this.decompte.getNombreTickAuto());// TODO
         this.setCellValue(tauxAuto, this.decompte.getTauxAuto());
     }
-    private void setFooterInformation(){
-        this.setCellValue(imputation,this.decompte.getImputation());
-        this.setCellValue(exercice,this.decompte.getExercice());
+
+    private void fillTaxi() {
+        this.setCellValue(tickAuto, msg.getMessage("decompte.taxi"));
+        this.setCellValue(nombreTickAuto, this.decompte.getDays());// TODO
+        this.setCellValue(tauxAuto, this.decompte.getTauxTaxi());
     }
+
+    private void setFooterInformation() {
+        this.setCellValue(imputation, this.decompte.getImputation());
+        this.setCellValue(exercice, this.decompte.getExercice());
+    }
+
     private double getCellValue(String ref) {
         CellReference cr = new CellReference(ref);
         Cell cell = sheet.getRow(cr.getRow()).getCell(cr.getCol());
@@ -161,12 +178,10 @@ public class Excel {
             res += " " + decimal + " cts";
         }
         //Captlize first letter
-        res = res.substring(0, 1).toUpperCase() + res.substring(1);
+        res = res.substring(0, 1).toUpperCase() + res.substring(1)+ " DH.";
         System.out.println(res);
         this.setCellValue(totalOnWords, res);
     }
-
-
 
 
 }

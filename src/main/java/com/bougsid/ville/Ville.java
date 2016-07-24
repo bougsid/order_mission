@@ -17,8 +17,11 @@ public class Ville {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom;
-    private float distance;
-    private float tauxAuto;
+    private double distance;
+    private double tauxAuto;
+    private double tauxCTM;
+    private double tauxTRAIN;
+    private double tauxAvion;
 
     public Ville() {
     }
@@ -39,19 +42,43 @@ public class Ville {
         this.nom = nom;
     }
 
-    public float getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(float distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
-    public float getTauxAuto() {
+    public double getTauxAuto() {
         return tauxAuto;
     }
 
-    public void setTauxAuto(float tauxAuto) {
+    public void setTauxAuto(double tauxAuto) {
         this.tauxAuto = tauxAuto;
+    }
+
+    public double getTauxCTM() {
+        return tauxCTM;
+    }
+
+    public void setTauxCTM(double tauxCTM) {
+        this.tauxCTM = tauxCTM;
+    }
+
+    public double getTauxTRAIN() {
+        return tauxTRAIN;
+    }
+
+    public void setTauxTRAIN(double tauxTRAIN) {
+        this.tauxTRAIN = tauxTRAIN;
+    }
+
+    public double getTauxAvion() {
+        return tauxAvion;
+    }
+
+    public void setTauxAvion(double tauxAvion) {
+        this.tauxAvion = tauxAvion;
     }
 }

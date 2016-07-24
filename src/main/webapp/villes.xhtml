@@ -136,24 +136,25 @@
                                                 </li>
                                                 <c:if test="#{villeView.selectedVille != null}">
 
-                                                <li class="no-padding ">
-                                                    <p:commandLink process="@this"
-                                                                   update="@(#employeDetail)"
-                                                                   actionListener="#{villeView.deleteVille()}"
-                                                                   class="text-success">#{msg['employe.button.delete']}
-                                                        <p:confirm header="#{msg['confirmation.deleteHeader']}"
-                                                                   message="#{msg['confirmation.deleteQuestion']}"
-                                                                   icon="ui-icon-alert"/>
-                                                    </p:commandLink>
-                                                </li>
-                                                <p:confirmDialog global="true">
-                                                    <p:commandButton value="#{msg['confirmation.yes']}" type="button"
-                                                                     styleClass="ui-confirmdialog-yes"
-                                                                     icon="ui-icon-check"/>
-                                                    <p:commandButton value="#{msg['confirmation.no']}" type="button"
-                                                                     styleClass="ui-confirmdialog-no"
-                                                                     icon="ui-icon-close"/>
-                                                </p:confirmDialog>
+                                                    <li class="no-padding ">
+                                                        <p:commandLink process="@this"
+                                                                       update="@(#employeDetail)"
+                                                                       actionListener="#{villeView.deleteVille()}"
+                                                                       class="text-success">#{msg['employe.button.delete']}
+                                                            <p:confirm header="#{msg['confirmation.deleteHeader']}"
+                                                                       message="#{msg['confirmation.deleteQuestion']}"
+                                                                       icon="ui-icon-alert"/>
+                                                        </p:commandLink>
+                                                    </li>
+                                                    <p:confirmDialog global="true">
+                                                        <p:commandButton value="#{msg['confirmation.yes']}"
+                                                                         type="button"
+                                                                         styleClass="ui-confirmdialog-yes"
+                                                                         icon="ui-icon-check"/>
+                                                        <p:commandButton value="#{msg['confirmation.no']}" type="button"
+                                                                         styleClass="ui-confirmdialog-no"
+                                                                         icon="ui-icon-close"/>
+                                                    </p:confirmDialog>
                                                 </c:if>
                                             </ul>
 
@@ -161,58 +162,95 @@
                                         </div>
                                         <c:if test="#{villeView.selectedVille != null}">
 
-                                        <div class="email-content">
+                                            <div class="email-content">
 
-                                            <div class="clearfix"/>
+                                                <div class="clearfix"/>
 
-                                            <div class="email-content-body m-t-20">
-                                                <div class="form-group form-group-attached">
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default required">
-                                                            <label>#{msg['ville.nom']}</label>
-                                                            <p:inputText label="#{msg['ville.nom']}"
-                                                                         styleClass="form-control input-lg" id="objet"
-                                                                         value="#{villeView.selectedVille.nom}"
-                                                                         required="true"/>
+                                                <div class="email-content-body m-t-20">
+                                                    <div class="form-group form-group-attached">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['ville.nom']}</label>
+                                                                    <p:inputText label="#{msg['ville.nom']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 id="objet"
+                                                                                 value="#{villeView.selectedVille.nom}"
+                                                                                 required="true"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['ville.distance']}</label>
+                                                                    <h:inputText id="fonction" required="true"
+                                                                                 label="#{msg['ville.distance']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{villeView.selectedVille.distance}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row clearfix">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['ville.tauxAuto']}</label>
+                                                                    <h:inputText id="tauxAuto" required="true"
+                                                                                 label="#{msg['ville.tauxAuto']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{villeView.selectedVille.tauxAuto}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['ville.tauxTRAIN']}</label>
+                                                                    <h:inputText id="tauxTRAIN" required="true"
+                                                                                 label="#{msg['ville.tauxTRAIN']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{villeView.selectedVille.tauxTRAIN}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['ville.tauxCTM']}</label>
+                                                                    <h:inputText id="tauxCTM" required="true"
+                                                                                 label="#{msg['ville.tauxCTM']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{villeView.selectedVille.tauxCTM}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['ville.tauxAVION']}</label>
+                                                                    <h:inputText id="tauxAVION" required="true"
+                                                                                 label="#{msg['ville.tauxAVION']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{villeView.selectedVille.tauxAvion}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default required">
-                                                            <label>#{msg['ville.distance']}</label>
-                                                            <h:inputText id="fonction" required="true"
-                                                                         label="#{msg['ville.distance']}"
-                                                                         styleClass="form-control input-lg"
-                                                                         value="#{villeView.selectedVille.distance}">
-                                                            </h:inputText>
+                                                    <div class="row p-b-20">
+
+                                                        <div style="text-align: center" class="col-sm-11 m-t-30">
+                                                            <p:commandButton validateClient="true"
+                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['ville.notification.success.save']}','success')"
+                                                                             value="#{msg['employe.button.save']}"
+                                                                             update="@(#villeDetail)"
+                                                                             actionListener="#{villeView.saveVille()}"
+                                                                             class="btn btn-complete btn-cons m-l-10"/>
+
                                                         </div>
+
                                                     </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default required">
-                                                            <label>#{msg['ville.tauxAuto']}</label>
-                                                            <h:inputText id="tauxAuto" required="true"
-                                                                         label="#{msg['ville.tauxAuto']}"
-                                                                         styleClass="form-control input-lg"
-                                                                         value="#{villeView.selectedVille.tauxAuto}">
-                                                            </h:inputText>
-                                                        </div>
-                                                    </div>
+                                                    <p:messages/>
                                                 </div>
-                                                <div class="row p-b-20">
-
-                                                    <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                        <p:commandButton validateClient="true"
-                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['ville.notification.success.save']}','success')"
-                                                                         value="#{msg['employe.button.save']}"
-                                                                         update="@(#villeDetail)"
-                                                                         actionListener="#{villeView.saveVille()}"
-                                                                         class="btn btn-complete btn-cons m-l-10"/>
-
-                                                    </div>
-
-                                                </div>
-                                                <p:messages/>
                                             </div>
-                                        </div>
                                         </c:if>
                                     </div>
                                 </div>

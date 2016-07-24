@@ -5,6 +5,7 @@ import com.bougsid.mission.Mission;
 import com.bougsid.taux.ITauxService;
 import com.bougsid.taux.Taux;
 import com.bougsid.transport.TransportType;
+import com.bougsid.ville.Ville;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,7 @@ public class DecompteService implements IDecompteService {
 
     @Override
     public Decompte save(Decompte decompte) {
+        decompte.calculeTotal();
         return this.decompteRepository.save(decompte);
     }
 
@@ -70,11 +72,36 @@ public class DecompteService implements IDecompteService {
             this.decompte.setTauxDejounerDiner(taux.getTauxDejounerDiner());
             this.decompte.setTauxPetitDejouner(taux.getTauxPetitDejouner());
             this.decompte.setTauxHebergement(taux.getTauxHebergement());
-            this.decompte.setTauxKilometrique(taux.getTauxKilometrique());
             if (mission.getTransportType() == TransportType.PERSONNEL) {
-                if (mission.getVilles().size() == 1) {
-                    this.decompte.setTauxAuto(mission.getVilles().get(0).getTauxAuto());
-                    this.decompte.setDistance(mission.getVilles().get(0).getDistance());
+                this.decompte.setTauxKilometrique(taux.getTauxKilometrique());
+            }
+            if (mission.getVilles().size() == 1) {
+                Ville destination = mission.getVilles().get(0);
+                if (mission.getTransportType() == TransportType.PERSONNEL) {
+                    this.decompte.setDistance(destination.getDistance());
+                    this.decompte.setTauxAuto(destination.getTauxAuto());
+                } else if (mission.getTransportType() == TransportType.TRAIN
+                        || mission.getTransportType() == TransportType.CTM
+                        || mission.getTransportType() == TransportType.AVION) {
+                    double tauxKilometrique = 0d;
+                    switch (mission.getTransportType()) {
+                        case TRAIN:
+                            tauxKilometrique = destination.getTauxTRAIN();
+                            break;
+                        case CTM:
+                            tauxKilometrique = destination.getTauxCTM();
+                            break;
+                        case AVION:
+                            tauxKilometrique = destination.getTauxAvion();
+                            break;
+                    }
+                    this.decompte.setTauxKilometrique(tauxKilometrique);
+                    this.decompte.setDistance(2.0d);
+                    this.decompte.setDays(this.getDays(mission.getStartDate(), mission.getEndDate()));
+                    this.decompte.setTauxTaxi(taux.getTauxTaxi());
+                } else if (mission.getTransportType() == TransportType.Service) {
+                    this.decompte.setTauxKilometrique(0.0);
+                    this.decompte.setDistance(destination.getDistance());
                 }
             }
         }
@@ -136,8 +163,13 @@ public class DecompteService implements IDecompteService {
         this.decompte.setHebergement(days);
 //        System.out.println("Petit Dejouner = " + petitDejouner + "  Dejouner diner = " + dejounerDiner + " Days = " + (days+1));
     }
+
+    private long getDays(LocalDateTime startDate, LocalDateTime endDate) {
+        return ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate());
+    }
+
     @Override
-    public void printDecompte(Decompte decompte)  {
+    public void printDecompte(Decompte decompte) {
         System.out.println("staaaaart");
         this.excel.generateExcel(decompte);
     }
