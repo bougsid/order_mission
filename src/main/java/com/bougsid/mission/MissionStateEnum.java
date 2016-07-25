@@ -11,8 +11,9 @@ public enum MissionStateEnum {
     RCHEF("Refuser par le chef de service"),
     RDG("Refuser par le directeur generale"),
     RDTYPE("Refuser par service d'entreprise"),
-    DAF("DAF"),
-    VALIDATED("VALIDATED");
+    DAF("Valider par DAF"),
+    VALIDATED("VALIDATED"),
+    CANCELED("Annuler");
 
     private String label;
 

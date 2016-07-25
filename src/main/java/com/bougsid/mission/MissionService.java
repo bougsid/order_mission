@@ -1,13 +1,18 @@
 package com.bougsid.mission;
 
+import com.bougsid.decompte.generatedecompte.Excel;
 import com.bougsid.employe.Employe;
 import com.bougsid.employe.EmployeProfile;
 import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
-import com.bougsid.decompte.generatedecompte.Excel;
+import com.bougsid.entreprise.Entreprise;
+import com.bougsid.missiontype.MissionType;
 import com.bougsid.printers.PrintMission;
 import com.bougsid.service.Dept;
+import com.bougsid.statistics.DateType;
+import com.bougsid.statistics.StatisticsType;
 import com.bougsid.util.NotificationService;
+import com.bougsid.ville.Ville;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -18,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -41,20 +49,20 @@ public class MissionService implements IMissionService {
     @Override
     public Page<Mission> findAll(int page) {
         Employe cp = getPrincipal();
-        if(cp.getGrade() != null)
-        switch (cp.getGrade().getType()) {
-            case DG:
-                return this.getMissionsForDG(page);
-            case CHEF:
-                return this.getMissionsForCHEF(page);
-            case ASSISTANT:{
-                if(cp.getDept().getNom().equals("DAF"))
-                    return this.getMissionsForDAF(page);
-                return this.getMissionsForEMP(page);
+        if (cp.getGrade() != null)
+            switch (cp.getGrade().getType()) {
+                case DG:
+                    return this.getMissionsForDG(page);
+                case CHEF:
+                    return this.getMissionsForCHEF(page);
+                case ASSISTANT: {
+                    if (cp.getDept().getNom().equals("DAF"))
+                        return this.getMissionsForDAF(page);
+                    return this.getMissionsForEMP(page);
+                }
+                case AUTRE:
+                    return this.getMissionsForEMP(page);
             }
-            case AUTRE:
-                return this.getMissionsForEMP(page);
-        }
         return null;
     }
 
@@ -68,11 +76,16 @@ public class MissionService implements IMissionService {
         Employe ce = getPrincipal();
         return this.missionRepository.getMissionsForCHEF(MissionStateEnum.VCHEF, ce.getDept(), MissionStateEnum.VDTYPE, ce.getDept(), new PageRequest(page, pageSize));
     }
+
     @Override
     public Page<Mission> getMissionsForDAF(int page) {
         Employe ce = getPrincipal();
-        return this.missionRepository.findByNextState(MissionStateEnum.DAF, new PageRequest(page, pageSize));
+        List<MissionStateEnum> nextStates = new ArrayList<>();
+        nextStates.add(MissionStateEnum.DAF);
+        nextStates.add(MissionStateEnum.VALIDATED);
+        return this.missionRepository.findByNextStateIn(nextStates, new PageRequest(page, pageSize));
     }
+
     @Override
     public Page<Mission> getMissionsForEMP(int page) {
         Page<Mission> missionPage = this.missionRepository.findByEmploye(getPrincipal(), new PageRequest(page, pageSize));
@@ -141,6 +154,19 @@ public class MissionService implements IMissionService {
         return nextState;
     }
 
+
+    @Override
+    @Transactional
+    public void cancelMission(Mission mission) {
+        mission.setCurrentState(MissionStateEnum.CANCELED);
+        this.missionRepository.save(mission);
+        MissionState state = context.getBean(MissionState.class);
+        state.setState(mission.getCurrentState());
+        state.setStateDate(LocalDateTime.now());
+        state.addMission(mission);
+        mission.addState(state);
+        state = this.missionStateRepository.save(state);
+    }
 
     @Override
     @Transactional
@@ -276,8 +302,35 @@ public class MissionService implements IMissionService {
     }
 
     @Override
-    public void printMission(Mission mission)  {
+    public void printMission(Mission mission) {
         this.printMission.printMission(mission);
+    }
+
+    @Override
+    public Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page) {
+        LocalDateTime start = LocalDateTime.of(date.getStart(), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(date.getEnd(), LocalTime.MAX);
+        System.out.println("min=" + start);
+        System.out.println("max=" + end);
+        switch (filter) {
+            case TYPE: {
+                MissionType type = (MissionType) filter.getCriteria();
+                return this.missionRepository.findByTypeAndStartDateBetween(type, start, end, new PageRequest(page, pageSize));
+            }
+            case ENTREPRISE: {
+                Entreprise entreprise = (Entreprise) filter.getCriteria();
+                return this.missionRepository.findByEntrepriseAndStartDateBetween(entreprise, start, end, new PageRequest(page, pageSize));
+            }
+            case SERVICE: {
+                Dept dept = (Dept) filter.getCriteria();
+                return this.missionRepository.findByDeptAndStartDateBetween(dept, start, end, new PageRequest(page, pageSize));
+            }
+            case VILLE: {
+                Ville ville = (Ville) filter.getCriteria();
+                return this.missionRepository.findByVilleAndStartDateBetween(ville, start, end, new PageRequest(page, pageSize));
+            }
+        }
+        return null;
     }
 
 

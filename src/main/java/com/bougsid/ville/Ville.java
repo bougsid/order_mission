@@ -1,5 +1,6 @@
 package com.bougsid.ville;
 
+import com.bougsid.service.Dept;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.Entity;
@@ -80,5 +81,24 @@ public class Ville {
 
     public void setTauxAvion(double tauxAvion) {
         this.tauxAvion = tauxAvion;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Ville) && (id != null)
+                ? id.equals(((Ville) other).id)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 }

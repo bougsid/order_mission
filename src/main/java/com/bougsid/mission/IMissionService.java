@@ -1,6 +1,8 @@
 package com.bougsid.mission;
 
 import com.bougsid.employe.Employe;
+import com.bougsid.statistics.DateType;
+import com.bougsid.statistics.StatisticsType;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,9 @@ public interface IMissionService {
 //    void validateMission(Mission mission);
 
     @Transactional
+    void cancelMission(Mission mission);
+
+    @Transactional
     void validateMission(Mission mission);
 
     @Transactional
@@ -43,7 +48,7 @@ public interface IMissionService {
 
     void printMission(Mission mission);
 
-
+    Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page);
 
 //    void rejectMission(Mission mission);
 }

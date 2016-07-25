@@ -7,11 +7,14 @@ import com.bougsid.entreprise.IEntrepriseService;
 import com.bougsid.grade.GradeType;
 import com.bougsid.missiontype.IMissionTypeService;
 import com.bougsid.missiontype.MissionType;
+import com.bougsid.service.Dept;
+import com.bougsid.service.IServiceService;
+import com.bougsid.statistics.DateType;
+import com.bougsid.statistics.StatisticsType;
 import com.bougsid.transport.TransportType;
 import com.bougsid.ville.IVilleService;
 import com.bougsid.ville.Ville;
 import org.primefaces.model.DualListModel;
-import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -26,7 +29,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,6 +51,8 @@ public class MissionView implements Serializable {
     private IMissionTypeService missionTypeService;
     @Autowired
     private IDecompteService decompteService;
+    @Autowired
+    private IServiceService serviceService;
     private int page;
     private int maxPages;
     //    @ManagedProperty(value = "#{missionService}")
@@ -55,8 +63,13 @@ public class MissionView implements Serializable {
     private List<Ville> targetVilles;
     private DualListModel<Ville> villes;
     private List<Entreprise> entreprises;
+    private List<Dept> depts;
     private List<MissionType> missionTypes;
-    private StreamedContent file;
+
+    private StatisticsType filter;
+    private DateType filterDate;
+    private Date start;
+    private Date end;
 
     @PostConstruct
     public void init() {
@@ -71,8 +84,14 @@ public class MissionView implements Serializable {
         this.targetVilles = new ArrayList<>();
         this.villes = new DualListModel<>(sourceVilles, targetVilles);
         this.entreprises = this.entrepriseService.getAllEntreprices();
+        this.depts = this.serviceService.findAll();
         this.missionTypes = this.missionTypeService.getAllTypes();
         this.page = 0;
+        this.filter = StatisticsType.ALL;
+        this.filterDate = DateType.ALL;
+        this.start = Calendar.getInstance().getTime();
+        this.end = Calendar.getInstance().getTime();
+
         Page<Mission> missionPage = this.missionService.findAll(this.page);
         if (missionPage != null) {
             this.missions = missionPage.getContent();
@@ -105,28 +124,46 @@ public class MissionView implements Serializable {
         this.missions = missions;
     }
 
-    public void updateMission() {
-        if (selectedMission != null) {
-            this.missionService.save(selectedMission);
-        }
-    }
+//    public void updateMission() {
+//        if (selectedMission != null) {
+//            this.missionService.save(selectedMission);
+//        }
+//    }
 
     public void updateListWithPage() {
         System.out.println("Page =" + page);
-        this.missions = this.missionService.findAll(page - 1).getContent();
+        if (this.filter == StatisticsType.ALL)
+            this.missions = this.missionService.findAll(page - 1).getContent();
+        else
+            this.missions = this.missionService.getFiltredMission(filter, filterDate, page - 1).getContent();
         System.out.println(this.missions.size());
     }
 
+    public void cancelMission() {
+        if (selectedMission != null) {
+            this.missionService.cancelMission(this.selectedMission);
+        }
+    }
+
     public void validateMission() {
-        if(selectedMission != null){
+        if (selectedMission != null) {
             this.missionService.validateMission(this.selectedMission);
         }
     }
 
     public void rejectMission() {
-        if(selectedMission != null){
+        if (selectedMission != null) {
             this.missionService.rejectMission(this.selectedMission);
         }
+    }
+
+    public void search() {
+        System.out.println("Filter =" + filter + "Cret = " + filter.getCriteria());
+        System.out.println("Sttttart =" + filterDate.getStart());
+        if (this.filter == StatisticsType.ALL && this.filterDate == DateType.ALL)
+            this.missions = this.missionService.findAll(0).getContent();
+        else
+            this.missions = this.missionService.getFiltredMission(filter, filterDate, 0).getContent();
     }
 
     public SelectItem[] getTransportTypes() {
@@ -138,14 +175,23 @@ public class MissionView implements Serializable {
         return items;
     }
 
-//    public SelectItem[] getMissionTypes() {
-//        SelectItem[] items = new SelectItem[MissionType.values().length];
-//        int i = 0;
-//        for (MissionType g : MissionType.values()) {
-//            items[i++] = new SelectItem(g, g.getLabel());
-//        }
-//        return items;
-//    }
+    public SelectItem[] getStatisticsTypes() {
+        SelectItem[] items = new SelectItem[StatisticsType.values().length];
+        int i = 0;
+        for (StatisticsType g : StatisticsType.values()) {
+            items[i++] = new SelectItem(g, g.getLabel());
+        }
+        return items;
+    }
+
+    public SelectItem[] getDateTypes() {
+        SelectItem[] items = new SelectItem[DateType.values().length];
+        int i = 0;
+        for (DateType g : DateType.values()) {
+            items[i++] = new SelectItem(g, g.getLabel());
+        }
+        return items;
+    }
 
     public void resendMission() {
         this.missionService.resendMission(selectedMission);
@@ -179,40 +225,25 @@ public class MissionView implements Serializable {
             e.printStackTrace();
         }
     }
-//    public void printDecompte() {
-//        System.out.println("Printing ...");
-//        this.missionService.printDecompte(selectedMission);
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-//        try {
-//            context.getExternalContext().redirect(request.getContextPath()
-//                    + "/download/" + selectedMission.getUuid()
-//                    + "/" + selectedMission.getEmploye().getFullName()
-//                    + "/xlsx"
-//            );
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
     public boolean isChefOrDG() {
         GradeType type = this.missionService.getPrincipal().getGrade().getType();
         return type == GradeType.CHEF || type == GradeType.DG;
     }
+
     public boolean isAutre() {
         GradeType type = this.missionService.getPrincipal().getGrade().getType();
         return type == GradeType.AUTRE;
     }
+
     public boolean isDaf() {
         Employe principal = this.missionService.getPrincipal();
         GradeType type = principal.getGrade().getType();
         return type == GradeType.ASSISTANT && principal.getDept().getNom().equals("DAF");
     }
+
     private String send() {
         return "employes";
-    }
-
-    public StreamedContent getFile() {
-        return this.file;
     }
 
     public List<MissionType> getMissionTypes() {
@@ -239,9 +270,60 @@ public class MissionView implements Serializable {
         this.villes = villes;
     }
 
-    public void setMissionToDecompteIframe(){
+    public StatisticsType getFilter() {
+        return filter;
+    }
+
+    public void setFilter(StatisticsType filter) {
+        this.filter = filter;
+    }
+
+    public DateType getFilterDate() {
+        return filterDate;
+    }
+
+    public void setFilterDate(DateType filterDate) {
+        this.filterDate = filterDate;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
+        this.filterDate.setEnd(end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+        System.out.println("Set Start =" + start);
+        this.filterDate.setStart(start.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    }
+
+    public void setMissionToDecompteIframe() {
         System.out.println("set mission iframe");
         this.decompteService.setDecompteWithMission(this.selectedMission);
         System.out.println("ok1");
+    }
+
+    public List<Ville> getSourceVilles() {
+        return sourceVilles;
+    }
+
+    public void setSourceVilles(List<Ville> sourceVilles) {
+        this.sourceVilles = sourceVilles;
+    }
+
+    public List<Dept> getDepts() {
+        return depts;
+    }
+
+    public void setDepts(List<Dept> depts) {
+        this.depts = depts;
     }
 }

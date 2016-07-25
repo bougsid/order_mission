@@ -6,8 +6,10 @@
       <identifier-quote-string>`</identifier-quote-string>
     </database-info>
     <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
-    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.5">
-      <schema id="1" name="mission"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+      <schema id="1" name="mission">
+        <visible>1</visible>
+      </schema>
       <table id="2" parent="1" name="app_user_user_profile"/>
       <table id="3" parent="1" name="bank"/>
       <table id="4" parent="1" name="dept"/>
@@ -27,11 +29,11 @@
       <table id="18" parent="1" name="decompte"/>
       <column id="19" parent="2" name="USER_ID">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="20" parent="2" name="USER_PROFILE_ID">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="21" parent="2" name="FKbvdb3fx4pgmbmjyw567aemwd9">
         <columns>USER_PROFILE_ID</columns>
@@ -44,14 +46,14 @@ USER_PROFILE_ID</columns>
       </key>
       <column id="23" parent="3" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="24" parent="3" name="name">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="25" parent="3" name="phone">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <key id="26" parent="3" name="PRIMARY">
         <columns>id</columns>
@@ -59,14 +61,14 @@ USER_PROFILE_ID</columns>
       </key>
       <column id="27" parent="4" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="28" parent="4" name="nom">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="29" parent="4" name="chef_idEmploye">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="30" parent="4" name="FK6n70svxtsa5hgqq3mymdald3t">
         <columns>chef_idEmploye</columns>
@@ -78,51 +80,51 @@ USER_PROFILE_ID</columns>
       </key>
       <column id="32" parent="5" name="idEmploye">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="33" parent="5" name="civilite">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="34" parent="5" name="classe">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="35" parent="5" name="email">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="36" parent="5" name="fonction">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="37" parent="5" name="matricule">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="38" parent="5" name="nom">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="39" parent="5" name="password">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="40" parent="5" name="prenom">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="41" parent="5" name="rib">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="42" parent="5" name="id_bank">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="43" parent="5" name="id_dept">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="44" parent="5" name="id_grade">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="45" parent="5" name="derictor">
         <mandatory>1</mandatory>
-        <data-type>bit(1)</data-type>
+        <data-type>bit(1)|0</data-type>
       </column>
       <column id="46" parent="5" name="vehicule_id">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="47" parent="5" name="FKff5ful5ivqgoecvu7hi4fxt5y">
         <columns>id_grade</columns>
@@ -146,10 +148,10 @@ USER_PROFILE_ID</columns>
       </key>
       <column id="52" parent="6" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="53" parent="6" name="type">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <key id="54" parent="6" name="PRIMARY">
         <columns>id</columns>
@@ -157,66 +159,66 @@ USER_PROFILE_ID</columns>
       </key>
       <column id="55" parent="7" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="56" parent="7" name="nom">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <key id="57" parent="7" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
       <column id="58" parent="8" name="next_val">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="59" parent="9" name="idMission">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="60" parent="9" name="comment">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="61" parent="9" name="currentState">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="62" parent="9" name="endDate">
-        <data-type>datetime</data-type>
+        <data-type>datetime|0</data-type>
       </column>
       <column id="63" parent="9" name="nextState">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="64" parent="9" name="objet">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="65" parent="9" name="startDate">
-        <data-type>datetime</data-type>
+        <data-type>datetime|0</data-type>
       </column>
       <column id="66" parent="9" name="uuid">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="67" parent="9" name="id_employe">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="68" parent="9" name="id_entreprise">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="69" parent="9" name="transport_id">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="70" parent="9" name="id_type">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="71" parent="9" name="transportType">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="72" parent="9" name="accompEmploye_idEmploye">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="73" parent="9" name="serviceVehicule_id">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="74" parent="9" name="FK55bpk7lyrditlim8qav9mgejd">
         <columns>transport_id</columns>
@@ -248,11 +250,11 @@ USER_PROFILE_ID</columns>
       </key>
       <column id="81" parent="10" name="MISSION_STATE_ID">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="82" parent="10" name="MISSION_ID">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="83" parent="10" name="FKkf28j7k9ntmjeemcyf8vywkax">
         <columns>MISSION_STATE_ID</columns>
@@ -265,11 +267,11 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="85" parent="11" name="MISSION_ID">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="86" parent="11" name="VILLE_ID">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="87" parent="11" name="FK3icbpasl47o1m4cxo0ju4tnom">
         <columns>MISSION_ID</columns>
@@ -281,14 +283,14 @@ MISSION_STATE_ID</columns>
       </index>
       <column id="89" parent="12" name="idMissionState">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="90" parent="12" name="state">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="91" parent="12" name="stateDate">
-        <data-type>datetime</data-type>
+        <data-type>datetime|0</data-type>
       </column>
       <key id="92" parent="12" name="PRIMARY">
         <columns>idMissionState</columns>
@@ -296,14 +298,14 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="93" parent="13" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="94" parent="13" name="label">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="95" parent="13" name="id_dept">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <index id="96" parent="13" name="FKbtii1mjsaofyk3c0s13p5bwmj">
         <columns>id_dept</columns>
@@ -315,19 +317,19 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="98" parent="14" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="99" parent="14" name="nom">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="100" parent="14" name="distance">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="101" parent="14" name="tauxAuto">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <key id="102" parent="14" name="PRIMARY">
         <columns>id</columns>
@@ -335,14 +337,14 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="103" parent="15" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="104" parent="15" name="label">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="105" parent="15" name="type">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <key id="106" parent="15" name="PRIMARY">
         <columns>id</columns>
@@ -350,40 +352,40 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="107" parent="16" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="108" parent="16" name="tauxDejounerDiner">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="109" parent="16" name="tauxDejounerDinerDirec">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="110" parent="16" name="tauxHebergement">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="111" parent="16" name="tauxHebergementDirec">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="112" parent="16" name="tauxKilometrique">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="113" parent="16" name="tauxKilometriqueDirec">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="114" parent="16" name="tauxPetitDejouner">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <column id="115" parent="16" name="tauxPetitDejounerDirec">
         <mandatory>1</mandatory>
-        <data-type>float</data-type>
+        <data-type>float|0</data-type>
       </column>
       <key id="116" parent="16" name="PRIMARY">
         <columns>id</columns>
@@ -391,20 +393,20 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="117" parent="17" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="118" parent="17" name="marque">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="119" parent="17" name="matricule">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="120" parent="17" name="employe_idEmploye">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="121" parent="17" name="service">
         <mandatory>1</mandatory>
-        <data-type>bit(1)</data-type>
+        <data-type>bit(1)|0</data-type>
       </column>
       <index id="122" parent="17" name="FK3n1nwdcljdhud4cidseuiea3e">
         <columns>employe_idEmploye</columns>
@@ -416,68 +418,68 @@ MISSION_STATE_ID</columns>
       </key>
       <column id="124" parent="18" name="id">
         <mandatory>1</mandatory>
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
       <column id="125" parent="18" name="depart">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="126" parent="18" name="distance">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="127" parent="18" name="nombreTickAuto">
         <mandatory>1</mandatory>
-        <data-type>int(11)</data-type>
+        <data-type>int(11)|0</data-type>
       </column>
       <column id="128" parent="18" name="tauxTickAuto">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="129" parent="18" name="mission_idMission">
-        <data-type>bigint(20)</data-type>
+        <data-type>bigint(20)|0</data-type>
       </column>
       <column id="130" parent="18" name="dejounerDiner">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="131" parent="18" name="exercice">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="132" parent="18" name="hebergement">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="133" parent="18" name="imputation">
-        <data-type>varchar(255)</data-type>
+        <data-type>varchar(255)|0</data-type>
       </column>
       <column id="134" parent="18" name="kilometrique">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="135" parent="18" name="petitDejouner">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="136" parent="18" name="tauxDejounerDiner">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="137" parent="18" name="tauxHebergement">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="138" parent="18" name="tauxKilometrique">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="139" parent="18" name="tauxPetitDejouner">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <column id="140" parent="18" name="tauxAuto">
         <mandatory>1</mandatory>
-        <data-type>double</data-type>
+        <data-type>double|0</data-type>
       </column>
       <index id="141" parent="18" name="FKcd177gebi820fakprg96u5gwp">
         <columns>mission_idMission</columns>

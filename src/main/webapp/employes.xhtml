@@ -296,10 +296,10 @@
 
                                                         <div class="row clearfix">
                                                             <div class="col-sm-6">
-                                                                <div class="form-group-default required">
+                                                                <div class="form-group-default">
                                                                     <label>#{msg['employe.bank']}</label>
                                                                     <h:selectOneMenu label="#{msg['employe.bank']}"
-                                                                                     id="bank" required="true"
+                                                                                     id="bank"
                                                                                      styleClass="select-one-menu"
                                                                                      value="#{employeView.selectedEmploye.bank}">
                                                                         <f:selectItem noSelectionOption="true"
@@ -316,9 +316,9 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6">
-                                                                <div class="form-group-default required">
+                                                                <div class="form-group-default">
                                                                     <label>#{msg['employe.rib']}</label>
-                                                                    <h:inputText id="rib" required="true" maxlength="14"
+                                                                    <h:inputText id="rib" maxlength="14"
                                                                                  label="#{msg['employe.rib']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.rib}">
@@ -329,14 +329,14 @@
                                                     </div>
                                                     <div class="row p-b-20">
                                                         <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                            <p:commandButton
+                                                            <p:commandButton id="reset"
                                                                     onsuccess="showNotification('#{msg['employe.notification.success.initpassword']}','success')"
                                                                     process="@this"
                                                                     value="#{msg['employe.button.initpassword']}"
                                                                     actionListener="#{employeView.initPassword()}"
                                                                     class="btn btn-white btn-cons"/>
                                                             <p:commandButton validateClient="true"
-                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['employe.notification.success.save']}','success')"
+                                                                             oncomplete="document.getElementById('employeDetail').reset(); if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['employe.notification.success.save']}','success')"
                                                                              value="#{msg['employe.button.save']}"
                                                                              update="@(#employeDetail)"
                                                                              actionListener="#{employeView.saveEmploye()}"

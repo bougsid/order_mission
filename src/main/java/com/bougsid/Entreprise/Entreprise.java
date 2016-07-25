@@ -1,6 +1,7 @@
 package com.bougsid.entreprise;
 
 import com.bougsid.mission.Mission;
+import com.bougsid.service.Dept;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
@@ -40,5 +41,19 @@ public class Entreprise {
 
     public String toString(){
         return String.valueOf(id);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Entreprise) && (id != null)
+                ? id.equals(((Entreprise) other).id)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 }

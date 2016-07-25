@@ -3,6 +3,23 @@
 * Override Pages default styles or create your own styles here
 
 */
+.ui-inputfield {
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.calendar .ui-widget {
+    width: 100px;
+    box-shadow: none;
+    margin: 0;
+    outline: medium none;
+    padding: 2px;
+    font-weight: normal;
+    border:none;
+}
+#recherche li{
+    padding: 10px;
+}
 
 .ui-datatable.borderless thead th,
 .ui-datatable.borderless tbody,
@@ -24,22 +41,26 @@
     color: #4f4f4f;
     text-shadow: none;
 }
-.CURRENT-mission{
+
+.CURRENT-mission {
     background: #fef6dd;
 }
-.VDE-mission{
+
+.VDE-mission {
     background: #befeb2;
 }
-.VDG-mission{
+
+.VDG-mission {
     background: #befeb2;
 }
-.RDE-mission{
-    background: #febbb8;
-}
-.RDG-mission{
+
+.RDE-mission {
     background: #febbb8;
 }
 
+.RDG-mission {
+    background: #febbb8;
+}
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
     background: #daeffd none;

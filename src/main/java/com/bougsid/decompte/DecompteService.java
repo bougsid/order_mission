@@ -2,6 +2,7 @@ package com.bougsid.decompte;
 
 import com.bougsid.decompte.generatedecompte.Excel;
 import com.bougsid.mission.Mission;
+import com.bougsid.mission.MissionRepository;
 import com.bougsid.taux.ITauxService;
 import com.bougsid.taux.Taux;
 import com.bougsid.transport.TransportType;
@@ -19,16 +20,14 @@ import java.util.List;
 @Service
 public class DecompteService implements IDecompteService {
     @Autowired
+    private MissionRepository missionRepository;
+    @Autowired
     private DecompteRepository decompteRepository;
     @Autowired
     private ITauxService tauxService;
     @Autowired
     private Excel excel;
     private Decompte decompte;
-
-    public DecompteService() {
-        this.decompte = new Decompte();
-    }
 
     @Override
     public List<Decompte> findAll() {
@@ -38,7 +37,9 @@ public class DecompteService implements IDecompteService {
     @Override
     public Decompte save(Decompte decompte) {
         decompte.calculeTotal();
-        return this.decompteRepository.save(decompte);
+        decompte = this.decompteRepository.save(decompte);
+        this.missionRepository.save(decompte.getMission());
+        return decompte;
     }
 
     @Override
@@ -48,10 +49,16 @@ public class DecompteService implements IDecompteService {
 
     @Override
     public void setDecompteWithMission(Mission mission) {
-        this.decompte.setMission(mission);
-        this.fillSejour(mission.getStartDate(), mission.getEndDate());
+        if (mission.getDecompte() == null) {
+            this.decompte = new Decompte();
+            this.decompte.setMission(mission);
+            mission.setDecompte(this.decompte);
+            this.fillSejour(mission.getStartDate(), mission.getEndDate());
+            this.fillTaux(mission);
+        } else {
+            this.decompte = mission.getDecompte();
+        }
         //Set Taux
-        this.fillTaux(mission);
         System.out.println("ok2");
     }
 

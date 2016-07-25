@@ -13,7 +13,7 @@
 
         var selectedEvent;
         $('#calendar_lang').pagescalendar({
-            //Loading Dummy EVENTS for demo Purposes, you can feed the events attribute from 
+            //Loading Dummy EVENTS for demo Purposes, you can feed the events attribute from
             //Web Service
             events: [{
                 title: 'Call Dave',
@@ -55,7 +55,7 @@
             }, ],
             view:"week",
             onViewRenderComplete: function() {
-                //You can Do a Simple AJAX here and update 
+                //You can Do a Simple AJAX here and update
             },
             onEventClick: function(event) {
                 //Open Pages Custom Quick View

@@ -91,43 +91,28 @@
                                 <a class="list-refresh" href="#"><i class="fa fa-refresh"/></a>
                                 <div data-email="list">
                                     <!-- START EMAIL LIST SORTED BY DATE -->
-                                    <h:form id="tableForm">
+                                    <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="serviceList" var="srv"
+                                        <p:dataTable widgetVar="entrepriseList" var="bnk"
                                                      styleClass="borderless hide-column-names"
-                                                     value="#{serviceView.depts}"
+                                                     value="#{entrepriseView.entreprises}"
                                                      selectionMode="single"
-                                                     selection="#{serviceView.selectedDept}"
-                                                     rowKey="#{srv.id}">
-                                            <p:ajax event="rowSelect" update="@(#serviceDetail)"/>
-
+                                                     selection="#{entrepriseView.selectedEntreprise}"
+                                                     rowKey="#{bnk.id}">
+                                            <p:ajax event="rowSelect" update="@(#entrepriseDetail)"/>
                                             <p:column>
-                                                <h:outputText value="#{srv.nom}"/>
+                                                <h:outputText value="#{bnk.nom}"/>
                                             </p:column>
-
-                                            <p:column>
-                                                <h:outputText value="#{srv.chef.fullName}"/>
-                                            </p:column>
-
                                         </p:dataTable>
 
                                     </h:form>
-                                    <h:form>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <h:selectOneMenu id="page"
-                                                         styleClass="select-one-menu"
-                                                         value="#{serviceView.page}">
-                                            <f:selectItems value="#{serviceView.pages}"/>
-                                            <p:ajax update="tableForm" event="valueChange"
-                                                    listener="#{serviceView.updateListWithPage()}"/>
-                                        </h:selectOneMenu>
-                                    </h:form>
+
                                     <!-- END EMAIL LIST SORTED BY DATE -->
                                 </div>
                             </div>
                             <!-- END SPLIT LIST VIEW -->
                             <!-- START SPLIT DETAILS -->
-                            <h:form id="serviceDetail">
+                            <h:form id="entrepriseDetail">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                 <div data-email="opened" class="split-details">
@@ -136,21 +121,19 @@
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
 
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
-
-
                                                 <li class="no-padding ">
                                                     <p:commandLink process="@this"
-                                                                   onstart="unselectAll(PF('serviceList'));"
-                                                                   update="@(#serviceDetail)"
-                                                                   actionListener="#{serviceView.newService()}"
+                                                                   onstart="unselectAll(PF('entrepriseList'));"
+                                                                   update="@(#entrepriseDetail)"
+                                                                   actionListener="#{entrepriseView.newEntreprise()}"
                                                                    class="text-success">#{msg['employe.button.new']}</p:commandLink>
                                                 </li>
-                                                <c:if test="#{serviceView.selectedDept != null}">
+                                                <c:if test="#{entrepriseView.selectedEntreprise != null}">
 
                                                 <li class="no-padding ">
                                                     <p:commandLink process="@this"
                                                                    update="@(#employeDetail)"
-                                                                   actionListener="#{serviceView.deleteService()}"
+                                                                   actionListener="#{entrepriseView.deleteEntreprise()}"
                                                                    class="text-success">#{msg['employe.button.delete']}
                                                         <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.deleteQuestion']}" icon="ui-icon-alert" />
                                                     </p:commandLink>
@@ -160,62 +143,42 @@
                                                     <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                                 </p:confirmDialog>
                                                 </c:if>
-
                                             </ul>
 
                                             <div class="clearfix"/>
                                         </div>
-                                        <c:if test="#{serviceView.selectedDept != null}">
-                                            <div class="email-content">
+                                        <c:if test="#{entrepriseView.selectedEntreprise != null}">
 
+                                        <div class="email-content">
 
-                                                <div class="clearfix"/>
+                                            <div class="clearfix"/>
 
-                                                <div class="email-content-body m-t-20">
-                                                    <div class="form-group-attached">
-
-                                                        <div class="form-group form-group-default required">
-                                                            <label>#{msg['dept.nom']}</label>
-                                                            <p:inputText label="#{msg['dept.nom']}"
-                                                                         styleClass="form-control input-lg" id="objet"
-                                                                         value="#{serviceView.selectedDept.nom}"
-                                                                         required="true"/>
-                                                        </div>
-                                                        <div class="form-group form-group-default required">
-                                                            <label>#{msg['dept.chef']}</label>
-                                                            <h:selectOneMenu rendered="true" label="#{msg['dept.chef']}"
-                                                                             id="chef" required="true"
-                                                                             styleClass="select-one-menu"
-                                                                             value="#{serviceView.selectedDept.chef}">
-                                                                <f:selectItem noSelectionOption="true"
-                                                                              itemLabel="#{msg['employe.message.selectbank']}"
-                                                                              itemValue=""/>
-                                                                <f:selectItems rendered="true" value="#{serviceView.employes}"
-                                                                               var="chef"
-                                                                               itemValue="#{chef}"
-                                                                               itemLabel="#{chef.fullName}"
-                                                                />
-                                                                <f:converter converterId="employeConverter"/>
-                                                            </h:selectOneMenu>
-                                                        </div>
-
+                                            <div class="email-content-body m-t-20">
+                                                <div class="form-group-attached">
+                                                    <div class="form-group form-group-default required">
+                                                        <label>#{msg['entreprise.nom']}</label>
+                                                        <p:inputText label="#{msg['entreprise.nom']}"
+                                                                     styleClass="form-control input-lg" id="nom"
+                                                                     value="#{entrepriseView.selectedEntreprise.nom}"
+                                                                     required="true"/>
                                                     </div>
-                                                    <div class="row p-b-20">
-
-                                                        <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                            <p:commandButton validateClient="true"
-                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['dept.notification.success.save']}','success')"
-                                                                             value="#{msg['employe.button.save']}"
-                                                                             update="@(#serviceDetail)"
-                                                                             actionListener="#{serviceView.saveService()}"
-                                                                             class="btn btn-complete btn-cons m-l-10"/>
-
-                                                        </div>
-
-                                                    </div>
-                                                    <p:messages/>
                                                 </div>
+                                                <div class="row p-b-20">
+
+                                                    <div style="text-align: center" class="col-sm-11 m-t-30">
+                                                        <p:commandButton validateClient="true"
+                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['entreprise.notification.success.save']}','success')"
+                                                                         value="#{msg['employe.button.save']}"
+                                                                         update="@(#entrepriseDetail)"
+                                                                         actionListener="#{entrepriseView.saveEntreprise()}"
+                                                                         class="btn btn-complete btn-cons m-l-10"/>
+
+                                                    </div>
+
+                                                </div>
+                                                <p:messages/>
                                             </div>
+                                        </div>
                                         </c:if>
                                     </div>
                                 </div>

@@ -21,7 +21,7 @@ public class OrderMissionApplication {
 	@Bean
 	public LocaleResolver localeResolver() {
 		SessionLocaleResolver slr = new SessionLocaleResolver();
-		slr.setDefaultLocale(Locale.US); // Set default Locale as US
+		slr.setDefaultLocale(Locale.FRANCE); // Set default Locale as US
 		return slr;
 	}
 

@@ -7,4 +7,6 @@ import java.util.List;
  */
 public interface IEntrepriseService {
     public List<Entreprise> getAllEntreprices();
+    public Entreprise save(Entreprise entreprise);
+    void delete(Entreprise entreprise);
 }

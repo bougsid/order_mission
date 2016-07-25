@@ -75,7 +75,10 @@ public class MissionController {
     public String missionsPage() {
         return "missions";
     }
-
+    @RequestMapping(value = "/entreprises", method = RequestMethod.GET)
+    public String entreprisesPage() {
+        return "entreprises";
+    }
     @RequestMapping(value = "/taux", method = RequestMethod.GET)
     public String tauxPage() {
         return "taux";

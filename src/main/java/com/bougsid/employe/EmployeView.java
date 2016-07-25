@@ -98,8 +98,9 @@ public class EmployeView implements Serializable {
     public void saveEmploye() {
         System.out.println("Save Employe");
         try {
-            if (selectedEmploye.getIdEmploye() == null)
+            if (selectedEmploye.getIdEmploye() == null){
                 this.employeService.registerEmploye(selectedEmploye);
+            }
             else
                 this.employeService.updateEmploye(selectedEmploye);
         } catch (MatriculeAlreadyExistException e) {

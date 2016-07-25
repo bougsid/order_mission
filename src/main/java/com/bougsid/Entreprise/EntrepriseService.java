@@ -16,4 +16,14 @@ public class EntrepriseService implements IEntrepriseService {
     public List<Entreprise> getAllEntreprices() {
         return this.entrepriseRepository.findAll();
     }
+
+    @Override
+    public Entreprise save(Entreprise entreprise) {
+        return this.entrepriseRepository.save(entreprise);
+    }
+
+    @Override
+    public void delete(Entreprise entreprise) {
+        this.entrepriseRepository.delete(entreprise);
+    }
 }

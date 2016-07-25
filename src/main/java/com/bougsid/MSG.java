@@ -13,7 +13,7 @@ public class MSG {
     private ResourceBundle resourceBundle;
 
     public MSG() {
-        this.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+        this.resourceBundle = ResourceBundle.getBundle("messages", Locale.FRANCE);
     }
     public String getMessage(String key){
         return this.resourceBundle.getString(key);

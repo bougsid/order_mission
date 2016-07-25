@@ -35,7 +35,7 @@ public class DecompteView implements Serializable {
                 getAutowireCapableBeanFactory().
                 autowireBean(this);
 //        this.decompteService = OrderMissionApplication.getContext().getBean(IDecompteService.class);
-        this.decomptes = this.decompteService.findAll();
+//        this.decomptes = this.decompteService.findAll();
         this.decompte = this.decompteService.getDecompte();
     }
 

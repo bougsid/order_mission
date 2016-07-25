@@ -1,5 +1,6 @@
 package com.bougsid.mission;
 
+import com.bougsid.decompte.Decompte;
 import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.missiontype.MissionType;
@@ -56,6 +57,8 @@ public class Mission {
     @ManyToOne
     @JoinColumn(name = "id_entreprise", nullable = true)
     private Entreprise entreprise;
+    @OneToOne
+    private Decompte decompte;
 
     public Mission() {
 //        this.transport = new Transport();
@@ -220,15 +223,24 @@ public class Mission {
         this.entreprise = entreprise;
     }
 
+    public Decompte getDecompte() {
+        return decompte;
+    }
+
+    public void setDecompte(Decompte decompte) {
+        this.decompte = decompte;
+    }
+
     @Transient
-    public String getStringfyVille(){
+    public String getStringfyVille() {
         String stringfyVilles = "";
         for (Ville ville : villes) {
-            stringfyVilles += ville.getNom() +",";
+            stringfyVilles += ville.getNom() + ",";
         }
-        stringfyVilles = stringfyVilles.substring(0,stringfyVilles.length()-1);
+        stringfyVilles = stringfyVilles.substring(0, stringfyVilles.length() - 1);
         return stringfyVilles;
     }
+
     @Override
     public String toString() {
         return "Mission{" +
