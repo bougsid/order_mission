@@ -43,10 +43,12 @@ public class MissionController {
     public String errorPage() {
         return "404";
     }
+
     @RequestMapping(value = "/decompte", method = RequestMethod.GET)
     public String decomptePage() {
         return "decompte";
     }
+
     @RequestMapping(value = "/addmission", method = RequestMethod.GET)
     public String addMissionPage() {
         return "addmission";
@@ -75,22 +77,27 @@ public class MissionController {
     public String missionsPage() {
         return "missions";
     }
+
     @RequestMapping(value = "/entreprises", method = RequestMethod.GET)
     public String entreprisesPage() {
         return "entreprises";
     }
+
     @RequestMapping(value = "/taux", method = RequestMethod.GET)
     public String tauxPage() {
         return "taux";
     }
+
     @RequestMapping(value = "/transport", method = RequestMethod.GET)
     public String transportPage() {
         return "transport";
     }
+
     @RequestMapping(value = "/villes", method = RequestMethod.GET)
     public String villesPage() {
         return "villes";
     }
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -112,12 +119,12 @@ public class MissionController {
                 response.setContentType("application/pdf");
             else
                 response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-disposition", "inline; filename=" + name+"."+type
+            response.setHeader("Content-disposition", "inline; filename=" + name + "." + type
             );
 
             // get your file as InputStream
             File downloadDir = new File(msg.getMessage("application.mission.downloaddir"));
-            InputStream is = new FileInputStream(downloadDir.getPath() + "/" + uuid + "."+type);
+            InputStream is = new FileInputStream(downloadDir.getPath() + "/" + uuid + "." + type);
 
             // copy it to response's OutputStream
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());

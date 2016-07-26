@@ -108,7 +108,7 @@ container-fluid">
 
                                                     <div class="row clearfix">
                                                         <div class="col-sm-6">
-                                                            <div class="form-group form-group-default required">
+                                                            <div class="form-group form-group-default">
                                                                 <label>#{msg['mission.entreprise']}</label>
                                                                 <h:selectOneMenu label="#{msg['mission.entreprise']}"
                                                                                  id="entreprise"
@@ -130,9 +130,12 @@ container-fluid">
                                                             <div class="form-group form-group-default required">
                                                                 <label>#{msg['mission.type']}</label>
                                                                 <h:selectOneMenu label="#{msg['mission.type']}"
-                                                                                 id="type"
+                                                                                 id="type" required="true"
                                                                                  styleClass="select-one-menu"
                                                                                  value="#{addMissionView.mission.type}">
+                                                                    <f:selectItem noSelectionOption="true"
+                                                                                  itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                  itemValue=""/>
                                                                     <f:selectItems
                                                                             value="#{addMissionView.missionTypes}"
                                                                             var="tp" itemValue="#{tp}"

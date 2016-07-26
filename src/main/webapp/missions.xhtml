@@ -204,9 +204,10 @@
                                                                     </c:when>
                                                                     <c:when test="#{missionView.filter == 'SERVICE'}">
                                                                         <label>#{msg['search.service']}</label>
-                                                                        <h:selectOneMenu label="#{msg['search.service']}"
-                                                                                         styleClass="select-one-menu"
-                                                                                         value="#{missionView.filter.criteria}">
+                                                                        <h:selectOneMenu
+                                                                                label="#{msg['search.service']}"
+                                                                                styleClass="select-one-menu"
+                                                                                value="#{missionView.filter.criteria}">
                                                                             <f:selectItems
                                                                                     value="#{missionView.depts}"
                                                                                     var="tp" itemValue="#{tp}"
@@ -230,9 +231,10 @@
                                                                     </c:when>
                                                                     <c:when test="#{missionView.filter == 'ENTREPRISE'}">
                                                                         <label>#{msg['search.entreprise']}</label>
-                                                                        <h:selectOneMenu label="#{msg['search.entreprise']}"
-                                                                                         styleClass="select-one-menu"
-                                                                                         value="#{missionView.filter.criteria}">
+                                                                        <h:selectOneMenu
+                                                                                label="#{msg['search.entreprise']}"
+                                                                                styleClass="select-one-menu"
+                                                                                value="#{missionView.filter.criteria}">
                                                                             <f:selectItems
                                                                                     value="#{entrepriseView.entreprises}"
                                                                                     var="tp" itemValue="#{tp}"
@@ -313,7 +315,6 @@
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
                                                 <c:if test="#{missionView.selectedMission != null}">
-
                                                     <c:if test="#{missionView.chefOrDG}">
                                                         <li class="no-padding ">
                                                             <p:commandLink process="comment @this"
@@ -335,15 +336,8 @@
                                                         </li>
                                                     </c:if>
                                                     <c:if test="#{missionView.daf and missionView.selectedMission.currentState!='CANCELED'}">
-                                                        <li class="no-padding ">
-                                                            <p:commandLink process="comment @this"
-                                                                           onsuccess="showNotification('#{msg['mission.notification.success.validate']}','success')"
-                                                                           onerror="showNotification('#{msg['mission.notification.error.validate']}','error')"
-                                                                           actionListener="#{missionView.validateMission()}"
-                                                                           class="text-success">
-                                                                #{msg['mission.button.validate']}
-                                                            </p:commandLink>
-                                                        </li>
+
+                                                        <!--Cancel Order-->
                                                         <c:if test="#{missionView.selectedMission.currentState=='DAF'}">
                                                             <li class="no-padding ">
                                                                 <p:commandLink process="comment @this"
@@ -354,6 +348,7 @@
                                                                 </p:commandLink>
                                                             </li>
                                                         </c:if>
+                                                        <!--Print Order de Mission-->
                                                         <li class="no-padding ">
                                                             <p:commandLink process="@this"
                                                                            onsuccess="showNotification('#{msg['mission.notification.success.print']}','success')"
@@ -363,7 +358,7 @@
                                                                 #{msg['mission.button.print']}
                                                             </p:commandLink>
                                                         </li>
-
+                                                        <!--print Decompte-->
                                                         <li class="no-padding ">
                                                             <p:lightBox
                                                                     onShow="${missionView.setMissionToDecompteIframe()}"
@@ -375,7 +370,16 @@
                                                                 </h:outputLink>
                                                             </p:lightBox>
                                                         </li>
-
+                                                        <!--Print Order de Virement-->
+                                                        <li class="no-padding ">
+                                                            <p:commandLink process="@this"
+                                                                           onsuccess="showNotification('#{msg['mission.notification.success.print']}','success')"
+                                                                           onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
+                                                                           actionListener="#{missionView.printOrderVirement()}"
+                                                                           class="text-success">
+                                                                #{msg['mission.button.printOrderVirement']}
+                                                            </p:commandLink>
+                                                        </li>
                                                     </c:if>
                                                 </c:if>
                                             </ul>

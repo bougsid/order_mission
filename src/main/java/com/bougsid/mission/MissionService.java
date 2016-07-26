@@ -7,6 +7,7 @@ import com.bougsid.employe.EmployeRole;
 import com.bougsid.employe.EmployeUserDetails;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.missiontype.MissionType;
+import com.bougsid.printers.OrderVirementPrinter;
 import com.bougsid.printers.PrintMission;
 import com.bougsid.service.Dept;
 import com.bougsid.statistics.DateType;
@@ -44,6 +45,8 @@ public class MissionService implements IMissionService {
     private PrintMission printMission;
     @Autowired
     private Excel excel;
+    @Autowired
+    private OrderVirementPrinter orderVirementPrinter;
     private final static int pageSize = 10;
 
     @Override
@@ -110,7 +113,9 @@ public class MissionService implements IMissionService {
     }
 
     private MissionStateEnum getNextState(Mission mission) {
-        Dept typeDept = mission.getType().getDept();
+        Dept typeDept = null;
+        if (mission.getType() != null)
+            typeDept = mission.getType().getDept();
         MissionStateEnum nextState = MissionStateEnum.CURRENT;
 //        if (mission.getType().getDept() == null) {
         switch (mission.getCurrentState()) {
@@ -304,6 +309,15 @@ public class MissionService implements IMissionService {
     @Override
     public void printMission(Mission mission) {
         this.printMission.printMission(mission);
+    }
+
+    @Override
+    public String printOrderVirement() {
+        List<Mission> missions = this.missionRepository.findByNextState(MissionStateEnum.VALIDATED);
+        if (missions.size() != 0) {
+            return this.orderVirementPrinter.printOrderVirement(missions);
+        }
+        return null;
     }
 
     @Override

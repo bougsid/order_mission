@@ -296,10 +296,10 @@
 
                                                         <div class="row clearfix">
                                                             <div class="col-sm-6">
-                                                                <div class="form-group-default">
+                                                                <div class="form-group-default required">
                                                                     <label>#{msg['employe.bank']}</label>
                                                                     <h:selectOneMenu label="#{msg['employe.bank']}"
-                                                                                     id="bank"
+                                                                                     id="bank" required="true"
                                                                                      styleClass="select-one-menu"
                                                                                      value="#{employeView.selectedEmploye.bank}">
                                                                         <f:selectItem noSelectionOption="true"
@@ -316,9 +316,9 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-6">
-                                                                <div class="form-group-default">
+                                                                <div class="form-group-default required">
                                                                     <label>#{msg['employe.rib']}</label>
-                                                                    <h:inputText id="rib" maxlength="14"
+                                                                    <h:inputText id="rib" maxlength="14" required="true"
                                                                                  label="#{msg['employe.rib']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.rib}">

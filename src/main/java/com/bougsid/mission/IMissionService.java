@@ -48,6 +48,8 @@ public interface IMissionService {
 
     void printMission(Mission mission);
 
+    String printOrderVirement();
+
     Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page);
 
 //    void rejectMission(Mission mission);

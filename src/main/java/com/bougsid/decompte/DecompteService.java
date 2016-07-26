@@ -1,6 +1,7 @@
 package com.bougsid.decompte;
 
 import com.bougsid.decompte.generatedecompte.Excel;
+import com.bougsid.mission.IMissionService;
 import com.bougsid.mission.Mission;
 import com.bougsid.mission.MissionRepository;
 import com.bougsid.taux.ITauxService;
@@ -9,6 +10,7 @@ import com.bougsid.transport.TransportType;
 import com.bougsid.ville.Ville;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -28,6 +30,8 @@ public class DecompteService implements IDecompteService {
     @Autowired
     private Excel excel;
     private Decompte decompte;
+    @Autowired
+    private IMissionService missionService;
 
     @Override
     public List<Decompte> findAll() {
@@ -35,10 +39,12 @@ public class DecompteService implements IDecompteService {
     }
 
     @Override
+    @Transactional
     public Decompte save(Decompte decompte) {
         decompte.calculeTotal();
         decompte = this.decompteRepository.save(decompte);
         this.missionRepository.save(decompte.getMission());
+        this.missionService.validateMission(decompte.getMission());
         return decompte;
     }
 

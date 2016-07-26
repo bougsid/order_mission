@@ -40,6 +40,8 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     Page<Mission> findByNextState(MissionStateEnum nextState, Pageable pageable);
 
+    List<Mission> findByNextState(MissionStateEnum nextState);
+
     Page<Mission> findByNextStateIn(List<MissionStateEnum> nextState, Pageable pageable);
 
     Page<Mission> findByEmploye(Employe employe, Pageable page);

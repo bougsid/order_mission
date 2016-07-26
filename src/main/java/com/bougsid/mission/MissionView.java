@@ -29,7 +29,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -208,6 +210,25 @@ public class MissionView implements Serializable {
             pages[i - 1] = new SelectItem(String.valueOf(i), String.valueOf(i));
         }
         return pages;
+    }
+
+    public void printOrderVirement() {
+        System.out.println("Printing ...");
+        String fileName = this.missionService.printOrderVirement();
+        if (fileName == null) {
+            return;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            context.getExternalContext().redirect(request.getContextPath()
+                    + "/download/" + fileName
+                    + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy 'Heure' HH:mm"))
+                    + "/xlsx"
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void printMission() {
