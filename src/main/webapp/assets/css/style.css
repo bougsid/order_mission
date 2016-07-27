@@ -43,23 +43,29 @@
 }
 
 .CURRENT-mission {
-    background: #fef6dd;
+    background: #FFFFFF;
 }
 
-.VDE-mission {
+.VCHEF-mission {
     background: #befeb2;
 }
 
 .VDG-mission {
-    background: #befeb2;
+    background: #8efe6f;
 }
 
-.RDE-mission {
+.RCHEF-mission {
     background: #febbb8;
 }
 
 .RDG-mission {
-    background: #febbb8;
+    background: #fe726d;
+}
+.DAF-mission {
+    background: #47b2fe;
+}
+.CANCELED-mission {
+    background: #fe9848;
 }
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {

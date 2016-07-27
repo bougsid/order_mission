@@ -1,5 +1,6 @@
 package com.bougsid.mission;
 
+import com.bougsid.MSG;
 import com.bougsid.decompte.IDecompteService;
 import com.bougsid.employe.Employe;
 import com.bougsid.entreprise.Entreprise;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -32,10 +34,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -43,6 +42,8 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 public class MissionView implements Serializable {
+    @Autowired
+    private MSG msg;
     @Autowired
     private IMissionService missionService;
     @Autowired
@@ -216,6 +217,7 @@ public class MissionView implements Serializable {
         System.out.println("Printing ...");
         String fileName = this.missionService.printOrderVirement();
         if (fileName == null) {
+            FacesContext.getCurrentInstance().addMessage("decompteError", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg.getMessage("decompte.print.error"), ""));
             return;
         }
         FacesContext context = FacesContext.getCurrentInstance();
@@ -259,7 +261,9 @@ public class MissionView implements Serializable {
 
     public boolean isDaf() {
         Employe principal = this.missionService.getPrincipal();
-        GradeType type = principal.getGrade().getType();
+        GradeType type = null;
+        if (principal.getGrade() != null)
+            type = principal.getGrade().getType();
         return type == GradeType.ASSISTANT && principal.getDept().getNom().equals("DAF");
     }
 

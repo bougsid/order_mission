@@ -124,7 +124,7 @@
                                                     </div>
                                                     <div class="inline m-l-15">
                                                         <p class="recipients no-margin hint-text small">
-                                                            #{mission.employe.prenom}</p>
+                                                            #{mission.employe.fullName}</p>
                                                         <p class="subject no-margin">#{mission.objet}</p>
                                                         <p class="body no-margin">
                                                             #{msg['mission.startDate']} #{mission.startDate}
@@ -160,158 +160,162 @@
                             <!-- END SPLIT LIST VIEW -->
                             <!-- START SPLIT DETAILS -->
                             <c:if test="#{missionView.daf}">
-                                <h:form id="recherche">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                    <div>
-                                        <ul class="actions menuclipper-menu no-margin p-l-20 ">
-                                            <li class="no-padding">
-                                                <div class="form-group-attached">
-                                                    <div class="form-group form-group-default ">
-                                                        <label>#{msg['search.criteria']}</label>
-                                                        <h:selectOneMenu
-                                                                label="#{msg['search.criteria']}"
-                                                                styleClass="select-one-menu"
-                                                                value="#{missionView.filter}">
-                                                            <f:selectItems value="#{missionView.statisticsTypes}"/>
-                                                            <f:converter binding="#{genericEnumConverter}"/>
-                                                            <p:ajax event="change" update="typesearch"
-                                                                    render="typesearch"/>
-                                                        </h:selectOneMenu>
+                                <p:dialog header="#{msg['mission.button.search']}" widgetVar="dlg1" minHeight="40">
+                                    <h:form id="recherche">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <div>
+                                            <ul class="actions menuclipper-menu no-margin p-l-20 ">
+                                                <li class="no-padding">
+                                                    <div class="form-group-attached">
+                                                        <div class="form-group form-group-default ">
+                                                            <label>#{msg['search.criteria']}</label>
+                                                            <h:selectOneMenu
+                                                                    label="#{msg['search.criteria']}"
+                                                                    styleClass="select-one-menu"
+                                                                    value="#{missionView.filter}">
+                                                                <f:selectItems value="#{missionView.statisticsTypes}"/>
+                                                                <f:converter binding="#{genericEnumConverter}"/>
+                                                                <p:ajax event="change" update="typesearch"
+                                                                        render="typesearch"/>
+                                                            </h:selectOneMenu>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                            <li class="no-padding">
-                                                <h:panelGroup id="typesearch">
-                                                    <h:panelGroup
-                                                            rendered="#{missionView.filter != 'ALL'}">
-                                                        <div class="form-group-attached">
-                                                            <div class="form-group form-group-default ">
+                                                </li>
+                                                <li class="no-padding">
+                                                    <h:panelGroup id="typesearch">
+                                                        <h:panelGroup
+                                                                rendered="#{missionView.filter != 'ALL'}">
+                                                            <div class="form-group-attached">
+                                                                <div class="form-group form-group-default ">
 
-                                                                <c:choose>
-                                                                    <c:when test="#{missionView.filter == 'TYPE'}">
-                                                                        <label>#{msg['search.type']}</label>
-                                                                        <h:selectOneMenu id="typeValue"
-                                                                                         label="#{msg['search.type']}"
-                                                                                         styleClass="select-one-menu"
-                                                                                         value="#{missionView.filter.criteria}">
-                                                                            <f:selectItems
-                                                                                    value="#{missionView.missionTypes}"
-                                                                                    var="tp" itemValue="#{tp}"
-                                                                                    itemLabel="#{tp.label}"/>
-                                                                            <f:converter for="type"
-                                                                                         converterId="missionTypeConverter"/>
-                                                                        </h:selectOneMenu>
-                                                                    </c:when>
-                                                                    <c:when test="#{missionView.filter == 'SERVICE'}">
-                                                                        <label>#{msg['search.service']}</label>
-                                                                        <h:selectOneMenu
-                                                                                label="#{msg['search.service']}"
-                                                                                styleClass="select-one-menu"
-                                                                                value="#{missionView.filter.criteria}">
-                                                                            <f:selectItems
-                                                                                    value="#{missionView.depts}"
-                                                                                    var="tp" itemValue="#{tp}"
-                                                                                    itemLabel="#{tp.nom}"/>
-                                                                            <f:converter for="type"
-                                                                                         converterId="serviceConverter"/>
-                                                                        </h:selectOneMenu>
-                                                                    </c:when>
-                                                                    <c:when test="#{missionView.filter == 'VILLE'}">
-                                                                        <label>#{msg['search.ville']}</label>
-                                                                        <h:selectOneMenu label="#{msg['search.ville']}"
-                                                                                         styleClass="select-one-menu"
-                                                                                         value="#{missionView.filter.criteria}">
-                                                                            <f:selectItems
-                                                                                    value="#{missionView.sourceVilles}"
-                                                                                    var="tp" itemValue="#{tp}"
-                                                                                    itemLabel="#{tp.nom}"/>
-                                                                            <f:converter for="type"
-                                                                                         converterId="villeConverter2"/>
-                                                                        </h:selectOneMenu>
-                                                                    </c:when>
-                                                                    <c:when test="#{missionView.filter == 'ENTREPRISE'}">
-                                                                        <label>#{msg['search.entreprise']}</label>
-                                                                        <h:selectOneMenu
-                                                                                label="#{msg['search.entreprise']}"
-                                                                                styleClass="select-one-menu"
-                                                                                value="#{missionView.filter.criteria}">
-                                                                            <f:selectItems
-                                                                                    value="#{entrepriseView.entreprises}"
-                                                                                    var="tp" itemValue="#{tp}"
-                                                                                    itemLabel="#{tp.nom}"/>
-                                                                            <f:converter for="type"
-                                                                                         converterId="entrepriseConverter"/>
-                                                                        </h:selectOneMenu>
-                                                                    </c:when>
-                                                                </c:choose>
+                                                                    <c:choose>
+                                                                        <c:when test="#{missionView.filter == 'TYPE'}">
+                                                                            <label>#{msg['search.type']}</label>
+                                                                            <h:selectOneMenu id="typeValue"
+                                                                                             label="#{msg['search.type']}"
+                                                                                             styleClass="select-one-menu"
+                                                                                             value="#{missionView.filter.criteria}">
+                                                                                <f:selectItems
+                                                                                        value="#{missionView.missionTypes}"
+                                                                                        var="tp" itemValue="#{tp}"
+                                                                                        itemLabel="#{tp.label}"/>
+                                                                                <f:converter for="type"
+                                                                                             converterId="missionTypeConverter"/>
+                                                                            </h:selectOneMenu>
+                                                                        </c:when>
+                                                                        <c:when test="#{missionView.filter == 'SERVICE'}">
+                                                                            <label>#{msg['search.service']}</label>
+                                                                            <h:selectOneMenu
+                                                                                    label="#{msg['search.service']}"
+                                                                                    styleClass="select-one-menu"
+                                                                                    value="#{missionView.filter.criteria}">
+                                                                                <f:selectItems
+                                                                                        value="#{missionView.depts}"
+                                                                                        var="tp" itemValue="#{tp}"
+                                                                                        itemLabel="#{tp.nom}"/>
+                                                                                <f:converter for="type"
+                                                                                             converterId="serviceConverter"/>
+                                                                            </h:selectOneMenu>
+                                                                        </c:when>
+                                                                        <c:when test="#{missionView.filter == 'VILLE'}">
+                                                                            <label>#{msg['search.ville']}</label>
+                                                                            <h:selectOneMenu label="#{msg['search.ville']}"
+                                                                                             styleClass="select-one-menu"
+                                                                                             value="#{missionView.filter.criteria}">
+                                                                                <f:selectItems
+                                                                                        value="#{missionView.sourceVilles}"
+                                                                                        var="tp" itemValue="#{tp}"
+                                                                                        itemLabel="#{tp.nom}"/>
+                                                                                <f:converter for="type"
+                                                                                             converterId="villeConverter2"/>
+                                                                            </h:selectOneMenu>
+                                                                        </c:when>
+                                                                        <c:when test="#{missionView.filter == 'ENTREPRISE'}">
+                                                                            <label>#{msg['search.entreprise']}</label>
+                                                                            <h:selectOneMenu
+                                                                                    label="#{msg['search.entreprise']}"
+                                                                                    styleClass="select-one-menu"
+                                                                                    value="#{missionView.filter.criteria}">
+                                                                                <f:selectItems
+                                                                                        value="#{entrepriseView.entreprises}"
+                                                                                        var="tp" itemValue="#{tp}"
+                                                                                        itemLabel="#{tp.nom}"/>
+                                                                                <f:converter for="type"
+                                                                                             converterId="entrepriseConverter"/>
+                                                                            </h:selectOneMenu>
+                                                                        </c:when>
+                                                                    </c:choose>
 
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </h:panelGroup>
                                                     </h:panelGroup>
-                                                </h:panelGroup>
-                                            </li>
+                                                </li>
 
-                                            <li class="no-padding">
-                                                <div class="form-group-attached">
-                                                    <div class="form-group form-group-default ">
-                                                        <label>#{msg['search.date']}</label>
-                                                        <h:selectOneMenu
-                                                                label="#{msg['search.date']}"
-                                                                styleClass="select-one-menu"
-                                                                value="#{missionView.filterDate}">
-                                                            <f:selectItems value="#{missionView.dateTypes}"/>
-                                                            <f:converter binding="#{genericEnumConverter}"/>
-                                                            <p:ajax event="change" update="start end"
-                                                                    render="start end"/>
-                                                        </h:selectOneMenu>
+                                                <li class="no-padding">
+                                                    <div class="form-group-attached">
+                                                        <div class="form-group form-group-default ">
+                                                            <label>#{msg['search.date']}</label>
+                                                            <h:selectOneMenu
+                                                                    label="#{msg['search.date']}"
+                                                                    styleClass="select-one-menu"
+                                                                    value="#{missionView.filterDate}">
+                                                                <f:selectItems value="#{missionView.dateTypes}"/>
+                                                                <f:converter binding="#{genericEnumConverter}"/>
+                                                                <p:ajax event="change" update="start end"
+                                                                        render="start end"/>
+                                                            </h:selectOneMenu>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                            <li class="no-padding">
-                                                <h:panelGroup id="start">
-                                                    <h:panelGroup rendered="#{missionView.filterDate == 'CUSTOM'}">
-                                                        <div class="form-group-attached">
-                                                            <div class="form-group form-group-default ">
-                                                                <label>#{msg['search.start']}</label>
-                                                                <p:calendar pattern="dd/MM/yyyy" mask="true" lang="fr"
-                                                                            locale="fr" styleClass="calendar"
-                                                                            value="#{missionView.start}"/>
+                                                </li>
+                                                <li class="no-padding">
+                                                    <h:panelGroup id="start">
+                                                        <h:panelGroup rendered="#{missionView.filterDate == 'CUSTOM'}">
+                                                            <div class="form-group-attached">
+                                                                <div class="form-group form-group-default ">
+                                                                    <label>#{msg['search.start']}</label>
+                                                                    <p:calendar pattern="dd/MM/yyyy" mask="true" lang="fr"
+                                                                                locale="fr" styleClass="calendar"
+                                                                                value="#{missionView.start}"/>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </h:panelGroup>
                                                     </h:panelGroup>
-                                                </h:panelGroup>
-                                            </li>
-                                            <li class="no-padding">
-                                                <h:panelGroup id="end">
-                                                    <h:panelGroup rendered="#{missionView.filterDate == 'CUSTOM'}">
-                                                        <div class="form-group-attached">
-                                                            <div class="form-group form-group-default ">
-                                                                <label>#{msg['search.end']}</label>
-                                                                <p:calendar pattern="dd/MM/yyyy" mask="true" lang="fr"
-                                                                            locale="fr" styleClass="calendar"
-                                                                            value="#{missionView.end}"/>
+                                                </li>
+                                                <li class="no-padding">
+                                                    <h:panelGroup id="end">
+                                                        <h:panelGroup rendered="#{missionView.filterDate == 'CUSTOM'}">
+                                                            <div class="form-group-attached">
+                                                                <div class="form-group form-group-default ">
+                                                                    <label>#{msg['search.end']}</label>
+                                                                    <p:calendar pattern="dd/MM/yyyy" mask="true" lang="fr"
+                                                                                locale="fr" styleClass="calendar"
+                                                                                value="#{missionView.end}"/>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </h:panelGroup>
                                                     </h:panelGroup>
-                                                </h:panelGroup>
-                                            </li>
-                                            <li class="no-padding">
-                                                <p:commandButton class="text-success"
-                                                                 value="#{msg['mission.button.search']}"
-                                                                 update="tableForm"
-                                                                 actionListener="#{missionView.search}"
-                                                                 icon="ui-icon-check"/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </h:form>
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+                                        <div style="text-align: center" class="col-sm-11 m-t-30">
+                                            <p:commandButton class="btn btn-complete btn-cons"
+                                                             value="#{msg['mission.button.search']}"
+                                                             update="tableForm"
+                                                             actionListener="#{missionView.search}"
+                                                             icon="ui-icon-search"
+                                            oncomplete="PF('dlg1').hide();"/>
+                                        </div>
+                                    </h:form>
+                                </p:dialog>
                             </c:if>
                             <h:form id="missionDetail">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                                 <div data-email="opened" class="split-details">
                                     <div class="email-content-wrapper">
-
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
                                                 <c:if test="#{missionView.selectedMission != null}">
@@ -336,7 +340,6 @@
                                                         </li>
                                                     </c:if>
                                                     <c:if test="#{missionView.daf and missionView.selectedMission.currentState!='CANCELED'}">
-
                                                         <!--Cancel Order-->
                                                         <c:if test="#{missionView.selectedMission.currentState=='DAF'}">
                                                             <li class="no-padding ">
@@ -345,6 +348,8 @@
                                                                                actionListener="#{missionView.cancelMission()}"
                                                                                class="text-success">
                                                                     #{msg['mission.button.cancel']}
+                                                                    <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.cancelMission']}" icon="ui-icon-alert" />
+
                                                                 </p:commandLink>
                                                             </li>
                                                         </c:if>
@@ -369,16 +374,6 @@
                                                                             value="#{msg['mission.button.decompte']}"/>
                                                                 </h:outputLink>
                                                             </p:lightBox>
-                                                        </li>
-                                                        <!--Print Order de Virement-->
-                                                        <li class="no-padding ">
-                                                            <p:commandLink process="@this"
-                                                                           onsuccess="showNotification('#{msg['mission.notification.success.print']}','success')"
-                                                                           onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
-                                                                           actionListener="#{missionView.printOrderVirement()}"
-                                                                           class="text-success">
-                                                                #{msg['mission.button.printOrderVirement']}
-                                                            </p:commandLink>
                                                         </li>
                                                     </c:if>
                                                 </c:if>

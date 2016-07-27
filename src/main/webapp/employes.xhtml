@@ -153,10 +153,6 @@
                                                             <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.deleteQuestion']}" icon="ui-icon-alert" />
                                                         </p:commandLink>
                                                     </li>
-                                                    <p:confirmDialog global="true">
-                                                        <p:commandButton value="#{msg['confirmation.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                                        <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                                    </p:confirmDialog>
                                                 </c:if>
 
                                             </ul>
@@ -187,7 +183,7 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.nom']}</label>
-                                                                    <h:inputText id="nom" required="true"
+                                                                    <h:inputText id="nom" required="true" label="#{msg['employe.nom']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.nom}">
                                                                     </h:inputText>
@@ -196,7 +192,7 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.prenom']}</label>
-                                                                    <h:inputText id="prenom" required="true"
+                                                                    <h:inputText id="prenom" required="true" label="#{msg['employe.prenom']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.prenom}">
                                                                     </h:inputText>
@@ -207,7 +203,7 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.matricule']}</label>
-                                                                    <h:inputText id="matricule" required="true"
+                                                                    <h:inputText id="matricule" required="true" label="#{msg['employe.matricule']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.matricule}">
                                                                     </h:inputText>
@@ -216,7 +212,7 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.fonction']}</label>
-                                                                    <h:inputText id="fonction" required="true"
+                                                                    <h:inputText id="fonction" required="true" label="#{msg['employe.fonction']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.fonction}">
                                                                     </h:inputText>
@@ -329,19 +325,19 @@
                                                     </div>
                                                     <div class="row p-b-20">
                                                         <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                            <p:commandButton id="reset"
-                                                                    onsuccess="showNotification('#{msg['employe.notification.success.initpassword']}','success')"
-                                                                    process="@this"
-                                                                    value="#{msg['employe.button.initpassword']}"
-                                                                    actionListener="#{employeView.initPassword()}"
-                                                                    class="btn btn-white btn-cons"/>
+
                                                             <p:commandButton validateClient="true"
                                                                              oncomplete="document.getElementById('employeDetail').reset(); if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['employe.notification.success.save']}','success')"
                                                                              value="#{msg['employe.button.save']}"
                                                                              update="@(#employeDetail)"
                                                                              actionListener="#{employeView.saveEmploye()}"
                                                                              class="btn btn-complete btn-cons m-l-10"/>
-
+                                                            <p:commandButton id="reset"
+                                                                             onsuccess="showNotification('#{msg['employe.notification.success.initpassword']}','success')"
+                                                                             process="@this"
+                                                                             value="#{msg['employe.button.initpassword']}"
+                                                                             actionListener="#{employeView.initPassword()}"
+                                                                             class="btn btn-white btn-cons"/>
                                                         </div>
                                                     </div>
                                                     <p:messages/>

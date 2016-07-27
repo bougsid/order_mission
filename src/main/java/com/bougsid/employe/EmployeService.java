@@ -63,7 +63,7 @@ public class EmployeService implements IEmployeService {
         EmployeProfile userProfile = this.profileRepository.findByType(EmployeRole.USER);
         employe.addEmployeProfile(userProfile);
         employe = this.employeRepository.save(employe);
-        if (employe.getGrade().getType() == GradeType.CHEF) {
+        if (employe.getGrade().getType() == GradeType.CHEF || employe.getGrade().getType() == GradeType.DG) {
             employe.getDept().setChef(employe);
             this.serviceRepository.save(employe.getDept());
         }
@@ -84,7 +84,7 @@ public class EmployeService implements IEmployeService {
         if (emp != null && emp.getIdEmploye() != employe.getIdEmploye()) {
             throw new MatriculeAlreadyExistException();
         }
-        if (employe.getGrade().getType() == GradeType.CHEF) {
+        if (employe.getGrade().getType() == GradeType.CHEF||employe.getGrade().getType() == GradeType.DG) {
             employe.getDept().setChef(employe);
             this.serviceRepository.save(employe.getDept());
         }
@@ -102,8 +102,22 @@ public class EmployeService implements IEmployeService {
         employe.setPassword(employe.getMatricule());
         this.employeRepository.save(employe);
     }
+
     @Override
-    public Employe save(Employe employe){
+    public Employe save(Employe employe) {
         return this.employeRepository.save(employe);
+    }
+
+    @Override
+    public double updateEmployeAvoir(Employe employe, double montant) {
+        if (employe.getAvoir() >= montant) {
+            employe.setAvoir(employe.getAvoir() - montant);
+            montant = 0.0;
+        } else {
+            montant -= employe.getAvoir();
+            employe.setAvoir(0);
+        }
+        this.employeRepository.save(employe);
+        return montant;
     }
 }

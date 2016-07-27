@@ -1,6 +1,5 @@
 package com.bougsid.service;
 
-import com.bougsid.grade.Grade;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public interface IServiceService {
 
     Dept save(Dept dept);
 
-    Grade getChefGrade();
+//    Grade getChefGrade();
 
     void delete(Dept dept);
 }

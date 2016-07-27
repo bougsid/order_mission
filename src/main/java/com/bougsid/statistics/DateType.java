@@ -7,7 +7,7 @@ import java.time.temporal.ChronoField;
  * Created by ayoub on 7/25/2016.
  */
 public enum DateType {
-    ALL("Tous"),
+    ALL("Tous", null),
     THISMONTH("Ce mois-ci", ChronoField.DAY_OF_MONTH),
     THISYEAR("Cette année", ChronoField.DAY_OF_YEAR),
     CUSTOM("Période personnalisée");
@@ -17,8 +17,12 @@ public enum DateType {
 
     DateType(String label, ChronoField ch) {
         this.label = label;
-        this.end = LocalDate.now();
-        this.start = end.with(ch, 1);
+            this.end = LocalDate.now();
+        if (ch != null) {
+            this.start = end.with(ch, 1);
+        } else {
+            this.start = LocalDate.MIN;
+        }
         System.out.println("sart ? " + start);
         System.out.println("sart ? " + end);
     }

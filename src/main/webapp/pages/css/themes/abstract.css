@@ -3039,9 +3039,9 @@ fieldset[disabled] .btn-success.active {
 }
 .btn-complete,
 .btn-complete:focus {
-  color: #ffffff;
-  background-color: #2979fb;
-  border-color: #2979fb;
+  color: #ffffff !important;
+  background-color: #2979fb !important;
+  border-color: #2979fb !important;
 }
 .btn-complete.active,
 .btn-complete:active,

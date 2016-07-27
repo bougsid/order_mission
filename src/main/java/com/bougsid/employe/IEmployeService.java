@@ -24,4 +24,6 @@ public interface IEmployeService {
     void initPassword(Employe selectedEmploye);
 
     Employe save(Employe employe);
+
+    double updateEmployeAvoir(Employe employe, double avoir);
 }

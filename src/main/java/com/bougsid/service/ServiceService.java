@@ -40,17 +40,22 @@ public class ServiceService implements IServiceService {
 
     @Override
     public Dept save(Dept dept) {
-        if(dept.getChef() != null){
-            dept.getChef().setGrade(getChefGrade());
+        if (dept.getChef() != null) {
+            if (dept.getChef().getGrade() != getDGGrade())
+                dept.getChef().setGrade(getChefGrade());
             dept.getChef().setDept(dept);
         }
         this.serviceRepository.save(dept);
         this.employeService.save(dept.getChef());
         return dept;
     }
-    @Override
-    public Grade getChefGrade(){
+
+    private Grade getChefGrade() {
         return this.gradeService.findByType(GradeType.CHEF);
+    }
+
+    private Grade getDGGrade() {
+        return this.gradeService.findByType(GradeType.DG);
     }
 
     @Override

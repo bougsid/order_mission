@@ -6,7 +6,7 @@ package com.bougsid.mission;
 public enum MissionStateEnum {
     CURRENT("En cours"),
     VCHEF("Valider par le chef de service"),
-    VDG("Valider pa le directeur Générale"),
+    VDG("Valider par le directeur Générale"),
     VDTYPE("Valider par service d'entreprise"),
     RCHEF("Refuser par le chef de service"),
     RDG("Refuser par le directeur generale"),

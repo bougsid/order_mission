@@ -1,10 +1,7 @@
 package com.bougsid.mission;
 
 import com.bougsid.decompte.generatedecompte.Excel;
-import com.bougsid.employe.Employe;
-import com.bougsid.employe.EmployeProfile;
-import com.bougsid.employe.EmployeRole;
-import com.bougsid.employe.EmployeUserDetails;
+import com.bougsid.employe.*;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.missiontype.MissionType;
 import com.bougsid.printers.OrderVirementPrinter;
@@ -35,6 +32,8 @@ import java.util.List;
 public class MissionService implements IMissionService {
     @Autowired
     private MissionRepository missionRepository;
+    @Autowired
+    private EmployeRepository employeRepository;
     @Autowired
     private MissionStateRepository missionStateRepository;
     @Autowired
@@ -82,7 +81,7 @@ public class MissionService implements IMissionService {
 
     @Override
     public Page<Mission> getMissionsForDAF(int page) {
-        Employe ce = getPrincipal();
+//        Employe ce = getPrincipal();
         List<MissionStateEnum> nextStates = new ArrayList<>();
         nextStates.add(MissionStateEnum.DAF);
         nextStates.add(MissionStateEnum.VALIDATED);
@@ -171,6 +170,9 @@ public class MissionService implements IMissionService {
         state.addMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
+        Employe employe = mission.getEmploye();
+        employe.setAvoir(employe.getAvoir() + mission.getDecompte().getTotal());
+        this.employeRepository.save(employe);
     }
 
     @Override
@@ -313,8 +315,12 @@ public class MissionService implements IMissionService {
 
     @Override
     public String printOrderVirement() {
-        List<Mission> missions = this.missionRepository.findByNextState(MissionStateEnum.VALIDATED);
+        List<Mission> missions = this.missionRepository.findByNextState(MissionStateEnum.DAF);
         if (missions.size() != 0) {
+            for (Mission mission : missions) {
+                if(mission.getDecompte()==null)
+                    return null;
+            }
             return this.orderVirementPrinter.printOrderVirement(missions);
         }
         return null;
@@ -327,6 +333,12 @@ public class MissionService implements IMissionService {
         System.out.println("min=" + start);
         System.out.println("max=" + end);
         switch (filter) {
+            case ALL: {
+                List<MissionStateEnum> nextStates = new ArrayList<>();
+                nextStates.add(MissionStateEnum.DAF);
+                nextStates.add(MissionStateEnum.VALIDATED);
+                return this.missionRepository.findByNextStateInAndStartDateBetween(nextStates, start, end, new PageRequest(page, pageSize));
+            }
             case TYPE: {
                 MissionType type = (MissionType) filter.getCriteria();
                 return this.missionRepository.findByTypeAndStartDateBetween(type, start, end, new PageRequest(page, pageSize));

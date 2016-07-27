@@ -56,7 +56,7 @@ public class Employe {
     @JoinColumn(name = "id_bank")
     private Bank bank;
     private String rib;
-
+    private double avoir;
     @OneToOne
     private Vehicule vehicule;
     public Employe() {
@@ -199,6 +199,14 @@ public class Employe {
 
     public void setDept(Dept dept) {
         this.dept = dept;
+    }
+
+    public double getAvoir() {
+        return avoir;
+    }
+
+    public void setAvoir(double avoir) {
+        this.avoir = avoir;
     }
 
     @Transient

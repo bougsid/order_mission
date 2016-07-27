@@ -78,6 +78,11 @@ public class MissionController {
         return "missions";
     }
 
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET)
+    public String statisticsPage() {
+        return "statistics";
+    }
+
     @RequestMapping(value = "/entreprises", method = RequestMethod.GET)
     public String entreprisesPage() {
         return "entreprises";

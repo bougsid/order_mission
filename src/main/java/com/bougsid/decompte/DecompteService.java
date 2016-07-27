@@ -44,7 +44,6 @@ public class DecompteService implements IDecompteService {
         decompte.calculeTotal();
         decompte = this.decompteRepository.save(decompte);
         this.missionRepository.save(decompte.getMission());
-        this.missionService.validateMission(decompte.getMission());
         return decompte;
     }
 
