@@ -52,7 +52,7 @@ public class Mission {
     @JoinTable(name = "MISSION_VILLE",
             joinColumns = {@JoinColumn(name = "MISSION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "VILLE_ID")})
-    private List<Ville> villes = new ArrayList<>();
+    private Set<Ville> villes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "id_entreprise", nullable = true)
@@ -202,12 +202,15 @@ public class Mission {
         return Collections.max(this.states, Comparator.comparing(MissionState::getStateDate));
     }
 
-    public List<Ville> getVilles() {
+    public Set<Ville> getVilles() {
+        System.out.println(" 3 Ville Size ="+villes.size());
+
         return villes;
     }
 
-    public void setVilles(List<Ville> villes) {
+    public void setVilles(Set<Ville> villes) {
         this.villes = villes;
+        System.out.println("2 Ville Size ="+villes.size());
     }
 
     @Transient
@@ -234,6 +237,7 @@ public class Mission {
     @Transient
     public String getStringfyVille() {
         String stringfyVilles = "";
+        System.out.println("Ville Size ="+villes.size());
         for (Ville ville : villes) {
             stringfyVilles += ville.getNom() + ",";
         }

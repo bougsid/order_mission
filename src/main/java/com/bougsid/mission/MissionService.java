@@ -3,6 +3,7 @@ package com.bougsid.mission;
 import com.bougsid.decompte.generatedecompte.Excel;
 import com.bougsid.employe.*;
 import com.bougsid.entreprise.Entreprise;
+import com.bougsid.grade.GradeType;
 import com.bougsid.missiontype.MissionType;
 import com.bougsid.printers.OrderVirementPrinter;
 import com.bougsid.printers.PrintMission;
@@ -49,7 +50,8 @@ public class MissionService implements IMissionService {
     private final static int pageSize = 10;
 
     @Override
-    public Page<Mission> findAll(int page) {
+    public Page<Mission> findAll(int page, boolean mine) {
+        if (mine) return this.getMissionsForEMP(page);
         Employe cp = getPrincipal();
         if (cp.getGrade() != null)
             switch (cp.getGrade().getType()) {
@@ -111,10 +113,82 @@ public class MissionService implements IMissionService {
         return mission;
     }
 
-    private MissionStateEnum getNextState(Mission mission) {
+    @Override
+    public boolean isChefOrDG() {
+        return isChef(getPrincipal()) || isDG(getPrincipal());
+    }
+
+    public boolean isEmpChefOrDG(Employe employe) {
+        return isChef(employe) || isDG(employe);
+    }
+
+    private boolean isChef(Employe employe) {
+        GradeType type = employe.getGrade().getType();
+        return type == GradeType.CHEF;
+    }
+
+    private boolean isDG(Employe employe) {
+        GradeType type = employe.getGrade().getType();
+        return type == GradeType.DG;
+    }
+
+    private MissionStateEnum getNewtStateForChefOrDG(Mission mission) {
+        Employe employe = mission.getEmploye();
         Dept typeDept = null;
         if (mission.getType() != null)
             typeDept = mission.getType().getDept();
+        MissionStateEnum nextState = MissionStateEnum.CURRENT;
+        if (isChef(employe)) {
+            switch (mission.getCurrentState()) {
+                case CURRENT: {
+                    if (typeDept != null) {
+                        nextState = MissionStateEnum.VDTYPE;
+                    } else {
+                        nextState = MissionStateEnum.VDG;
+                    }
+                }
+                break;
+                case VDTYPE: {
+                    nextState = MissionStateEnum.VDG;
+                }
+                break;
+                case VDG: {
+                    nextState = MissionStateEnum.DAF;
+                }
+                break;
+                case DAF: {
+                    nextState = MissionStateEnum.VALIDATED;
+                }
+                break;
+            }
+        } else {
+            switch (mission.getCurrentState()) {
+                case CURRENT: {
+                    if (typeDept != null) {
+                        nextState = MissionStateEnum.VDTYPE;
+                    } else {
+                        nextState = MissionStateEnum.DAF;
+                    }
+                }
+                break;
+                case VDTYPE: {
+                    nextState = MissionStateEnum.DAF;
+                }
+                break;
+                case DAF: {
+                    nextState = MissionStateEnum.VALIDATED;
+                }
+            }
+        }
+        return nextState;
+    }
+
+    private MissionStateEnum getNextState(Mission mission) {
+        if (isEmpChefOrDG(mission.getEmploye())) return getNewtStateForChefOrDG(mission);
+        Dept typeDept = null;
+        if (mission.getType() != null)
+            typeDept = mission.getType().getDept();
+
         MissionStateEnum nextState = MissionStateEnum.CURRENT;
 //        if (mission.getType().getDept() == null) {
         switch (mission.getCurrentState()) {
@@ -318,7 +392,7 @@ public class MissionService implements IMissionService {
         List<Mission> missions = this.missionRepository.findByNextState(MissionStateEnum.DAF);
         if (missions.size() != 0) {
             for (Mission mission : missions) {
-                if(mission.getDecompte()==null)
+                if (mission.getDecompte() == null)
                     return null;
             }
             return this.orderVirementPrinter.printOrderVirement(missions);
@@ -327,37 +401,67 @@ public class MissionService implements IMissionService {
     }
 
     @Override
-    public Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page) {
+    public Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page, boolean mine) {
+        if (mine) return this.getFiltredMissionForEMP(filter, date, page);
+        LocalDateTime start = LocalDateTime.of(date.getStart(), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(date.getEnd(), LocalTime.MAX);
+        System.out.println("min=" + start);
+        System.out.println("max=" + end);
+        List<MissionStateEnum> nextStates = new ArrayList<>();
+        nextStates.add(MissionStateEnum.DAF);
+        nextStates.add(MissionStateEnum.VALIDATED);
+        switch (filter) {
+            case ALL: {
+                return this.missionRepository.findByNextStateInAndStartDateBetween(nextStates, start, end, new PageRequest(page, pageSize));
+            }
+            case TYPE: {
+                MissionType type = (MissionType) filter.getCriteria();
+                return this.missionRepository.findByNextStateInAndTypeAndStartDateBetween(nextStates, type, start, end, new PageRequest(page, pageSize));
+            }
+            case ENTREPRISE: {
+                Entreprise entreprise = (Entreprise) filter.getCriteria();
+                return this.missionRepository.findByNextStateInAndEntrepriseAndStartDateBetween(nextStates, entreprise, start, end, new PageRequest(page, pageSize));
+            }
+            case SERVICE: {
+                Dept dept = (Dept) filter.getCriteria();
+                return this.missionRepository.findByNextStateInAndDeptAndStartDateBetween(nextStates, dept, start, end, new PageRequest(page, pageSize));
+            }
+            case VILLE: {
+                Ville ville = (Ville) filter.getCriteria();
+                return this.missionRepository.findByNextStateInAndVilleAndStartDateBetween(nextStates, ville, start, end, new PageRequest(page, pageSize));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Page<Mission> getFiltredMissionForEMP(StatisticsType filter, DateType date, int page) {
         LocalDateTime start = LocalDateTime.of(date.getStart(), LocalTime.MIN);
         LocalDateTime end = LocalDateTime.of(date.getEnd(), LocalTime.MAX);
         System.out.println("min=" + start);
         System.out.println("max=" + end);
         switch (filter) {
             case ALL: {
-                List<MissionStateEnum> nextStates = new ArrayList<>();
-                nextStates.add(MissionStateEnum.DAF);
-                nextStates.add(MissionStateEnum.VALIDATED);
-                return this.missionRepository.findByNextStateInAndStartDateBetween(nextStates, start, end, new PageRequest(page, pageSize));
+                return this.missionRepository.findByEmployeAndStartDateBetween(getPrincipal(), start, end, new PageRequest(page, pageSize));
             }
             case TYPE: {
                 MissionType type = (MissionType) filter.getCriteria();
-                return this.missionRepository.findByTypeAndStartDateBetween(type, start, end, new PageRequest(page, pageSize));
+                return this.missionRepository.findByEmployeAndTypeAndStartDateBetween(getPrincipal(), type, start, end, new PageRequest(page, pageSize));
             }
             case ENTREPRISE: {
                 Entreprise entreprise = (Entreprise) filter.getCriteria();
-                return this.missionRepository.findByEntrepriseAndStartDateBetween(entreprise, start, end, new PageRequest(page, pageSize));
+                return this.missionRepository.findByEmployeAndEntrepriseAndStartDateBetween(getPrincipal(), entreprise, start, end, new PageRequest(page, pageSize));
             }
             case SERVICE: {
                 Dept dept = (Dept) filter.getCriteria();
-                return this.missionRepository.findByDeptAndStartDateBetween(dept, start, end, new PageRequest(page, pageSize));
+                return this.missionRepository.findByEmployeAndDeptAndStartDateBetween(getPrincipal(), dept, start, end, new PageRequest(page, pageSize));
             }
             case VILLE: {
                 Ville ville = (Ville) filter.getCriteria();
-                return this.missionRepository.findByVilleAndStartDateBetween(ville, start, end, new PageRequest(page, pageSize));
+                return this.missionRepository.findByEmployeAndVilleAndStartDateBetween(getPrincipal(), ville, start, end, new PageRequest(page, pageSize));
             }
         }
         return null;
     }
-
 
 }

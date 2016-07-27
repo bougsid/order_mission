@@ -58,6 +58,7 @@ public class MissionView implements Serializable {
     private IServiceService serviceService;
     private int page;
     private int maxPages;
+    private boolean mine = false;
     //    @ManagedProperty(value = "#{missionService}")
 
     private Mission selectedMission;
@@ -95,10 +96,9 @@ public class MissionView implements Serializable {
         this.start = Calendar.getInstance().getTime();
         this.end = Calendar.getInstance().getTime();
 
-        Page<Mission> missionPage = this.missionService.findAll(this.page);
+        Page<Mission> missionPage = this.missionService.findAll(this.page, mine);
         if (missionPage != null) {
-            this.missions = missionPage.getContent();
-            this.maxPages = missionPage.getTotalPages();
+            this.updateMission(missionPage);
         }
     }
 
@@ -108,7 +108,7 @@ public class MissionView implements Serializable {
 
     public void setSelectedMission(Mission selectedMission) {
         this.selectedMission = selectedMission;
-        this.villes.setTarget(this.selectedMission.getVilles());
+        this.villes.setTarget(new ArrayList<>(this.selectedMission.getVilles()));
     }
 
     public int getPage() {
@@ -135,11 +135,24 @@ public class MissionView implements Serializable {
 
     public void updateListWithPage() {
         System.out.println("Page =" + page);
-        if (this.filter == StatisticsType.ALL)
-            this.missions = this.missionService.findAll(page - 1).getContent();
-        else
-            this.missions = this.missionService.getFiltredMission(filter, filterDate, page - 1).getContent();
+        if (this.filter == StatisticsType.ALL) {
+            this.updateMission(this.missionService.findAll(page - 1, mine));
+        } else {
+            this.updateMission(this.missionService.getFiltredMission(filter, filterDate, page - 1,mine));
+        }
         System.out.println(this.missions.size());
+    }
+
+    public void getMine() {
+        this.mine = true;
+        this.page = 0;
+        this.updateMission(this.missionService.findAll(page, mine));
+
+    }
+
+    private void updateMission(Page<Mission> missionPage) {
+        this.missions = missionPage.getContent();
+        this.maxPages = missionPage.getTotalPages();
     }
 
     public void cancelMission() {
@@ -161,12 +174,13 @@ public class MissionView implements Serializable {
     }
 
     public void search() {
-        System.out.println("Filter =" + filter + "Cret = " + filter.getCriteria());
-        System.out.println("Sttttart =" + filterDate.getStart());
         if (this.filter == StatisticsType.ALL && this.filterDate == DateType.ALL)
-            this.missions = this.missionService.findAll(0).getContent();
-        else
-            this.missions = this.missionService.getFiltredMission(filter, filterDate, 0).getContent();
+        {
+            this.updateMission(this.missionService.findAll(0, mine));
+        }
+        else{
+            this.updateMission(this.missionService.getFiltredMission(filter, filterDate, 0,mine));
+        }
     }
 
     public SelectItem[] getTransportTypes() {
@@ -250,8 +264,7 @@ public class MissionView implements Serializable {
     }
 
     public boolean isChefOrDG() {
-        GradeType type = this.missionService.getPrincipal().getGrade().getType();
-        return type == GradeType.CHEF || type == GradeType.DG;
+        return this.missionService.isChefOrDG();
     }
 
     public boolean isAutre() {

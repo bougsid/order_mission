@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,7 +89,7 @@ public class DecompteService implements IDecompteService {
                 this.decompte.setTauxKilometrique(taux.getTauxKilometrique());
             }
             if (mission.getVilles().size() == 1) {
-                Ville destination = mission.getVilles().get(0);
+                Ville destination = new ArrayList<>(mission.getVilles()).get(0);
                 if (mission.getTransportType() == TransportType.PERSONNEL) {
                     this.decompte.setDistance(destination.getDistance());
                     this.decompte.setTauxAuto(destination.getTauxAuto());

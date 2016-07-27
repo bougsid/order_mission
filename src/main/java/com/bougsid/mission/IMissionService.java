@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 public interface IMissionService {
-    Page<Mission> findAll(int page);
+    Page<Mission> findAll(int page,boolean mine);
 
 
     Page<Mission> getMissionsForDG(int page);
@@ -25,6 +25,8 @@ public interface IMissionService {
     Mission save(Mission mission);
 //
 //    void validateMission(Mission mission);
+
+    boolean isChefOrDG();
 
     @Transactional
     void cancelMission(Mission mission);
@@ -50,7 +52,9 @@ public interface IMissionService {
 
     String printOrderVirement();
 
-    Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page);
+    Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page,boolean mine);
+
+    Page<Mission> getFiltredMissionForEMP(StatisticsType filter, DateType date, int page);
 
 //    void rejectMission(Mission mission);
 }

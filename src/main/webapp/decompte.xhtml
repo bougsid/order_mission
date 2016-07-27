@@ -331,13 +331,28 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div style="text-align: center" class="col-sm-11 m-t-30">
+                                <div style="text-align: center" class="col-sm-8 m-t-30">
                                     <p:commandButton validateClient="true"
                                                      onstart="showNotification('#{msg['mission.notification.success.print']}','success')"
                                                      onerror="showNotification('#{msg['mission.notification.error.print']}','error')"
-                                                     value="#{msg['employe.button.save']}"
+                                                     value="#{msg['decompte.button.confirmer']}"
                                                      actionListener="#{decompteView.saveDecompte()}"
                                                      class="btn btn-complete btn-cons m-l-10"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>${msg['decompte.total']}</label>
+                                        <span class="help"></span>
+                                        <h:inputText readonly="true" id="total" immediate="true" value="${decompteView.decompte.total}"
+                                                     type="text" class="form-control"
+                                                     placeholder="${msg['decompte.total']}" required=""/>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 22px" class="col-sm-2">
+                                    <p:commandButton validateClient="true" update="total"
+                                                     value="#{msg['decompte.button.calculer']}"
+                                                     actionListener="#{decompteView.calculeDecompte()}"
+                                                     class="btn btn-success"/>
 
                                 </div>
                             </div>

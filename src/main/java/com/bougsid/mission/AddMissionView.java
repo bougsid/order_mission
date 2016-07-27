@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -72,7 +73,7 @@ public class AddMissionView {
 //        for (Ville ville : this.villes.getTarget()) {
 //            System.out.println("---------------"+ville.getId()+ville.getNom());
 //        }
-        this.mission.setVilles(this.villes.getTarget());
+        this.mission.setVilles(new HashSet<>(this.villes.getTarget()));
         this.missionService.save(this.mission);
         this.mission = new Mission();
 

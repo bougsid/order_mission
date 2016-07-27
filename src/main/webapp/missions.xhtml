@@ -78,22 +78,8 @@
                 <div class="content full-height">
                     <!-- START APP -->
                     <!-- START SECONDARY SIDEBAR MENU-->
-                    <nav class="secondary-sidebar padding-30">
-                        <a href="addmission"
-                           class="btn btn-complete btn-block btn-compose m-b-30">#{msg['mission.compose']}</a>
+                    <ui:include src="menu.xhtml"/>
 
-
-                        <ul class="main-menu">
-
-                            <li class="active">
-                                <a href="missions">
-                                    <span class="title"><i class="pg-inbox"/> Orders de Missions</span>
-                                    <!--<span class="badge pull-right">5</span>-->
-                                </a>
-                            </li>
-
-                        </ul>
-                    </nav>
                     <!-- END SECONDARY SIDEBAR MENU -->
 
                     <div class="inner-content full-height">
@@ -137,9 +123,6 @@
                                             </p:column>
 
                                         </p:dataTable>
-
-                                    </h:form>
-                                    <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
                                                          styleClass="select-one-menu"
@@ -149,6 +132,7 @@
                                                     listener="#{missionView.updateListWithPage()}"/>
                                         </h:selectOneMenu>
                                     </h:form>
+
                                     <!--<ul class="pagination">-->
                                     <!--<c:forEach var="page" items="#{missionView.pages}">-->
                                     <!--<li><a href="#">#{page}</a></li>-->
@@ -219,9 +203,10 @@
                                                                         </c:when>
                                                                         <c:when test="#{missionView.filter == 'VILLE'}">
                                                                             <label>#{msg['search.ville']}</label>
-                                                                            <h:selectOneMenu label="#{msg['search.ville']}"
-                                                                                             styleClass="select-one-menu"
-                                                                                             value="#{missionView.filter.criteria}">
+                                                                            <h:selectOneMenu
+                                                                                    label="#{msg['search.ville']}"
+                                                                                    styleClass="select-one-menu"
+                                                                                    value="#{missionView.filter.criteria}">
                                                                                 <f:selectItems
                                                                                         value="#{missionView.sourceVilles}"
                                                                                         var="tp" itemValue="#{tp}"
@@ -274,7 +259,8 @@
                                                             <div class="form-group-attached">
                                                                 <div class="form-group form-group-default ">
                                                                     <label>#{msg['search.start']}</label>
-                                                                    <p:calendar pattern="dd/MM/yyyy" mask="true" lang="fr"
+                                                                    <p:calendar pattern="dd/MM/yyyy" mask="true"
+                                                                                lang="fr"
                                                                                 locale="fr" styleClass="calendar"
                                                                                 value="#{missionView.start}"/>
                                                                 </div>
@@ -288,7 +274,8 @@
                                                             <div class="form-group-attached">
                                                                 <div class="form-group form-group-default ">
                                                                     <label>#{msg['search.end']}</label>
-                                                                    <p:calendar pattern="dd/MM/yyyy" mask="true" lang="fr"
+                                                                    <p:calendar pattern="dd/MM/yyyy" mask="true"
+                                                                                lang="fr"
                                                                                 locale="fr" styleClass="calendar"
                                                                                 value="#{missionView.end}"/>
                                                                 </div>
@@ -306,7 +293,7 @@
                                                              update="tableForm"
                                                              actionListener="#{missionView.search}"
                                                              icon="ui-icon-search"
-                                            oncomplete="PF('dlg1').hide();"/>
+                                                             oncomplete="PF('dlg1').hide();"/>
                                         </div>
                                     </h:form>
                                 </p:dialog>
@@ -348,7 +335,10 @@
                                                                                actionListener="#{missionView.cancelMission()}"
                                                                                class="text-success">
                                                                     #{msg['mission.button.cancel']}
-                                                                    <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.cancelMission']}" icon="ui-icon-alert" />
+                                                                    <p:confirm
+                                                                            header="#{msg['confirmation.deleteHeader']}"
+                                                                            message="#{msg['confirmation.cancelMission']}"
+                                                                            icon="ui-icon-alert"/>
 
                                                                 </p:commandLink>
                                                             </li>
@@ -475,10 +465,9 @@
                                                                 </p:pickList>
                                                             </c:if>
                                                             <c:if test="#{!missionView.autre}">
-                                                                <ui:repeat value="#{missionView.selectedMission.villes}"
-                                                                           var="ville">
-                                                                    <h:outputText value="#{ville.nom}, "/>
-                                                                </ui:repeat>
+
+                                                                <h:outputText
+                                                                        value="#{missionView.selectedMission.stringfyVille}"/>
                                                             </c:if>
                                                         </div>
                                                         <div class="row clearfix">

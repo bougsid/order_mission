@@ -109,10 +109,13 @@ public class PrintMission {
             cell.setBorder(Rectangle.NO_BORDER);
             cell.setPaddingTop(10);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(" - " + mission.getEntreprise().getNom(), DEFAULT_FONT));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
-            table.addCell(cell);
+
+            if (mission.getEntreprise() != null) {
+                cell = new PdfPCell(new Paragraph(" - " + mission.getEntreprise().getNom(), DEFAULT_FONT));
+                cell.setBorder(Rectangle.NO_BORDER);
+                cell.setPaddingTop(10);
+                table.addCell(cell);
+            }
 
             //line 6
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.lieu"), DEFAULT_FONT_BOLD));

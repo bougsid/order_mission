@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +31,8 @@ public class OrderVirementPrinter {
     private IMissionService missionService;
     private XSSFSheet sheet;
     private int startRow = 6;
+    private String day = "B1";
+    private String hour = "B2";
     private double total;
     private XSSFCellStyle style;
 
@@ -52,6 +57,8 @@ public class OrderVirementPrinter {
             //iterating r number of rows
             int i = 0;
             System.out.println("mission size = " + missions.size());
+            this.setCellValue(day, LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            this.setCellValue(hour, LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
             for (Mission mission : missions) {
                 System.out.println("Ok" + i);
                 System.out.println("last row num" + sheet.getLastRowNum());

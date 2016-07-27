@@ -59,6 +59,9 @@ public class DecompteView implements Serializable {
         this.decompte = decompte;
     }
 
+    public void calculeDecompte(){
+        this.decompte.calculeTotal();
+    }
     public void saveDecompte(){
         System.out.println("Save Decompte"+decompte.getImputation());
         this.decompteService.save(this.decompte);

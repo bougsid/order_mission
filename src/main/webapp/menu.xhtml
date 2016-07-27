@@ -1,0 +1,25 @@
+<nav class="secondary-sidebar padding-30" xmlns:c="http://java.sun.com/jsp/jstl/core"
+     xmlns:p="http://primefaces.org/ui">
+    <a href="addmission"
+       class="btn btn-complete btn-block btn-compose m-b-30">#{msg['mission.compose']}</a>
+
+
+    <ul class="main-menu">
+
+        <li class="active">
+            <a href="missions">
+                <span class="title"><i class="pg-inbox"/>#{msg['menu.orderManagement']}</span>
+                <!--<span class="badge pull-right">5</span>-->
+            </a>
+        </li>
+        <c:if test="#{missionView.daf || missionView.chefOrDG}">
+            <li class="active">
+                <p:commandLink process="@this"
+                               actionListener="#{missionView.getMine()}"
+                               update="tableForm"
+                               value="#{msg['menu.myOrderManagement']}"/>
+            </li>
+        </c:if>
+
+    </ul>
+</nav>

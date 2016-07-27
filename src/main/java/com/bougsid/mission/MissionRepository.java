@@ -47,14 +47,26 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     Page<Mission> findByEmploye(Employe employe, Pageable page);
 
-    Page<Mission> findByTypeAndStartDateBetween(MissionType type, LocalDateTime start, LocalDateTime end, Pageable page);
+    Page<Mission> findByNextStateInAndTypeAndStartDateBetween(List<MissionStateEnum> nextState,MissionType type, LocalDateTime start, LocalDateTime end, Pageable page);
 
-    Page<Mission> findByEntrepriseAndStartDateBetween(Entreprise entreprise, LocalDateTime start, LocalDateTime end, Pageable page);
+    Page<Mission> findByNextStateInAndEntrepriseAndStartDateBetween(List<MissionStateEnum> nextState,Entreprise entreprise, LocalDateTime start, LocalDateTime end, Pageable page);
 
-    @Query("select m from Mission m where ?1 member m.villes and m.startDate between ?2 and ?3")
-    Page<Mission> findByVilleAndStartDateBetween(Ville ville, LocalDateTime start, LocalDateTime end, Pageable page);
+    @Query("select m from Mission m where m.nextState in ?1 and ?2 member m.villes and m.startDate between ?3 and ?4")
+    Page<Mission> findByNextStateInAndVilleAndStartDateBetween(List<MissionStateEnum> nextState,Ville ville, LocalDateTime start, LocalDateTime end, Pageable page);
 
-    @Query("select m from Mission m where m.employe.dept = ?1 and m.startDate between ?2 and ?3")
-    Page<Mission> findByDeptAndStartDateBetween(Dept dept, LocalDateTime start, LocalDateTime end, Pageable page);
+    @Query("select m from Mission m where m.nextState in ?1 and m.employe.dept = ?2 and m.startDate between ?3 and ?4")
+    Page<Mission> findByNextStateInAndDeptAndStartDateBetween(List<MissionStateEnum> nextState,Dept dept, LocalDateTime start, LocalDateTime end, Pageable page);
+
+
+    Page<Mission> findByEmployeAndStartDateBetween(Employe employe,LocalDateTime start, LocalDateTime end, Pageable pageable);
+    Page<Mission> findByEmployeAndTypeAndStartDateBetween(Employe employe,MissionType type, LocalDateTime start, LocalDateTime end, Pageable page);
+
+    Page<Mission> findByEmployeAndEntrepriseAndStartDateBetween(Employe employe,Entreprise entreprise, LocalDateTime start, LocalDateTime end, Pageable page);
+
+    @Query("select m from Mission m where m.employe = ?1 and ?2 member m.villes and m.startDate between ?3 and ?4")
+    Page<Mission> findByEmployeAndVilleAndStartDateBetween(Employe employe,Ville ville, LocalDateTime start, LocalDateTime end, Pageable page);
+
+    @Query("select m from Mission m where m.employe = ?1 and m.employe.dept = ?2 and m.startDate between ?3 and ?4")
+    Page<Mission> findByEmployeAndDeptAndStartDateBetween(Employe employe,Dept dept, LocalDateTime start, LocalDateTime end, Pageable page);
 
 }
