@@ -93,7 +93,7 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="serviceList" var="srv"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="serviceList" var="srv"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{serviceView.depts}"
                                                      selectionMode="single"
@@ -115,7 +115,7 @@
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
-                                                         styleClass="select-one-menu"
+                                                         styleClass="select-one-menu mypage"
                                                          value="#{serviceView.page}">
                                             <f:selectItems value="#{serviceView.pages}"/>
                                             <p:ajax update="tableForm" event="valueChange"

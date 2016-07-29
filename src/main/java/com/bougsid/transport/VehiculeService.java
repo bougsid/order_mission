@@ -1,5 +1,6 @@
 package com.bougsid.transport;
 
+import com.bougsid.employe.EmployeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,11 +15,16 @@ import java.util.List;
 public class VehiculeService implements IVehiculeService {
     @Autowired
     private VehiculeRepository vehiculeRepository;
+    @Autowired
+    private EmployeRepository employeRepository;
     private int maxPage = 10;
 
     @Override
     public Vehicule save(Vehicule vehicule) {
-        return this.vehiculeRepository.save(vehicule);
+        this.vehiculeRepository.save(vehicule);
+        vehicule.getEmploye().setVehicule(vehicule);
+        this.employeRepository.save(vehicule.getEmploye());
+        return vehicule;
     }
 
     @Override

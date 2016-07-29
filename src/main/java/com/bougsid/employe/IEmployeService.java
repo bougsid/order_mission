@@ -1,5 +1,6 @@
 package com.bougsid.employe;
 
+import com.bougsid.mission.Mission;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -19,11 +20,18 @@ public interface IEmployeService {
 
     Employe updateEmploye(Employe employe) throws MatriculeAlreadyExistException;
 
-    List<Employe> getDirectors();
+
+    List<Employe> getResponsables(Mission mission);
 
     void initPassword(Employe selectedEmploye);
 
     Employe save(Employe employe);
 
     double updateEmployeAvoir(Employe employe, double avoir);
+
+    void changePassword(String passwword);
+
+    Employe getPrincipal();
+
+    Employe getDG();
 }

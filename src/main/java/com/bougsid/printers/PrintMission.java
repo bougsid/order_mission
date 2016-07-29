@@ -6,6 +6,9 @@
 package com.bougsid.printers;
 
 import com.bougsid.MSG;
+import com.bougsid.employe.Employe;
+import com.bougsid.employe.IEmployeService;
+import com.bougsid.grade.GradeType;
 import com.bougsid.mission.Mission;
 import com.bougsid.ville.Ville;
 import com.itextpdf.text.*;
@@ -27,6 +30,8 @@ import java.time.format.DateTimeFormatter;
 public class PrintMission {
     @Autowired
     private MSG msg;
+    @Autowired
+    IEmployeService employeService;
     final Font DEFAULT_FONT = FontFactory.getFont(FontFactory.HELVETICA, 14);
     final Font DEFAULT_FONT_BOLD = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
 
@@ -37,9 +42,12 @@ public class PrintMission {
             if (!downloadDir.exists()) {
                 downloadDir.mkdir();
             }
-            System.out.println("Dir ="+downloadDir.getPath());
+            System.out.println("Dir =" + downloadDir.getPath());
             PdfWriter.getInstance(document, new FileOutputStream(downloadDir.getPath() + "/" + mission.getUuid() + ".pdf"));
             document.open();
+            Paragraph p = new Paragraph();
+            p.setSpacingAfter(60);
+            document.add(p);
             //header
             Paragraph paragraph = new Paragraph(msg.getMessage("mission.pdf.school") + "       " + mission.getIdMission() + "           ", DEFAULT_FONT);
             Phrase phrase = new Phrase(msg.getMessage("mission.pdf.city") + " " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
@@ -67,119 +75,156 @@ public class PrintMission {
             //line 1
             cell = new PdfPCell(new Paragraph(mission.getEmploye().getCivilite().getLabel(), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
             cell = new PdfPCell(new Paragraph(": " + mission.getEmploye().getFullName(), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
             //line 2
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.matricule"), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
             cell = new PdfPCell(new Paragraph(": " + mission.getEmploye().getMatricule(), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
             //line 3
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.grade"), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(": " + mission.getEmploye().getGrade().getLabel(), DEFAULT_FONT));
+            cell = new PdfPCell(new Paragraph(": " + mission.getEmploye().getFonction(), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
-            //line 4
-            cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.text_1"), DEFAULT_FONT_BOLD));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.text_1_2"), DEFAULT_FONT_BOLD));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
-            table.addCell(cell);
-
-            //line 5
-            cell = new PdfPCell(new Paragraph(" ", DEFAULT_FONT_BOLD));
-            cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
-            table.addCell(cell);
 
             if (mission.getEntreprise() != null) {
+                //line 4
+                cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.text_1"), DEFAULT_FONT_BOLD));
+                cell.setBorder(Rectangle.NO_BORDER);
+                cell.setPaddingTop(20);
+                table.addCell(cell);
+                cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.text_1_2"), DEFAULT_FONT_BOLD));
+                cell.setBorder(Rectangle.NO_BORDER);
+                cell.setPaddingTop(20);
+                table.addCell(cell);
+
+                //line 5
+                cell = new PdfPCell(new Paragraph(" ", DEFAULT_FONT_BOLD));
+                cell.setBorder(Rectangle.NO_BORDER);
+                cell.setPaddingTop(20);
+                table.addCell(cell);
                 cell = new PdfPCell(new Paragraph(" - " + mission.getEntreprise().getNom(), DEFAULT_FONT));
                 cell.setBorder(Rectangle.NO_BORDER);
-                cell.setPaddingTop(10);
+                cell.setPaddingTop(20);
                 table.addCell(cell);
             }
 
             //line 6
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.lieu"), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
-            Paragraph p = new Paragraph();
+            p = new Paragraph();
             p.setFont(DEFAULT_FONT);
             for (Ville ville : mission.getVilles()) {
                 p.add(ville.getNom() + "\n");
             }
             cell = new PdfPCell(p);
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
 
             //line 7
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.startdate"), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
             cell = new PdfPCell(new Paragraph(": " + mission.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                     + "    Heure : " + mission.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm")), DEFAULT_FONT));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
             //line 8
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.enddate"), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
             cell = new PdfPCell(new Paragraph(": " + mission.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                     + "    Heure : " + mission.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm")), DEFAULT_FONT));
 
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
             //line 9
             cell = new PdfPCell(new Paragraph(msg.getMessage("mission.pdf.transport"), DEFAULT_FONT_BOLD));
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(": " + mission.getTransportType().getLabel(), DEFAULT_FONT));
+            switch (mission.getTransportType()) {
+                case PERSONNEL:
+                    cell = new PdfPCell(new Paragraph(": "
+                            + msg.getMessage("mission.pdf.perso") + " "
+                            + mission.getEmploye().getVehicule().getMarque() + " "
+                            + msg.getMessage("mission.pdf.mat") + " "
+                            + mission.getEmploye().getVehicule().getMatricule() + " "
+                            , DEFAULT_FONT));
+                    break;
+                case Accompagnement:
+                    cell = new PdfPCell(new Paragraph(": "
+                            + msg.getMessage("mission.pdf.accomp") + " "
+                            + mission.getAccompEmploye().getCivilite() + " "
+                            + mission.getAccompEmploye().getFullName() + " "
+                            + msg.getMessage("mission.pdf.accomp.voitue") + " "
+                            + mission.getAccompEmploye().getVehicule().getMarque() + " "
+                            + msg.getMessage("mission.pdf.mat") + " "
+                            + mission.getAccompEmploye().getVehicule().getMatricule() + " "
+                            , DEFAULT_FONT));
+                    break;
+                case Service:
+                    cell = new PdfPCell(new Paragraph(": "
+                            + msg.getMessage("mission.pdf.service") + " "
+                            + mission.getEmploye().getVehicule().getMarque() + " "
+                            + msg.getMessage("mission.pdf.mat") + " "
+                            + mission.getEmploye().getVehicule().getMatricule() + " "
+                            , DEFAULT_FONT));
+                    break;
+                default: {
+                    cell = new PdfPCell(new Paragraph(": " + mission.getTransportType().getLabel() + " "+msg.getMessage("mission.pdf.taxi"), DEFAULT_FONT));
+                }
+            }
             cell.setBorder(Rectangle.NO_BORDER);
-            cell.setPaddingTop(10);
+            cell.setPaddingTop(20);
             table.addCell(cell);
 
-            table.setSpacingAfter(30);
+            table.setSpacingAfter(40);
             document.add(table);
 
             //note
             document.add(new Paragraph(msg.getMessage("mission.pdf.TEXT_2"), DEFAULT_FONT));
 
             //signature
-//            paragraph = new Paragraph(params[12], DEFAULT_FONT);
-//            paragraph.setAlignment(Element.ALIGN_RIGHT);
-//            paragraph.setSpacingBefore(40);
-//            document.add(paragraph);
-//            paragraph = new Paragraph(params[13], DEFAULT_FONT);
-//            paragraph.setAlignment(Element.ALIGN_RIGHT);
-//            document.add(paragraph);
+            if (mission.getEmploye().getGrade().getType() == GradeType.DG) {
+
+            } else {
+                Employe dir = employeService.getDG();
+                if (dir != null)
+                    paragraph = new Paragraph(dir.getFullName(), DEFAULT_FONT);
+                paragraph.setAlignment(Element.ALIGN_RIGHT);
+                paragraph.setSpacingBefore(40);
+                document.add(paragraph);
+                paragraph = new Paragraph(msg.getMessage("mission.pdf.DG"), DEFAULT_FONT);
+                paragraph.setAlignment(Element.ALIGN_RIGHT);
+                document.add(paragraph);
+            }
 
 
         } catch (DocumentException ex) {

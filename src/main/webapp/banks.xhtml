@@ -93,7 +93,7 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="bankList" var="bnk"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="bankList" var="bnk"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{bankView.banks}"
                                                      selectionMode="single"
@@ -133,18 +133,24 @@
                                                 </li>
                                                 <c:if test="#{bankView.selectedBank != null}">
 
-                                                <li class="no-padding ">
-                                                    <p:commandLink process="@this"
-                                                                   update="@(#employeDetail)"
-                                                                   actionListener="#{bankView.deleteBank()}"
-                                                                   class="text-success">#{msg['employe.button.delete']}
-                                                        <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.deleteQuestion']}" icon="ui-icon-alert" />
-                                                    </p:commandLink>
-                                                </li>
-                                                <p:confirmDialog global="true">
-                                                    <p:commandButton value="#{msg['confirmation.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                                    <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                                </p:confirmDialog>
+                                                    <li class="no-padding ">
+                                                        <p:commandLink process="@this"
+                                                                       update="@(#employeDetail)"
+                                                                       actionListener="#{bankView.deleteBank()}"
+                                                                       class="text-success">#{msg['employe.button.delete']}
+                                                            <p:confirm header="#{msg['confirmation.deleteHeader']}"
+                                                                       message="#{msg['confirmation.deleteQuestion']}"
+                                                                       icon="ui-icon-alert"/>
+                                                        </p:commandLink>
+                                                    </li>
+                                                    <p:confirmDialog global="true">
+                                                        <p:commandButton value="#{msg['confirmation.yes']}"
+                                                                         type="button" styleClass="ui-confirmdialog-yes"
+                                                                         icon="ui-icon-check"/>
+                                                        <p:commandButton value="#{msg['confirmation.no']}" type="button"
+                                                                         styleClass="ui-confirmdialog-no"
+                                                                         icon="ui-icon-close"/>
+                                                    </p:confirmDialog>
                                                 </c:if>
                                             </ul>
 
@@ -152,49 +158,96 @@
                                         </div>
                                         <c:if test="#{bankView.selectedBank != null}">
 
-                                        <div class="email-content">
+                                            <div class="email-content">
 
-                                            <div class="clearfix"/>
+                                                <div class="clearfix"/>
 
-                                            <div class="email-content-body m-t-20">
-                                                <div class="form-group-attached">
-                                                    <div class="form-group form-group-default required">
-                                                        <label>#{msg['bank.name']}</label>
-                                                        <p:inputText label="#{msg['bank.name']}"
-                                                                     styleClass="form-control input-lg" id="objet"
-                                                                     value="#{bankView.selectedBank.name}"
-                                                                     required="true"/>
-                                                    </div>
-                                                    <div class="row clearfix">
-
-                                                        <div class="col-sm-12">
-                                                            <div class="form-group-default required">
-                                                                <label>#{msg['bank.phone']}</label>
-                                                                <h:inputText id="fonction" required="true"
-                                                                             label="#{msg['bank.phone']}"
-                                                                             styleClass="form-control input-lg"
-                                                                             value="#{bankView.selectedBank.phone}">
-                                                                </h:inputText>
+                                                <div class="email-content-body m-t-20">
+                                                    <div class="form-group-attached">
+                                                        <div class="row clearfix">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['bank.name']}</label>
+                                                                    <p:inputText label="#{msg['bank.name']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 id="name"
+                                                                                 value="#{bankView.selectedBank.name}"
+                                                                                 required="true"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['bank.phone']}</label>
+                                                                    <h:inputText id="phone" required="true"
+                                                                                 label="#{msg['bank.phone']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{bankView.selectedBank.phone}">
+                                                                    </h:inputText>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row p-b-20">
+                                                    <div class="form-group-attached">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <h3>#{msg['bank.agences']} #{bankView.selectedBank.name}</h3>
+                                                                <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="agenceList"
+                                                                             var="ag" id="agenceList"
+                                                                             styleClass="borderless hide-column-names"
+                                                                             value="#{bankView.selectedBank.agences}"
+                                                                             selectionMode="single"
+                                                                             selection="#{bankView.selectedAgence}"
+                                                                             rowKey="#{ag.hashCode()}">
+                                                                    <p:ajax event="rowSelect" update="@(#bankDetail)"/>
 
-                                                    <div style="text-align: center" class="col-sm-11 m-t-30">
-                                                        <p:commandButton validateClient="true"
-                                                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['bank.notification.success.save']}','success')"
-                                                                         value="#{msg['bank.button.save']}"
-                                                                         update="@(#bankDetail)"
-                                                                         actionListener="#{bankView.saveBank()}"
-                                                                         class="btn btn-complete btn-cons m-l-10"/>
+                                                                    <p:column>
+                                                                        <h:outputText value="#{ag.nom}"/>
+                                                                    </p:column>
+                                                                </p:dataTable>
 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-9">
+                                                                <div class="form-group-default">
+                                                                    <label>#{msg['agence.nom']}</label>
+                                                                    <h:inputText id="agence"
+                                                                                 label="#{msg['agence.nom']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{bankView.selectedAgence.nom}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-3">
+                                                                <p:commandButton validateClient="true"
+                                                                                 process="@this agence"
+                                                                                 value="#{msg['agence.button.add']}"
+                                                                                 update="bankDetail:agenceList agence"
+                                                                                 actionListener="#{bankView.saveAgence()}"
+                                                                                 class="btn btn-complete btn-cons m-t-10 m-l-10"/>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
+                                                    <div class="row p-b-20">
+
+                                                        <div style="text-align: center" class="col-sm-11 m-t-30">
+                                                            <p:commandButton validateClient="true"
+                                                                             process="@this name phone"
+                                                                             oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['bank.notification.success.save']}','success')"
+                                                                             value="#{msg['bank.button.save']}"
+                                                                             update="@(#bankDetail)"
+                                                                             actionListener="#{bankView.saveBank()}"
+                                                                             class="btn btn-complete btn-cons m-l-10"/>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <p:messages/>
                                                 </div>
-                                                <p:messages/>
                                             </div>
-                                        </div>
                                         </c:if>
                                     </div>
                                 </div>

@@ -4,13 +4,17 @@ import com.bougsid.MSG;
 import com.bougsid.grade.Grade;
 import com.bougsid.grade.GradeType;
 import com.bougsid.grade.IGradeService;
+import com.bougsid.mission.Mission;
 import com.bougsid.service.ServiceRepository;
+import com.bougsid.transport.VehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +31,8 @@ public class EmployeService implements IEmployeService {
     private EmployeProfileRepository profileRepository;
     @Autowired
     private ServiceRepository serviceRepository;
+    @Autowired
+    private VehiculeRepository vehiculeRepository;
     @Autowired
     private ApplicationContext context;
     @Autowired
@@ -62,7 +68,7 @@ public class EmployeService implements IEmployeService {
         employe.setPassword(employe.getMatricule());
         EmployeProfile userProfile = this.profileRepository.findByType(EmployeRole.USER);
         employe.addEmployeProfile(userProfile);
-        employe = this.employeRepository.save(employe);
+        employe = this.save(employe);
         if (employe.getGrade().getType() == GradeType.CHEF || employe.getGrade().getType() == GradeType.DG) {
             employe.getDept().setChef(employe);
             this.serviceRepository.save(employe.getDept());
@@ -84,16 +90,36 @@ public class EmployeService implements IEmployeService {
         if (emp != null && emp.getIdEmploye() != employe.getIdEmploye()) {
             throw new MatriculeAlreadyExistException();
         }
-        if (employe.getGrade().getType() == GradeType.CHEF||employe.getGrade().getType() == GradeType.DG) {
+        if (employe.getGrade().getType() == GradeType.CHEF || employe.getGrade().getType() == GradeType.DG) {
             employe.getDept().setChef(employe);
             this.serviceRepository.save(employe.getDept());
         }
-        return this.employeRepository.save(employe);
+        return this.save(employe);
     }
 
 
     @Override
-    public List<Employe> getDirectors() {
+    public List<Employe> getResponsables(Mission mission) {
+        List<GradeType> gradeTypes = new ArrayList<>();
+        switch (mission.getNextState()) {
+            case VCHEF: {
+                gradeTypes.add(GradeType.CHEF);
+                gradeTypes.add(GradeType.CHEFA);
+                return this.employeRepository.getChefAndChefA(
+                        mission.getEmploye().getDept()
+                        , gradeTypes);
+            }
+            case VDTYPE:
+                gradeTypes.add(GradeType.CHEF);
+                gradeTypes.add(GradeType.CHEFA);
+                return this.employeRepository.getChefAndChefA(
+                        mission.getType().getDept()
+                        , gradeTypes);
+            case VDG:
+                gradeTypes.add(GradeType.DG);
+                gradeTypes.add(GradeType.DGA);
+                return this.employeRepository.getDGAndDGA(gradeTypes);
+        }
         return null;
     }
 
@@ -105,7 +131,14 @@ public class EmployeService implements IEmployeService {
 
     @Override
     public Employe save(Employe employe) {
-        return this.employeRepository.save(employe);
+        this.employeRepository.save(employe);
+        if(employe.getVehicule()!=null){
+            if(!employe.getVehicule().equals(employe.getVehicule().getEmploye())){
+                employe.getVehicule().setEmploye(employe);
+                this.vehiculeRepository.save(employe.getVehicule());
+            }
+        }
+        return employe;
     }
 
     @Override
@@ -119,5 +152,27 @@ public class EmployeService implements IEmployeService {
         }
         this.employeRepository.save(employe);
         return montant;
+    }
+
+    @Override
+    public void changePassword(String passwword) {
+        Employe employe = getPrincipal();
+        employe.setPassword(passwword);
+        this.employeRepository.save(employe);
+    }
+
+    @Override
+    public Employe getPrincipal() {
+        EmployeUserDetails principal = (EmployeUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getEmploye();
+    }
+
+    @Override
+    public Employe getDG(){
+        List<Employe> dir = this.employeRepository.getDG(GradeType.DG);
+        if(dir!=null&&dir.size()!=0) {
+            return dir.get(0);
+        }
+        return null;
     }
 }

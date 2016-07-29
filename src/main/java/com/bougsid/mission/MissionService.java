@@ -1,12 +1,13 @@
 package com.bougsid.mission;
 
-import com.bougsid.decompte.generatedecompte.Excel;
+import com.bougsid.decompte.Excel;
 import com.bougsid.employe.*;
 import com.bougsid.entreprise.Entreprise;
 import com.bougsid.grade.GradeType;
 import com.bougsid.missiontype.MissionType;
 import com.bougsid.printers.OrderVirementPrinter;
 import com.bougsid.printers.PrintMission;
+import com.bougsid.printers.StatisticsPrinter;
 import com.bougsid.service.Dept;
 import com.bougsid.statistics.DateType;
 import com.bougsid.statistics.StatisticsType;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -47,6 +49,8 @@ public class MissionService implements IMissionService {
     private Excel excel;
     @Autowired
     private OrderVirementPrinter orderVirementPrinter;
+    @Autowired
+    private StatisticsPrinter statisticsPrinter;
     private final static int pageSize = 10;
 
     @Override
@@ -56,8 +60,10 @@ public class MissionService implements IMissionService {
         if (cp.getGrade() != null)
             switch (cp.getGrade().getType()) {
                 case DG:
+                case DGA:
                     return this.getMissionsForDG(page);
                 case CHEF:
+                case CHEFA:
                     return this.getMissionsForCHEF(page);
                 case ASSISTANT: {
                     if (cp.getDept().getNom().equals("DAF"))
@@ -87,12 +93,12 @@ public class MissionService implements IMissionService {
         List<MissionStateEnum> nextStates = new ArrayList<>();
         nextStates.add(MissionStateEnum.DAF);
         nextStates.add(MissionStateEnum.VALIDATED);
-        return this.missionRepository.findByNextStateIn(nextStates, new PageRequest(page, pageSize));
+        return this.missionRepository.findByNextStateInOrderByIdMissionDesc(nextStates, new PageRequest(page, pageSize));
     }
 
     @Override
     public Page<Mission> getMissionsForEMP(int page) {
-        Page<Mission> missionPage = this.missionRepository.findByEmploye(getPrincipal(), new PageRequest(page, pageSize));
+        Page<Mission> missionPage = this.missionRepository.findByEmployeOrderByIdMissionDesc(getPrincipal(), new PageRequest(page, pageSize));
         return missionPage;
     }
 
@@ -105,8 +111,14 @@ public class MissionService implements IMissionService {
             MissionState state = context.getBean(MissionState.class);
             state.setState(MissionStateEnum.CURRENT);
             state.setStateDate(LocalDateTime.now());
-            state.addMission(mission);
+//            state.addMission(mission);
+            state.setMission(mission);
             state = this.missionStateRepository.save(state);
+            try {
+                this.notificationService.sendNotificaitoin(mission);
+            } catch (InterruptedException | MessagingException e) {
+                e.printStackTrace();
+            }
         } else {
             mission = this.missionRepository.save(mission);
         }
@@ -132,7 +144,7 @@ public class MissionService implements IMissionService {
         return type == GradeType.DG;
     }
 
-    private MissionStateEnum getNewtStateForChefOrDG(Mission mission) {
+    private MissionStateEnum getNextStateForChefOrDG(Mission mission) {
         Employe employe = mission.getEmploye();
         Dept typeDept = null;
         if (mission.getType() != null)
@@ -184,7 +196,7 @@ public class MissionService implements IMissionService {
     }
 
     private MissionStateEnum getNextState(Mission mission) {
-        if (isEmpChefOrDG(mission.getEmploye())) return getNewtStateForChefOrDG(mission);
+        if (isEmpChefOrDG(mission.getEmploye())) return getNextStateForChefOrDG(mission);
         Dept typeDept = null;
         if (mission.getType() != null)
             typeDept = mission.getType().getDept();
@@ -241,7 +253,8 @@ public class MissionService implements IMissionService {
         MissionState state = context.getBean(MissionState.class);
         state.setState(mission.getCurrentState());
         state.setStateDate(LocalDateTime.now());
-        state.addMission(mission);
+//        state.addMission(mission);
+        state.setMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
         Employe employe = mission.getEmploye();
@@ -254,18 +267,18 @@ public class MissionService implements IMissionService {
     public void validateMission(Mission mission) {
         mission.setCurrentState(mission.getNextState());
         mission.setNextState(this.getNextState(mission));
+        mission.setSecret(UUID.randomUUID().toString());
         this.missionRepository.save(mission);
         MissionState state = context.getBean(MissionState.class);
         state.setState(mission.getCurrentState());
         state.setStateDate(LocalDateTime.now());
-        state.addMission(mission);
+//        state.addMission(mission);
+        state.setMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
         try {
             this.notificationService.sendNotificaitoin(mission);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
+        } catch (InterruptedException | MessagingException e) {
             e.printStackTrace();
         }
     }
@@ -276,11 +289,13 @@ public class MissionService implements IMissionService {
         MissionStateEnum rejectState = getRStateDependsOnConnectedPrincipal(mission);
         mission.setCurrentState(rejectState);
         mission.setNextState(MissionStateEnum.CURRENT);
+        mission.setSecret(UUID.randomUUID().toString());
         this.missionRepository.save(mission);
         MissionState state = context.getBean(MissionState.class);
         state.setState(mission.getCurrentState());
         state.setStateDate(LocalDateTime.now());
-        state.addMission(mission);
+//        state.addMission(mission);
+        state.setMission(mission);
         mission.addState(state);
         state = this.missionStateRepository.save(state);
 //        if (missionStateEnum == MissionStateEnum.VDE) {
@@ -296,9 +311,10 @@ public class MissionService implements IMissionService {
 
     @Override
     @Transactional
-    public boolean validateMissionByUuid(String uuid) {
+    public boolean validateMissionByUuid(String uuid, String secret) {
         Mission mission = this.missionRepository.findByUuid(uuid);
         if (mission == null) return false;
+        if (!mission.getSecret().equals(secret)) return false;
 //        MissionState state = context.getBean(MissionState.class);
 //        state.setState(mission.getCurrentState());
 //        state.setStateDate(LocalDateTime.now());
@@ -313,26 +329,38 @@ public class MissionService implements IMissionService {
 
     @Override
     @Transactional
-    public boolean rejectMissionByUuid(String uuid) {
+    public boolean rejectMissionByUuid(String uuid, String secret) {
         Mission mission = this.missionRepository.findByUuid(uuid);
         if (mission == null) return false;
+        if (!mission.getSecret().equals(secret)) return false;
+
         this.rejectMission(mission);
         return true;
     }
 
     private MissionStateEnum getRStateDependsOnConnectedPrincipal(Mission mission) {
-        Employe employe = getPrincipal();
-        switch (employe.getGrade().getType()) {
-            case DG:
+        switch (mission.getNextState()) {
+            case VCHEF:
+                return MissionStateEnum.RCHEF;
+            case VDG:
                 return MissionStateEnum.RDG;
-            case CHEF: {
-                if (mission.getNextState() == MissionStateEnum.VCHEF) {
-                    return MissionStateEnum.RCHEF;
-                } else {
-                    return MissionStateEnum.RDTYPE;
-                }
-            }
+            case VDTYPE:
+                return MissionStateEnum.RDTYPE;
         }
+//        Employe employe = getPrincipal();
+//        switch (employe.getGrade().getType()) {
+//            case DG:
+//            case DGA:
+//                return MissionStateEnum.RDG;
+//            case CHEF:
+//            case CHEFA: {
+//                if (mission.getNextState() == MissionStateEnum.VCHEF) {
+//                    return MissionStateEnum.RCHEF;
+//                } else {
+//                    return MissionStateEnum.RDTYPE;
+//                }
+//            }
+//        }
         return null;
     }
 
@@ -362,23 +390,31 @@ public class MissionService implements IMissionService {
     public void resendMission(Mission mission) {
         mission.setCurrentState(MissionStateEnum.CURRENT);
         mission.setNextState(this.getNextState(mission));
+        mission.setComment("");
         mission = this.missionRepository.save(mission);
         MissionState state = context.getBean(MissionState.class);
         state.setState(mission.getCurrentState());
         state.setStateDate(LocalDateTime.now());
-        state.addMission(mission);
+//        state.addMission(mission);
+        state.setMission(mission);
         state = this.missionStateRepository.save(state);
+        try {
+            this.notificationService.sendNotificaitoin(mission);
+        } catch (InterruptedException | MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean isRejected(Mission mission) {
         MissionStateEnum currentState = mission.getCurrentState();
-        switch (currentState) {
-            case RCHEF:
-            case RDG:
-            case RDTYPE:
-                return true;
-        }
+        if (currentState != null)
+            switch (currentState) {
+                case RCHEF:
+                case RDG:
+                case RDTYPE:
+                    return true;
+            }
         return false;
     }
 
@@ -389,7 +425,7 @@ public class MissionService implements IMissionService {
 
     @Override
     public String printOrderVirement() {
-        List<Mission> missions = this.missionRepository.findByNextState(MissionStateEnum.DAF);
+        List<Mission> missions = this.missionRepository.findByNextStateOrderByIdMissionDesc(MissionStateEnum.DAF);
         if (missions.size() != 0) {
             for (Mission mission : missions) {
                 if (mission.getDecompte() == null)
@@ -464,4 +500,62 @@ public class MissionService implements IMissionService {
         return null;
     }
 
+    @Override
+    public String download() {
+        List<Mission> missions = this.missionRepository.findByNextStateOrderByIdMissionDesc(MissionStateEnum.VALIDATED);
+        if (missions.size() != 0) {
+            for (Mission mission : missions) {
+                if (mission.getDecompte() == null)
+                    return null;
+            }
+            return this.statisticsPrinter.printStatistics(missions);
+        }
+        return null;
+    }
+
+    @Override
+    public String download(StatisticsType filter, DateType date) {
+        LocalDateTime start = LocalDateTime.of(date.getStart(), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(date.getEnd(), LocalTime.MAX);
+        System.out.println("min=" + start);
+        System.out.println("max=" + end);
+        List<MissionStateEnum> nextStates = new ArrayList<>();
+        List<Mission> missions = null;
+//        nextStates.add(MissionStateEnum.DAF);
+        nextStates.add(MissionStateEnum.VALIDATED);
+        switch (filter) {
+            case ALL: {
+                missions = this.missionRepository.findByNextStateInAndStartDateBetween(nextStates, start, end);
+            }
+            break;
+            case TYPE: {
+                MissionType type = (MissionType) filter.getCriteria();
+                missions = this.missionRepository.findByNextStateInAndTypeAndStartDateBetween(nextStates, type, start, end);
+            }
+            break;
+            case ENTREPRISE: {
+                Entreprise entreprise = (Entreprise) filter.getCriteria();
+                missions = this.missionRepository.findByNextStateInAndEntrepriseAndStartDateBetween(nextStates, entreprise, start, end);
+            }
+            break;
+            case SERVICE: {
+                Dept dept = (Dept) filter.getCriteria();
+                missions = this.missionRepository.findByNextStateInAndDeptAndStartDateBetween(nextStates, dept, start, end);
+            }
+            break;
+            case VILLE: {
+                Ville ville = (Ville) filter.getCriteria();
+                missions = this.missionRepository.findByNextStateInAndVilleAndStartDateBetween(nextStates, ville, start, end);
+            }
+            break;
+        }
+        if (missions.size() != 0) {
+            for (Mission mission : missions) {
+                if (mission.getDecompte() == null)
+                    return null;
+            }
+            return this.statisticsPrinter.printStatistics(missions, filter, date);
+        }
+        return null;
+    }
 }

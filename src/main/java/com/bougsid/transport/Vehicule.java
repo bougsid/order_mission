@@ -1,5 +1,6 @@
 package com.bougsid.transport;
 
+import com.bougsid.bank.Bank;
 import com.bougsid.employe.Employe;
 import org.springframework.context.annotation.Scope;
 
@@ -82,14 +83,22 @@ public class Vehicule {
     public void setService(boolean service) {
         this.service = service;
     }
-
     @Override
     public String toString() {
-        return "Transport{" +
-                "id=" + id +
-                ", marque='" + marque + '\'' +
-                ", matricule='" + matricule + '\'' +
-//                ", type=" + type +
-                '}';
+        return String.valueOf(id);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Vehicule) && (id != null)
+                ? id.equals(((Vehicule) other).id)
+                : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null)
+                ? (this.getClass().hashCode() + id.hashCode())
+                : super.hashCode();
     }
 }

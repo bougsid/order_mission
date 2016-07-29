@@ -1,6 +1,5 @@
 package com.bougsid.decompte;
 
-import com.bougsid.decompte.generatedecompte.Excel;
 import com.bougsid.mission.IMissionService;
 import com.bougsid.mission.Mission;
 import com.bougsid.mission.MissionRepository;
@@ -93,6 +92,7 @@ public class DecompteService implements IDecompteService {
                 if (mission.getTransportType() == TransportType.PERSONNEL) {
                     this.decompte.setDistance(destination.getDistance());
                     this.decompte.setTauxAuto(destination.getTauxAuto());
+                    this.decompte.setNombreTickAuto(destination.getNombreTickAuto());
                 } else if (mission.getTransportType() == TransportType.TRAIN
                         || mission.getTransportType() == TransportType.CTM
                         || mission.getTransportType() == TransportType.AVION) {
@@ -109,7 +109,7 @@ public class DecompteService implements IDecompteService {
                             break;
                     }
                     this.decompte.setTauxKilometrique(tauxKilometrique);
-                    this.decompte.setDistance(2.0d);
+                    this.decompte.setDistance(1.0d);
                     this.decompte.setDays(this.getDays(mission.getStartDate(), mission.getEndDate()));
                     this.decompte.setTauxTaxi(taux.getTauxTaxi());
                 } else if (mission.getTransportType() == TransportType.Service) {

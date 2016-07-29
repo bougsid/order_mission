@@ -55,14 +55,29 @@ public class MissionController {
     }
 
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
-    public String confirmMissionPage(@RequestParam(value = "mission") String uuid) {
+    public String confirmMission(@RequestParam(value = "mission") String uuid
+    ,@RequestParam(value = "s") String secret) {
         System.out.println("Mission = " + uuid);
-        if (this.missionService.validateMissionByUuid(uuid)) {
+        if (this.missionService.validateMissionByUuid(uuid,secret)) {
             return "login?state=success";
         }
         return "login?state=error";
     }
 
+    @RequestMapping(value = "/reject", method = RequestMethod.GET)
+    public String rejectMission(@RequestParam(value = "mission") String uuid
+            ,@RequestParam(value = "s") String secret) {
+        System.out.println("Mission = " + uuid);
+        if (this.missionService.rejectMissionByUuid(uuid,secret)) {
+            return "login?state=success";
+        }
+        return "login?state=error";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String indexPag(){
+        return loginPage();
+    }
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

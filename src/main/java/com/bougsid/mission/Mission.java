@@ -33,10 +33,11 @@ public class Mission {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_employe", nullable = false)
     private Employe employe;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "MISSION_MISSION_STATE",
-            joinColumns = {@JoinColumn(name = "MISSION_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "MISSION_STATE_ID")})
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "MISSION_MISSION_STATE",
+//            joinColumns = {@JoinColumn(name = "MISSION_ID")},
+//            inverseJoinColumns = {@JoinColumn(name = "MISSION_STATE_ID")})
+    @OneToMany(mappedBy = "mission",fetch = FetchType.EAGER)
     private Set<MissionState> states = new HashSet<MissionState>();
     @Enumerated(EnumType.STRING)
     private MissionStateEnum currentState;
@@ -47,6 +48,7 @@ public class Mission {
     private MissionType type;
     private String comment;
     private String uuid;
+    private String secret;// to destinct role
     //    @OneToMany(fetch = FetchType.LAZY)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "MISSION_VILLE",
@@ -63,6 +65,7 @@ public class Mission {
     public Mission() {
 //        this.transport = new Transport();
         this.uuid = UUID.randomUUID().toString();
+        this.secret = UUID.randomUUID().toString();
     }
 
     public Employe getEmploye() {
@@ -207,7 +210,6 @@ public class Mission {
 
         return villes;
     }
-
     public void setVilles(Set<Ville> villes) {
         this.villes = villes;
         System.out.println("2 Ville Size ="+villes.size());
@@ -222,6 +224,7 @@ public class Mission {
         return entreprise;
     }
 
+
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
     }
@@ -232,6 +235,14 @@ public class Mission {
 
     public void setDecompte(Decompte decompte) {
         this.decompte = decompte;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     @Transient

@@ -93,7 +93,7 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="serviceList" var="typ"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="serviceList" var="typ"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{missionTypeView.missionTypes}"
                                                      selectionMode="single"
@@ -113,7 +113,7 @@
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
-                                                         styleClass="select-one-menu"
+                                                         styleClass="select-one-menu mypage"
                                                          value="#{missionTypeView.page}">
                                             <f:selectItems value="#{missionTypeView.pages}"/>
                                             <p:ajax update="tableForm" event="valueChange"
@@ -184,7 +184,7 @@
                                                                          required="true"/>
                                                         </div>
                                                         <div class="form-group form-group-default">
-                                                            <label>#{msg['missionType.dept']}</label>
+                                                            <label>#{msg['missionType.validateby']}</label>
                                                             <h:selectOneMenu label="#{msg['employe.dept']}"
                                                                              id="dept"
                                                                              styleClass="select-one-menu"

@@ -1,9 +1,12 @@
-<div class="header " xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+<div class="header " xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+     xmlns:h="http://xmlns.jcp.org/jsf/html">
     <!-- START MOBILE CONTROLS -->
     <!-- LEFT SIDE -->
     <p:confirmDialog global="true">
-        <p:commandButton value="#{msg['confirmation.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-        <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        <p:commandButton value="#{msg['confirmation.yes']}" type="button" styleClass="ui-confirmdialog-yes"
+                         icon="ui-icon-check"/>
+        <p:commandButton value="#{msg['confirmation.no']}" type="button" styleClass="ui-confirmdialog-no"
+                         icon="ui-icon-close"/>
     </p:confirmDialog>
     <div class="pull-left full-height visible-sm visible-xs">
         <!-- START ACTION BAR -->
@@ -47,7 +50,7 @@
             </div>
 
             <ul class="notification-list no-margin hidden-sm hidden-xs b-grey b-l b-r no-style p-l-30 p-r-20">
-                <c:if test="#{missionView.daf}">
+                <c:if test="#{missionView.daf and request.requestURL.toString().contains('missions')}">
 
                     <li class="p-r-15 inline">
                         <p:commandLink process="@this"
@@ -59,16 +62,18 @@
                         </p:commandLink>
                     </li>
                     <li class="p-r-15 inline">
-                        <p:commandButton icon="ui-icon-search" class="btn btn-cons m-l-10" value="#{msg['mission.button.search']}" type="button"
+                        <p:commandButton icon="ui-icon-search" class="btn btn-cons m-l-10"
+                                         value="#{msg['mission.button.search']}" type="button"
                                          onclick="PF('dlg1').show();"/>
                     </li>
 
-                    <p:messages style="position: absolute;" for="decompteError" id="decompteError" showDetail="true" autoUpdate="true" closable="true" />
+                    <p:messages style="position: absolute;" for="decompteError" id="decompteError" showDetail="true"
+                                autoUpdate="true" closable="true"/>
 
                 </c:if>
                 <!--<li class="p-r-20 inline">-->
-                    <!--<a href="#" id="mark-email" class="mark-email text-info m-l-20"><i-->
-                            <!--class="fa fa-pencil fs-16"/></a>-->
+                <!--<a href="#" id="mark-email" class="mark-email text-info m-l-20"><i-->
+                <!--class="fa fa-pencil fs-16"/></a>-->
                 <!--</li>-->
             </ul>
         </div>
@@ -102,18 +107,16 @@
 
                 <ul class="dropdown-menu profile-dropdown" role="menu">
 
-                    <li><a href="#"><i class="pg-settings_small"/> Settings</a>
-                    </li>
+                    <li>
+                        <p:commandButton class="btn btn-cons m-l-10"
+                                         value="#{msg['login.password']}" type="button"
+                                         onclick="PF('passwordDlg').show();"/>
 
-                    <li><a href="#"><i class="pg-outdent"/> Feedback</a>
-                    </li>
-
-                    <li><a href="#"><i class="pg-signals"/> Help</a>
                     </li>
 
                     <li class="bg-master-lighter">
                         <a href="/logout" class="clearfix">
-                            <span class="pull-left">Logout</span>
+                            <span class="pull-left">#{msg['login.logout']}</span>
                             <span class="pull-right"><i class="pg-power"/></span>
                         </a>
                     </li>
@@ -122,4 +125,35 @@
         </div>
         <!-- END User Info-->
     </div>
+    <p:dialog resizable="false" header="#{msg['login.password']}" widgetVar="passwordDlg">
+        <h:form class="email-content">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <div class="email-content-body">
+                <div class="form-group-attached">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group-default required">
+                                <label>#{msg['login.newPassword']}</label>
+                                <h:inputText id="tauxAVION" required="true"
+                                             label="#{msg['login.newPassword']}"
+                                             styleClass="form-control input-lg"
+                                             value="#{changePasswordView.password}">
+                                </h:inputText>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-b-20">
+                    <div style="text-align: center" class="col-sm-12 m-t-10">
+                        <p:commandButton validateClient="true" onsuccess="PF('passwordDlg').hide();"
+                                         oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['login.notification.password.success']}','success')"
+                                         value="#{msg['login.button.changePassword']}"
+                                         actionListener="#{changePasswordView.changePassword()}"
+                                         class="btn btn-complete btn-cons"/>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </p:dialog>
 </div>

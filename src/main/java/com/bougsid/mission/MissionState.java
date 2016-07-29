@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by ayoub on 6/27/2016.
@@ -21,11 +19,10 @@ public class MissionState {
     private LocalDateTime stateDate;
     @Enumerated(EnumType.STRING)
     private MissionStateEnum state;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "MISSION_MISSION_STATE",
-            joinColumns = { @JoinColumn(name = "MISSION_STATE_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "MISSION_ID") })
-    private Set<Mission> missions = new HashSet<Mission>();
+    @ManyToOne
+    private Mission mission;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    private Set<Mission> missions = new HashSet<Mission>();
 
     public MissionState() {
     }
@@ -54,14 +51,21 @@ public class MissionState {
         this.state = state;
     }
 
-    public Set<Mission> getMissions() {
-        return missions;
+    public Mission getMission() {
+        return mission;
     }
 
-    public void setMissions(Set<Mission> missions) {
-        this.missions = missions;
+    public void setMission(Mission mission) {
+        this.mission = mission;
     }
-    public void addMission(Mission mission){
-        this.missions.add(mission);
-    }
+//    public Set<Mission> getMissions() {
+//        return missions;
+//    }
+//
+//    public void setMissions(Set<Mission> missions) {
+//        this.missions = missions;
+//    }
+//    public void addMission(Mission mission){
+//        this.missions.add(mission);
+//    }
 }

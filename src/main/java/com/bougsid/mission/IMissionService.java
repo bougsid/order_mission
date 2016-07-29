@@ -37,10 +37,10 @@ public interface IMissionService {
     @Transactional
     void rejectMission(Mission mission);
 
-    boolean validateMissionByUuid(String uuid);
+    boolean validateMissionByUuid(String uuid,String secret);
 
     @Transactional
-    boolean rejectMissionByUuid(String uuid);
+    boolean rejectMissionByUuid(String uuid,String secret);
 
     Employe getPrincipal();
 
@@ -55,6 +55,10 @@ public interface IMissionService {
     Page<Mission> getFiltredMission(StatisticsType filter, DateType date, int page,boolean mine);
 
     Page<Mission> getFiltredMissionForEMP(StatisticsType filter, DateType date, int page);
+
+    String download();
+
+    String download(StatisticsType filter, DateType date);
 
 //    void rejectMission(Mission mission);
 }

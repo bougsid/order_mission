@@ -166,7 +166,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row clearfix">
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-12">
                                                             <div class="form-group form-group-default ">
                                                                 <label>#{msg['taux.tauxTaxi']}</label>
                                                                 <h:inputText id="tauxTaxi"
@@ -184,8 +184,6 @@
                                 </div>
                                 <div class="row p-b-20">
                                     <div style="text-align: center" class="col-sm-11 m-t-30">
-                                        <button type="reset"
-                                                class="btn btn-white btn-cons">#{msg['mission.button.clear']}</button>
                                         <p:commandButton process="@(form)"
                                                          oncomplete="if (args &amp;&amp; !args.validationFailed) showNotification('#{msg['taux.notification.success.add']}','success')"
                                                          validateClient="true"

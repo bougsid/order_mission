@@ -1,6 +1,6 @@
 package com.bougsid.employe;
 
-import com.bougsid.bank.Bank;
+import com.bougsid.bank.Agence;
 import com.bougsid.grade.Grade;
 import com.bougsid.mission.Mission;
 import com.bougsid.service.Dept;
@@ -53,8 +53,8 @@ public class Employe {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_bank")
-    private Bank bank;
+    @JoinColumn(name = "id_agence")
+    private Agence agence;
     private String rib;
     private double avoir;
     @OneToOne
@@ -151,12 +151,21 @@ public class Employe {
         this.employeProfiles = employeProfiles;
     }
 
-    public Bank getBank() {
-        return bank;
+//    public Bank getBank() {
+//        return bank;
+//    }
+//
+//    public void setBank(Bank bank) {
+//        this.bank = bank;
+//    }
+
+
+    public Agence getAgence() {
+        return agence;
     }
 
-    public void setBank(Bank bank) {
-        this.bank = bank;
+    public void setAgence(Agence agence) {
+        this.agence = agence;
     }
 
     public String getRib() {

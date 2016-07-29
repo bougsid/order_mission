@@ -1,7 +1,6 @@
-package com.bougsid.decompte.generatedecompte;
+package com.bougsid.decompte;
 
 import com.bougsid.MSG;
-import com.bougsid.decompte.Decompte;
 import com.bougsid.employe.Employe;
 import com.bougsid.mission.Mission;
 import com.bougsid.taux.ITauxService;
@@ -178,7 +177,7 @@ public class Excel {
             res += " " + decimal + " cts";
         }
         //Captlize first letter
-        res = res.substring(0, 1).toUpperCase() + res.substring(1)+ " DH.";
+        res = res.substring(0, 1).toUpperCase() + res.substring(1)+ " DHs.";
         System.out.println(res);
         this.setCellValue(totalOnWords, res);
     }

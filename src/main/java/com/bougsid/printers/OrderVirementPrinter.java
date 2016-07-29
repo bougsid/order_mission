@@ -102,7 +102,7 @@ public class OrderVirementPrinter {
         c4.setCellValue(employe.getRib());
         c4.setCellStyle(style);
         XSSFCell c5 = row.createCell(5);
-        c5.setCellValue(employe.getBank().getName());
+        c5.setCellValue(employe.getAgence().getFullName());
         c5.setCellStyle(style);
         this.total += montant;
     }

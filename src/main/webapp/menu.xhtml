@@ -20,6 +20,14 @@
                                value="#{msg['menu.myOrderManagement']}"/>
             </li>
         </c:if>
+        <c:if test="#{missionView.daf}">
+            <li class="active">
+                <a href="employes">
+                    <span class="title"><i class="pg-inbox"/>#{msg['menu.administration']}</span>
+                    <!--<span class="badge pull-right">5</span>-->
+                </a>
+            </li>
+        </c:if>
 
     </ul>
 </nav>

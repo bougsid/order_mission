@@ -138,7 +138,7 @@ public class MissionView implements Serializable {
         if (this.filter == StatisticsType.ALL) {
             this.updateMission(this.missionService.findAll(page - 1, mine));
         } else {
-            this.updateMission(this.missionService.getFiltredMission(filter, filterDate, page - 1,mine));
+            this.updateMission(this.missionService.getFiltredMission(filter, filterDate, page - 1, mine));
         }
         System.out.println(this.missions.size());
     }
@@ -174,12 +174,36 @@ public class MissionView implements Serializable {
     }
 
     public void search() {
-        if (this.filter == StatisticsType.ALL && this.filterDate == DateType.ALL)
-        {
+        if (this.filter == StatisticsType.ALL && this.filterDate == DateType.ALL) {
             this.updateMission(this.missionService.findAll(0, mine));
+        } else {
+            this.updateMission(this.missionService.getFiltredMission(filter, filterDate, 0, mine));
         }
-        else{
-            this.updateMission(this.missionService.getFiltredMission(filter, filterDate, 0,mine));
+    }
+
+    public void download() {
+        System.out.println("Printing ...");
+        List<Mission> missions = null;
+        String fileName = "";
+        if (this.filter == StatisticsType.ALL && this.filterDate == DateType.ALL) {
+            fileName = this.missionService.download();
+        } else {
+            fileName = this.missionService.download(filter, filterDate);
+        }
+        if (fileName == null) {
+            FacesContext.getCurrentInstance().addMessage("decompteError", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg.getMessage("decompte.print.error"), ""));
+            return;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            context.getExternalContext().redirect(request.getContextPath()
+                    + "/download/" + fileName
+                    + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy 'Heure' HH:mm"))
+                    + "/xlsx"
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -265,6 +289,11 @@ public class MissionView implements Serializable {
 
     public boolean isChefOrDG() {
         return this.missionService.isChefOrDG();
+    }
+
+    public boolean isAdjoint() {
+        GradeType type = this.missionService.getPrincipal().getGrade().getType();
+        return type == GradeType.CHEFA || type == GradeType.DGA;
     }
 
     public boolean isAutre() {

@@ -202,7 +202,7 @@ public class Decompte {
         double pd = petitDejouner * tauxPetitDejouner;
         double dd = dejounerDiner * tauxDejounerDiner;
         double h = hebergement * tauxHebergement;
-        double k = tauxKilometrique * distance;
+        double k = tauxKilometrique * distance * 2.0;
         double a = 0d; //Auto
         double t = 0d; //Taxi
         if (mission.getTransportType() == TransportType.PERSONNEL) {

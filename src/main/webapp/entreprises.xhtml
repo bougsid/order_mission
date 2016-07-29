@@ -93,7 +93,7 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="entrepriseList" var="bnk"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="entrepriseList" var="bnk"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{entrepriseView.entreprises}"
                                                      selectionMode="single"

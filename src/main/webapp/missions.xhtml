@@ -94,7 +94,8 @@
                                     <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                                        <p:dataTable widgetVar="missionList" rowIndexVar="rowIndex" id="missionTable"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}"
+                                                     widgetVar="missionList" rowIndexVar="rowIndex" id="missionTable"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{missionView.missions}" var="mission"
                                                      selection="#{missionView.selectedMission}"
@@ -125,7 +126,7 @@
                                         </p:dataTable>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
-                                                         styleClass="select-one-menu"
+                                                         styleClass="select-one-menu mypage"
                                                          value="#{missionView.page}">
                                             <f:selectItems value="#{missionView.pages}"/>
                                             <p:ajax update="tableForm" event="valueChange"
@@ -287,11 +288,19 @@
                                             </ul>
 
                                         </div>
-                                        <div style="text-align: center" class="col-sm-11 m-t-30">
+                                        <div style="text-align: center" class="m-t-30">
                                             <p:commandButton class="btn btn-complete btn-cons"
                                                              value="#{msg['mission.button.search']}"
                                                              update="tableForm"
                                                              actionListener="#{missionView.search}"
+                                                             icon="ui-icon-search"
+                                                             oncomplete="PF('dlg1').hide();"/>
+                                            <p:commandButton class="btn btn-complete btn-cons"
+                                                             value="#{msg['mission.button.download']}"
+                                                             onstart="showNotification('#{msg['statistics.notification.startDownload']}','success')"
+
+                                                             update="tableForm"
+                                                             actionListener="#{missionView.download}"
                                                              icon="ui-icon-search"
                                                              oncomplete="PF('dlg1').hide();"/>
                                         </div>
@@ -306,7 +315,7 @@
                                         <div class="actions-wrapper menuclipper bg-master-lightest">
                                             <ul class="actions menuclipper-menu no-margin p-l-20 ">
                                                 <c:if test="#{missionView.selectedMission != null}">
-                                                    <c:if test="#{missionView.chefOrDG}">
+                                                    <c:if test="#{missionView.chefOrDG or missionView.adjoint}">
                                                         <li class="no-padding ">
                                                             <p:commandLink process="comment @this"
                                                                            onsuccess="showNotification('#{msg['mission.notification.success.validate']}','success')"
@@ -375,10 +384,16 @@
 
                                                 <div class="email-content-header">
                                                     <h5>#{msg['mission.state']}
-                                                        #{missionView.selectedMission.lastState.state.label} -
-                                                        #{missionView.selectedMission.lastState.stateDate}
+                                                        <c:if test="#{missionView.selectedMission.lastState.state == 'VDTYPE' or missionView.selectedMission.lastState.state == 'RDTYPE'}">
+                                                            #{missionView.selectedMission.lastState.state.label}
+                                                            #{missionView.selectedMission.type.dept.nom}-
+                                                        </c:if>
+                                                        <c:if test="#{missionView.selectedMission.lastState.state != 'VDTYPE'}">
+                                                            #{missionView.selectedMission.lastState.state.label} -
+                                                        </c:if>
+                                                            #{missionView.selectedMission.lastState.stateDate}
                                                     </h5>
-                                                    <c:if test="#{missionView.chefOrDG||missionView.daf}">
+                                                    <c:if test="#{missionView.chefOrDG||missionView.daf||missionView.adjoint}">
                                                         <p:inputTextarea class="form-control" id="comment"
                                                                          placeholder="#{msg['mission.comment']}"
                                                                          value="#{missionView.selectedMission.comment}"

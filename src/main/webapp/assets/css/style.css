@@ -3,6 +3,14 @@
 * Override Pages default styles or create your own styles here
 
 */
+.myactive{
+    color: #FFFFFF;
+}
+.mypage{
+    position: fixed;
+    bottom: 0;
+    width: 20% !important;
+}
 .ui-inputfield {
     border-radius: 0px;
     box-shadow: none;

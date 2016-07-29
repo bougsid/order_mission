@@ -12,13 +12,21 @@ import java.util.List;
 public class BankService implements IBankService {
     @Autowired
     private BankRepository bankRepository;
+    @Autowired
+    private AgenceRepository agenceRepository;
 
     @Override
     public List<Bank> getAllBanks() {
         return this.bankRepository.findAll();
     }
+
     @Override
-    public void addBank(Bank bank){
+    public List<Agence> getAllAgences() {
+        return this.agenceRepository.findAll();
+    }
+
+    @Override
+    public void addBank(Bank bank, String agences) {
         this.bankRepository.save(bank);
     }
 
@@ -28,12 +36,24 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public void save(Bank bank) {
-        this.bankRepository.save(bank);
+    public Bank save(Bank bank) {
+        return this.bankRepository.save(bank);
+    }
+
+    @Override
+    public Agence saveAgence(Agence agence) {
+        return this.agenceRepository.save(agence);
+    }
+
+    @Override
+    public void deleteAgence(Agence agence) {
+        this.agenceRepository.delete(agence);
     }
 
     @Override
     public void delete(Bank bank) {
         this.bankRepository.delete(bank);
     }
+
+
 }

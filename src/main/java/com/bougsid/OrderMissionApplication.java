@@ -2,6 +2,7 @@ package com.bougsid;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -32,7 +33,10 @@ public class OrderMissionApplication {
 		source.setUseCodeAsDefaultMessage(true);
 		return source;
 	}
-
+	@Bean
+	public ServerProperties getServerProperties() {
+		return new ServerCustomization();
+	}
 //	public static ApplicationContext getContext() {
 //		return context;
 //	}

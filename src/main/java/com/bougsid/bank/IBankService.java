@@ -8,11 +8,15 @@ import java.util.List;
 public interface IBankService {
     List<Bank> getAllBanks();
 
-    void addBank(Bank bank);
+    List<Agence> getAllAgences();
+
+    void addBank(Bank bank,String agences);
 
     Bank findOne(Long id);
 
-    void save(Bank bank);
+    Bank save(Bank bank);
+    Agence saveAgence(Agence agence);
+    void deleteAgence(Agence agence);
 
     void delete(Bank bank);
 }

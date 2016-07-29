@@ -1,6 +1,5 @@
 package com.bougsid.bank;
 
-import com.bougsid.employe.Employe;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
@@ -17,10 +16,10 @@ public class Bank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-//    private String email;
     private String phone;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bank")
-    private Set<Employe> employes = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bank", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    private Set<Agence> agences = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -53,13 +52,21 @@ public class Bank {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+//
+//    public Set<Employe> getEmployes() {
+//        return employes;
+//    }
+//
+//    public void setEmployes(Set<Employe> employes) {
+//        this.employes = employes;
+//    }
 
-    public Set<Employe> getEmployes() {
-        return employes;
+    public Set<Agence> getAgences() {
+        return agences;
     }
 
-    public void setEmployes(Set<Employe> employes) {
-        this.employes = employes;
+    public void setAgences(Set<Agence> agences) {
+        this.agences = agences;
     }
 
     @Override
@@ -80,4 +87,18 @@ public class Bank {
                 ? (this.getClass().hashCode() + id.hashCode())
                 : super.hashCode();
     }
+
+    public void addAgence(Agence agence) {
+        agence.setBank(this);
+        this.agences.add(agence);
+        System.out.println("add Ageence");
+    }
+//    @Transient
+//    public String agencesAsString() {
+//        String agencesAsString = "";
+//        for (Agence agence : agences) {
+//            agencesAsString += agence.getNom() + "\n";
+//        }
+//        return agencesAsString;
+//    }
 }

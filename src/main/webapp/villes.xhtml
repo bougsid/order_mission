@@ -93,7 +93,7 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="villeList" var="vl"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="villeList" var="vl"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{villeView.villes}"
                                                      selectionMode="single"
@@ -205,6 +205,16 @@
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <div class="form-group-default required">
+                                                                    <label>#{msg['ville.nombreTickAuto']}</label>
+                                                                    <h:inputText id="nombreTickAuto" required="true"
+                                                                                 label="#{msg['ville.nombreTickAuto']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 value="#{villeView.selectedVille.nombreTickAuto}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group-default required">
                                                                     <label>#{msg['ville.tauxTRAIN']}</label>
                                                                     <h:inputText id="tauxTRAIN" required="true"
                                                                                  label="#{msg['ville.tauxTRAIN']}"
@@ -213,7 +223,7 @@
                                                                     </h:inputText>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-3">
+                                                            <div class="col-sm-2">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['ville.tauxCTM']}</label>
                                                                     <h:inputText id="tauxCTM" required="true"
@@ -223,7 +233,7 @@
                                                                     </h:inputText>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-3">
+                                                            <div class="col-sm-2">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['ville.tauxAVION']}</label>
                                                                     <h:inputText id="tauxAVION" required="true"

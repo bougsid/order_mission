@@ -1,6 +1,5 @@
 package com.bougsid.ville;
 
-import com.bougsid.service.Dept;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.Entity;
@@ -23,6 +22,7 @@ public class Ville {
     private double tauxCTM;
     private double tauxTRAIN;
     private double tauxAvion;
+    private long nombreTickAuto;
 
     public Ville() {
     }
@@ -81,6 +81,14 @@ public class Ville {
 
     public void setTauxAvion(double tauxAvion) {
         this.tauxAvion = tauxAvion;
+    }
+
+    public long getNombreTickAuto() {
+        return nombreTickAuto;
+    }
+
+    public void setNombreTickAuto(long nombreTickAuto) {
+        this.nombreTickAuto = nombreTickAuto;
     }
 
     @Override

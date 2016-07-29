@@ -94,7 +94,7 @@
                                     <!-- START EMAIL LIST SORTED BY DATE -->
                                     <h:form id="tableForm">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <p:dataTable widgetVar="employeList" var="emp"
+                                        <p:dataTable emptyMessage="#{msg['general.message.EmptyList']}" widgetVar="employeList" var="emp"
                                                      styleClass="borderless hide-column-names"
                                                      value="#{employeView.employes}"
                                                      selectionMode="single"
@@ -116,7 +116,7 @@
                                     <h:form>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <h:selectOneMenu id="page"
-                                                         styleClass="select-one-menu"
+                                                         styleClass="select-one-menu mypage"
                                                          value="#{employeView.page}">
                                             <f:selectItems value="#{employeView.pages}"/>
                                             <p:ajax update="tableForm" event="valueChange"
@@ -150,7 +150,9 @@
                                                                        update="@(#employeDetail)"
                                                                        actionListener="#{employeView.deleteEmploye()}"
                                                                        class="text-success">#{msg['employe.button.delete']}
-                                                            <p:confirm header="#{msg['confirmation.deleteHeader']}" message="#{msg['confirmation.deleteQuestion']}" icon="ui-icon-alert" />
+                                                            <p:confirm header="#{msg['confirmation.deleteHeader']}"
+                                                                       message="#{msg['confirmation.deleteQuestion']}"
+                                                                       icon="ui-icon-alert"/>
                                                         </p:commandLink>
                                                     </li>
                                                 </c:if>
@@ -164,7 +166,7 @@
 
                                                 <div class="clearfix"/>
 
-                                                <div class="email-content-body m-t-20 form-group-attached">
+                                                <div class="email-content-body m-t-20">
                                                     <div class="form-group-attached">
                                                         <div class="row clearfix">
                                                             <div class="col-sm-4">
@@ -183,7 +185,8 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.nom']}</label>
-                                                                    <h:inputText id="nom" required="true" label="#{msg['employe.nom']}"
+                                                                    <h:inputText id="nom" required="true"
+                                                                                 label="#{msg['employe.nom']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.nom}">
                                                                     </h:inputText>
@@ -192,7 +195,8 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.prenom']}</label>
-                                                                    <h:inputText id="prenom" required="true" label="#{msg['employe.prenom']}"
+                                                                    <h:inputText id="prenom" required="true"
+                                                                                 label="#{msg['employe.prenom']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.prenom}">
                                                                     </h:inputText>
@@ -203,7 +207,8 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.matricule']}</label>
-                                                                    <h:inputText id="matricule" required="true" label="#{msg['employe.matricule']}"
+                                                                    <h:inputText id="matricule" required="true"
+                                                                                 label="#{msg['employe.matricule']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.matricule}">
                                                                     </h:inputText>
@@ -212,7 +217,8 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.fonction']}</label>
-                                                                    <h:inputText id="fonction" required="true" label="#{msg['employe.fonction']}"
+                                                                    <h:inputText id="fonction" required="true"
+                                                                                 label="#{msg['employe.fonction']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.fonction}">
                                                                     </h:inputText>
@@ -220,13 +226,21 @@
                                                             </div>
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
-                                                                    <label>#{msg['employe.classe']}</label>
-                                                                    <h:selectOneMenu label="#{msg['employe.classe']}"
-                                                                                     id="classe" required="true"
+                                                                    <label>#{msg['employe.vehicule']}</label>
+                                                                    <h:selectOneMenu label="#{msg['employe.vehicule']}"
+                                                                                     id="vehicule" required="true"
                                                                                      styleClass="select-one-menu"
-                                                                                     value="#{employeView.selectedEmploye.classe}">
-                                                                        <f:selectItems value="#{employeView.classes}"/>
-                                                                        <f:converter binding="#{genericEnumConverter}"/>
+                                                                                     value="#{employeView.selectedEmploye.vehicule}">
+                                                                        <f:selectItem noSelectionOption="true"
+                                                                                      itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                      itemValue=""/>
+                                                                        <f:selectItems value="#{employeView.vehicules}"
+                                                                                       var="v"
+                                                                                       itemValue="#{v}"
+                                                                                       itemLabel="#{v.marque} #{v.matricule}"
+                                                                        />
+                                                                        <f:converter for="vehicule"
+                                                                                     converterId="vehiculeConverter"/>
                                                                     </h:selectOneMenu>
                                                                 </div>
                                                             </div>
@@ -263,7 +277,8 @@
                                                             <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.director']}</label>
-                                                                    <p:selectBooleanCheckbox itemLabel="Oui" label="Oui" value="#{employeView.selectedEmploye.derictor}" />
+                                                                    <p:selectBooleanCheckbox itemLabel="Oui" label="Oui"
+                                                                                             value="#{employeView.selectedEmploye.derictor}"/>
 
                                                                 </div>
                                                             </div>
@@ -291,13 +306,13 @@
                                                         </div>
 
                                                         <div class="row clearfix">
-                                                            <div class="col-sm-6">
+                                                            <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.bank']}</label>
                                                                     <h:selectOneMenu label="#{msg['employe.bank']}"
                                                                                      id="bank" required="true"
                                                                                      styleClass="select-one-menu"
-                                                                                     value="#{employeView.selectedEmploye.bank}">
+                                                                                     value="#{employeView.selectedBank}">
                                                                         <f:selectItem noSelectionOption="true"
                                                                                       itemLabel="#{msg['employe.message.selectbank']}"
                                                                                       itemValue=""/>
@@ -308,16 +323,52 @@
                                                                         />
                                                                         <f:converter for="bank"
                                                                                      converterId="bankConverter"/>
+                                                                        <p:ajax event="valueChange" update="agence"/>
                                                                     </h:selectOneMenu>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6">
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['employe.agence']}</label>
+                                                                    <h:selectOneMenu label="#{msg['employe.agence']}"
+                                                                                     id="agence" required="true"
+                                                                                     styleClass="select-one-menu"
+                                                                                     value="#{employeView.selectedEmploye.agence}">
+                                                                        <f:selectItem noSelectionOption="true"
+                                                                                      itemLabel="#{msg['employe.message.selectbank']}"
+                                                                                      itemValue=""/>
+                                                                        <f:selectItems value="#{employeView.agences}"
+                                                                                       var="a"
+                                                                                       itemValue="#{a}"
+                                                                                       itemLabel="#{a.fullName}"
+                                                                        />
+                                                                        <f:converter for="agence"
+                                                                                     converterId="agenceConverter"/>
+                                                                    </h:selectOneMenu>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
                                                                 <div class="form-group-default required">
                                                                     <label>#{msg['employe.rib']}</label>
                                                                     <h:inputText id="rib" maxlength="14" required="true"
                                                                                  label="#{msg['employe.rib']}"
                                                                                  styleClass="form-control input-lg"
                                                                                  value="#{employeView.selectedEmploye.rib}">
+                                                                    </h:inputText>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group-default required">
+                                                                    <label>#{msg['employe.email']}</label>
+                                                                    <h:inputText id="email"
+                                                                                 label="#{msg['employe.email']}"
+                                                                                 styleClass="form-control input-lg"
+                                                                                 validatorMessage="Email Invalide"
+                                                                                 value="#{employeView.selectedEmploye.email}">
+                                                                        <f:validateRegex
+                                                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                                                     </h:inputText>
                                                                 </div>
                                                             </div>

@@ -1,12 +1,15 @@
 package com.bougsid.employe;
 
 import com.bougsid.MSG;
+import com.bougsid.bank.Agence;
 import com.bougsid.bank.Bank;
 import com.bougsid.bank.IBankService;
 import com.bougsid.grade.Grade;
 import com.bougsid.grade.IGradeService;
 import com.bougsid.service.Dept;
 import com.bougsid.service.IServiceService;
+import com.bougsid.transport.IVehiculeService;
+import com.bougsid.transport.Vehicule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -20,7 +23,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ayoub on 6/23/2016.
@@ -34,14 +39,19 @@ public class EmployeView implements Serializable {
     @Autowired
     private IBankService bankService;
     @Autowired
+    private IVehiculeService vehiculeService;
+    @Autowired
     private IServiceService serviceService;
     @Autowired
     private IGradeService gradeService;
+    private Bank selectedBank;
     @Autowired
     private MSG msg;
     private Employe selectedEmploye;
     private List<Employe> employes;
+    //    private List<Agence> agences;
     private List<Bank> banks;
+    private List<Vehicule> vehicules;
     private List<Dept> depts;
     private List<Grade> grades;
     private int page;
@@ -55,7 +65,11 @@ public class EmployeView implements Serializable {
         WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).
                 getAutowireCapableBeanFactory().
                 autowireBean(this);
+//        this.agences = this.bankService.getAllAgences();
         this.banks = this.bankService.getAllBanks();
+        if (this.banks.size() != 0)
+            this.selectedBank = this.banks.get(0);
+        this.vehicules = this.vehiculeService.getAllVehicules();
         this.depts = this.serviceService.getAllServices();
         this.grades = this.gradeService.getAllGrades();
         //Get Employes List
@@ -68,6 +82,14 @@ public class EmployeView implements Serializable {
     public void updateListWithPage() {
         System.out.println("Page =" + page);
         this.employes = this.employeService.findAll(page - 1).getContent();
+    }
+
+    public Bank getSelectedBank() {
+        return selectedBank;
+    }
+
+    public void setSelectedBank(Bank selectedBank) {
+        this.selectedBank = selectedBank;
     }
 
     public Employe getSelectedEmploye() {
@@ -98,10 +120,9 @@ public class EmployeView implements Serializable {
     public void saveEmploye() {
         System.out.println("Save Employe");
         try {
-            if (selectedEmploye.getIdEmploye() == null){
+            if (selectedEmploye.getIdEmploye() == null) {
                 this.employeService.registerEmploye(selectedEmploye);
-            }
-            else
+            } else
                 this.employeService.updateEmploye(selectedEmploye);
         } catch (MatriculeAlreadyExistException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, msg.getMessage("error.employe.matriculeAlreadyExistException"), msg.getMessage("error.employe.matriculeAlreadyExistException")));
@@ -143,8 +164,18 @@ public class EmployeView implements Serializable {
         return items;
     }
 
+    public Set<Agence> getAgences() {
+        if (selectedBank != null)
+            return this.selectedBank.getAgences();
+        else return new HashSet<>();
+    }
+
     public List<Bank> getBanks() {
-        return this.banks;
+        return banks;
+    }
+
+    public List<Vehicule> getVehicules() {
+        return vehicules;
     }
 
     public List<Dept> getDepts() {
